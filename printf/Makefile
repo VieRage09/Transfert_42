@@ -4,17 +4,20 @@ CC = cc
 
 CFLAGS = -Wall -Werror -Wextra
 
-HDR = libft/libft.a
+HDR = libftprintf.h
 
 EXEC = maintest
 
-SRC =			\
-	ft_printf.c	\
+SRC =					\
+		ft_printf.c		\
+		ft_print_char.c \
+		ft_print_str.c	\
+		ft_print_int.c	\
 
 OBJ = $(SRC:.c=.o) 
 
 $(NAME) : $(OBJ)
-			ar rcs $(NAME) $(OBJ)
+			ar crs $(NAME) $(OBJ)
 
 all : $(NAME)
 
@@ -26,7 +29,10 @@ fclean : clean
 
 re : fclean all
 
-test : $(OBJ)
-			$(CC) $(CFLAGS) $(SRC) $(HDR) -o $(EXEC)
+test : $(NAME) lib
+			$(CC) $(CFLAGS) test.c $(NAME) libft/libft.a -o $(EXEC)
+
+lib : 
+			make -C libft libft.a
 
 .PHONY : all clean fclean re test
