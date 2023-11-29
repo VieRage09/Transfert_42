@@ -11,16 +11,16 @@
 /* ************************************************************************** */
 #ifndef	LIBFTPRINTF_H
 #define LIBFTPRINTF_H
-#include "libft/libft.h"
 #include <stdarg.h>
 #include <stddef.h> 
 #include <unistd.h>
 #include <stdlib.h>
+#include"libft/libft.h"
 
 int	ft_printf(const char *s, ...);
 
 int	ft_print_int(int n);
-int	ft_print_str(char *s);
+int	ft_print_str(const char *s);
 int	ft_print_char(char c);
 int	ft_print_pointer(void *p);
 int	ft_print_uns_int(unsigned int u);

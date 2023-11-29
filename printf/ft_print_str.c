@@ -9,9 +9,9 @@
 /*   Updated: 2023/11/28 18:54:15 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include"libftprintf.h"
+#include"ft_printf.h"
 
-int	ft_print_str(char *s)
+int	ft_print_str(const char *s)
 {
 	write(1, s, ft_strlen(s));
 	return (ft_strlen(s));

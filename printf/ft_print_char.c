@@ -9,8 +9,7 @@
 /*   Updated: 2023/11/28 18:18:01 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "libftprintf.h"
-#include"libft/libft.h"
+#include "ft_printf.h"
 
 int	ft_print_char(char c)
 {

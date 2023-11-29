@@ -11,22 +11,21 @@
 /* ************************************************************************** */
 
 #include"ft_printf.h"
-#include"libft/libft.h"
 
-static int	choose_arg(char det, va_list ap)
+static int	choose_arg(char det, va_list *ap)
 {
 	if (det == 'c')
-		return (ft_print_char(va_arg(ap, int)));
+		return (ft_print_char(va_arg(*ap, int)));
 	else if (det == 's')
-		return (ft_print_str(va_arg(ap, char *)));
+		return (ft_print_str(va_arg(*ap, char *)));
 	else if (det == 'p')
-		return (ft_print_pointer(va_arg(ap, void *)));
+		return (ft_print_pointer(va_arg(*ap, void *)));
 	else if (det == 'd')
-		return (ft_print_int(va_arg(ap, int)));
+		return (ft_print_int(va_arg(*ap, int)));
 	else if (det == 'i')
-		return (ft_print_int(va_arg(ap, int)));
+		return (ft_print_int(va_arg(*ap, int)));
 	else if (det == 'u')
-		return (ft_print_uns_int(va_arg(ap, unsigned int)));
+		return (ft_print_uns_int(va_arg(*ap, unsigned int)));
 	/*else if (det == 'x')
 		return (print_hex_low(ap, ));
 	else if (det == 'X')
@@ -38,11 +37,13 @@ static int	choose_arg(char det, va_list ap)
 
 int ft_printf(const char *s, ...)
 {
-	va_list	ap;	
+	va_list	ap;
+	va_list	*pap;
 	int		size;
 	size_t	cu;
 
 	va_start(ap, s);
+	pap = &ap;
 	size = 0;
 	cu = 0;
 	if (!s)
@@ -51,7 +52,7 @@ int ft_printf(const char *s, ...)
 	{
 		if (s[cu] == '%')
 		{
-			size += choose_arg(s[cu + 1], ap);
+			size += choose_arg(s[cu + 1], pap);
 			cu += 2;
 		}
 		else

@@ -10,10 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"libft/libft.h"
-
 int	ft_print_pointer(void *p)
 {
 	
-	//
+	write(1,ft_longtohexa(p), 8);	
+	return (0);
+}
+
+char	*ft_longtohexa(void *p)
+{
+	char	*s;
+
+	s = malloc(14); // Taille de n importe quelle adresse en hexa ???
+	if (!s)
+		return (NULL);
+	
+
+
+
 }
