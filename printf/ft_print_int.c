@@ -16,8 +16,13 @@
 int	ft_print_int(int n)
 {
 	char	*s;
-	
+	int	size;
+
 	s = ft_itoa(n);
-	write(1, s, ft_strlen(s));
-	return (ft_strlen(s));
+	if (!s)
+		return (-1);
+	size = ft_strlen(s);
+	write(1, s, size);
+	free(s);
+	return (size);
 }

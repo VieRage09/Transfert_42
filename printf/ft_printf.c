@@ -52,6 +52,7 @@ int ft_printf(const char *s, ...)
 	{
 		if (s[cu] == '%')
 		{
+			// gerer le cas ou choosearg renvoie -1
 			size += choose_arg(s[cu + 1], pap);
 			cu += 2;
 		}

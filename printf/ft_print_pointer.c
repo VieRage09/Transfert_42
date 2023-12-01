@@ -10,14 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include"ft_printf.h"
+
 int	ft_print_pointer(void *p)
 {
 	
-	write(1,ft_longtohexa(p), 8);	
+	write(1,p, 8);	
 	return (0);
 }
 
-char	*ft_longtohexa(void *p)
+/*static char	*ft_longtohexa(void *p)
 {
 	char	*s;
 
@@ -25,7 +27,8 @@ char	*ft_longtohexa(void *p)
 	if (!s)
 		return (NULL);
 	
+	return s;	
 
 
 
-}
+}*/

@@ -12,11 +12,49 @@
 
 #include"libft/libft.h"
 
+/*static int	ucount_digit(unsigned int n)
+{
+	int	count;
+
+	count = 1;
+	while (n > 9)
+	{
+		count++;
+		n /= 10;
+	}
+	return (count);
+}
+
+static char	*ft_uitoa(unsigned int u)
+{
+	char	*s;
+	int	digits;
+
+	digits = ucount_digit(u);
+	s = malloc((digits + 1) * sizeof(char));
+	if(!s)
+		return(NULL);
+	s[digits] = '\0';
+	digits -= 1;
+	while (digits >= 0)
+	{
+		s[digits] = u % 10;
+		u /= 10;
+		digits--;	
+	}
+	return (s);
+}
+*/
 int	ft_print_uns_int(unsigned int u)
 {
 	char	*s;
+	int	size;
 
 	s = ft_itoa(u);
-	write(1, s, ft_strlen(s));
-	return (ft_strlen(s));
+	if (!s)
+		return (-1);
+	size = ft_strlen(s);
+	write(1, s, size);
+	free(s);
+	return (size);
 }
