@@ -26,12 +26,12 @@ static int	choose_arg(char det, va_list *ap)
 		return (ft_print_int(va_arg(*ap, int)));
 	else if (det == 'u')
 		return (ft_print_uns_int(va_arg(*ap, unsigned int)));
-	/*else if (det == 'x')
-		return (print_hex_low(ap, ));
+	else if (det == 'x')
+		return (ft_print_hex_low(va_arg(*ap, int)));
 	else if (det == 'X')
-		return (print_hex_up(ap, ));
+		return (ft_print_hex_up(va_arg(*ap, int)));
 	else if (det == '%')
-		return (print_char('%');*/
+		return (ft_print_char('%'));
 	return (0);
 }
 

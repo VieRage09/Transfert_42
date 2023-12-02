@@ -19,10 +19,12 @@
 
 int	ft_printf(const char *s, ...);
 
-int	ft_print_int(int n);
-int	ft_print_str(const char *s);
 int	ft_print_char(char c);
+int	ft_print_str(const char *s);
 int	ft_print_pointer(void *p);
+int	ft_print_int(int n);
 int	ft_print_uns_int(unsigned int u);
+int	ft_print_hex_low(int i);
+int	ft_print_hex_up(int i);
 
 #endif

@@ -15,6 +15,8 @@ SRC =					\
 		ft_print_int.c	\
 		ft_print_pointer.c	\
 		ft_print_uns_int.c	\
+		ft_print_hex_low.c	\
+		ft_print_hex_up.c	\
 
 SRCL =				\
 		libft/ft_calloc.c	\
