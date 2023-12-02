@@ -3,7 +3,7 @@
 
 int	main()
 {
-	printf("%x\n", -42);
-	ft_printf("%x\n", -42);
+	printf("%s\n", NULL);
+//	ft_printf("%s\n", NULL);
 	return 0;
 }

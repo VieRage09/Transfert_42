@@ -13,6 +13,11 @@
 
 int	ft_print_str(const char *s)
 {
+	if (!s)
+	{
+		write(1, "(null)", 6);
+		return (6);
+	}
 	write(1, s, ft_strlen(s));
 	return (ft_strlen(s));
 }
