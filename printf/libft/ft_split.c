@@ -6,7 +6,7 @@
 /*   By: tlebon <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 19:52:59 by tlebon            #+#    #+#             */
-/*   Updated: 2023/11/24 17:04:48 by tlebon           ###   ########.fr       */
+/*   Updated: 2023/12/04 18:47:23 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include"libft.h"
@@ -96,6 +96,8 @@ char	**ft_split(char const *s, char c)
 	while (count < count_words(s, c))
 	{
 		buff = fill_tab(tab, s + curs, c, count);
+		if (buff == -1)
+			return (NULL);
 		curs += buff;
 		count++;
 	}
