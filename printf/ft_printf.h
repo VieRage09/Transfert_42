@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libftprintf.h                                      :+:      :+:    :+:   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 17:08:36 by tlebon            #+#    #+#             */
-/*   Updated: 2023/11/28 19:16:28 by tlebon           ###   ########.fr       */
+/*   Updated: 2023/12/04 19:11:47 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef	LIBFTPRINTF_H
-#define LIBFTPRINTF_H
-#include <stdarg.h>
-#include <stddef.h> 
-#include <unistd.h>
-#include <stdlib.h>
-#include"libft/libft.h"
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
+# include <stdarg.h>
+# include <stddef.h> 
+# include <unistd.h>
+# include <stdlib.h>
+# include"libft/libft.h"
 
 int	ft_printf(const char *s, ...);
 

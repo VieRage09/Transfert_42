@@ -6,13 +6,13 @@
 /*   By: tlebon <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 19:07:00 by tlebon            #+#    #+#             */
-/*   Updated: 2023/11/28 19:10:01 by tlebon           ###   ########.fr       */
+/*   Updated: 2023/12/04 19:16:13 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"libft/libft.h"
 
-/*static int	ucount_digit(unsigned int n)
+static int	ucount_digit(unsigned int n)
 {
 	int	count;
 
@@ -28,29 +28,29 @@
 static char	*ft_uitoa(unsigned int u)
 {
 	char	*s;
-	int	digits;
+	int		cursor;
 
-	digits = ucount_digit(u);
-	s = malloc((digits + 1) * sizeof(char));
-	if(!s)
-		return(NULL);
-	s[digits] = '\0';
-	digits -= 1;
-	while (digits >= 0)
+	s = malloc((ucount_digit(u) + 1) * sizeof(char));
+	if (!s)
+		return (NULL);
+	cursor = ucount_digit(u) - 1;
+	s[cursor + 1] = '\0';
+	while (u > 9)
 	{
-		s[digits] = u % 10;
+		s[cursor] = (u % 10) + '0';
 		u /= 10;
-		digits--;	
+		cursor--;
 	}
+	s[cursor] = u + '0';
 	return (s);
 }
-*/
+
 int	ft_print_uns_int(unsigned int u)
 {
 	char	*s;
-	int	size;
+	int		size;
 
-	s = ft_itoa(u);
+	s = ft_uitoa(u);
 	if (!s)
 		return (-1);
 	size = ft_strlen(s);

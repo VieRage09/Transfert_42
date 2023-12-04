@@ -1,6 +1,16 @@
-#include "ft_printf.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_print_hex_low.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tlebon <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/04 19:13:34 by tlebon            #+#    #+#             */
+/*   Updated: 2023/12/04 19:15:11 by tlebon           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-// Pour les nombre negatifs, printf natif affiche ffffffd6 pour -42, ft_printf affiche quant a lui -2a ???
+#include "ft_printf.h"
 
 static int	count_digit(long n)
 {
@@ -25,20 +35,19 @@ static char	write_hex(long n)
 	if (n > 15)
 		return ('\0'); // Condition d arret a revoir
 	else if (n > 9)
-		return (n + 'a' - 10); 
+		return (n + 'a' - 10);
 	else
 		return (n + '0');
 }
 
 int	ft_print_hex_low(int i)
 {
-	char	*s;
-	int	size;
-	int	cursor;
-	long	nbr;
-	
+	char			*s;
+	int				size;
+	int				cursor;
+	unsigned int	nbr;
 
-	nbr = (long) i;
+	nbr = (unsigned int) i;
 	s = malloc((count_digit(nbr) + 1) * sizeof(char));
 	if (!s)
 		return (-1);
@@ -49,7 +58,7 @@ int	ft_print_hex_low(int i)
 		s[0] = '-';
 		nbr *= (-1);
 	}
-	while(nbr > 15)
+	while (nbr > 15)
 	{
 		s[cursor] = write_hex(nbr % 16);
 		nbr /= 16;

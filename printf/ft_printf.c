@@ -6,7 +6,7 @@
 /*   By: tlebon <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 17:11:47 by tlebon            #+#    #+#             */
-/*   Updated: 2023/11/28 19:18:10 by tlebon           ###   ########.fr       */
+/*   Updated: 2023/12/04 19:13:05 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	choose_arg(char det, va_list *ap)
 	return (0);
 }
 
-int ft_printf(const char *s, ...)
+int	ft_printf(const char *s, ...)
 {
 	va_list	ap;
 	va_list	*pap;
@@ -58,7 +58,7 @@ int ft_printf(const char *s, ...)
 		}
 		else
 		{
-			write(1, &s[cu], 1);	
+			write(1, &s[cu], 1);
 			cu++;
 			size++;
 		}
