@@ -6,29 +6,34 @@
 /*   By: tlebon <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 19:04:55 by tlebon            #+#    #+#             */
-/*   Updated: 2023/11/28 19:16:15 by tlebon           ###   ########.fr       */
+/*   Updated: 2023/12/05 14:21:34 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"ft_printf.h"
 
-int	ft_print_pointer(void *p)
+static char	write_hex(unsigned long n)
 {
-	
-	write(1,p, 8);	
-	return (0);
+	if (n > 15)
+		return ('\0');
+	else if (n > 9)
+		return (n + 'a' - 10);
+	else
+		return (n + '0');
 }
 
-/*static char	*ft_longtohexa(void *p)
+int	ft_print_pointer(void *p)
 {
-	char	*s;
+	unsigned long	adr;
 
-	s = malloc(14); // Taille de n importe quelle adresse en hexa ???
-	if (!s)
-		return (NULL);
-	
-	return s;	
+	if (!p)
+	{
+		write(1, "(nil)", 5);
+		return (5);
+	}
+	adr = (unsigned long)p;
+	write(1, "0x", 2);
 
 
-
-}*/
+	return (0);
+}

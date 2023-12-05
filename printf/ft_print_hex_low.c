@@ -6,7 +6,7 @@
 /*   By: tlebon <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 19:13:34 by tlebon            #+#    #+#             */
-/*   Updated: 2023/12/04 19:15:11 by tlebon           ###   ########.fr       */
+/*   Updated: 2023/12/05 13:54:45 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	count_digit(long n)
 static char	write_hex(long n)
 {
 	if (n > 15)
-		return ('\0'); // Condition d arret a revoir
+		return ('\0');
 	else if (n > 9)
 		return (n + 'a' - 10);
 	else
@@ -43,7 +43,6 @@ static char	write_hex(long n)
 int	ft_print_hex_low(int i)
 {
 	char			*s;
-	int				size;
 	int				cursor;
 	unsigned int	nbr;
 
@@ -65,8 +64,8 @@ int	ft_print_hex_low(int i)
 		cursor--;
 	}
 	s[cursor] = write_hex(nbr);
-	size = ft_strlen(s);
-	write(1, s, size);
+	cursor = ft_strlen(s);
+	write(1, s, cursor);
 	free(s);
-	return (size);
+	return (cursor);
 }

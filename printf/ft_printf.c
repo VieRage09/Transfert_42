@@ -6,7 +6,7 @@
 /*   By: tlebon <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 17:11:47 by tlebon            #+#    #+#             */
-/*   Updated: 2023/12/04 19:13:05 by tlebon           ###   ########.fr       */
+/*   Updated: 2023/12/05 14:00:17 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	choose_arg(char det, va_list *ap)
 		return (ft_print_hex_up(va_arg(*ap, int)));
 	else if (det == '%')
 		return (ft_print_char('%'));
-	return (0);
+	return (-1);
 }
 
 int	ft_printf(const char *s, ...)
@@ -40,11 +40,13 @@ int	ft_printf(const char *s, ...)
 	va_list	ap;
 	va_list	*pap;
 	int		size;
+	int		buff;
 	size_t	cu;
 
 	va_start(ap, s);
 	pap = &ap;
 	size = 0;
+	buff = 0;
 	cu = 0;
 	if (!s)
 		return (-1);
@@ -52,8 +54,10 @@ int	ft_printf(const char *s, ...)
 	{
 		if (s[cu] == '%')
 		{
-			// gerer le cas ou choosearg renvoie -1
-			size += choose_arg(s[cu + 1], pap);
+			buff = choose_arg(s[cu + 1], pap);
+			if (buff == -1)
+				return (0);
+			size += buff;
 			cu += 2;
 		}
 		else
