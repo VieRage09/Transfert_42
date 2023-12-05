@@ -6,11 +6,29 @@
 /*   By: tlebon <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 19:04:55 by tlebon            #+#    #+#             */
-/*   Updated: 2023/12/05 14:21:34 by tlebon           ###   ########.fr       */
+/*   Updated: 2023/12/05 16:01:26 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"ft_printf.h"
+#include <stdio.h>
+static int	count_digit(unsigned long n)
+{
+	int	count;
+
+	count = 1;
+	if (n < 0)
+	{
+		n *= (-1);
+		count++;
+	}
+	while (n > 15)
+	{
+		count++;
+		n /= 16;
+	}
+	return (count);
+}
 
 static char	write_hex(unsigned long n)
 {
@@ -22,18 +40,45 @@ static char	write_hex(unsigned long n)
 		return (n + '0');
 }
 
-int	ft_print_pointer(void *p)
+char	*ultohexa(unsigned long adr)
 {
-	unsigned long	adr;
+	int	cursor;
+	char	*s;
 
+	s = malloc((count_digit(adr) + 1) * sizeof(char));
+	if(!s)
+		return (NULL);
+	cursor = count_digit(adr) - 1;
+	s[cursor + 1] = '\0';
+	while (adr > 15)
+	{
+		s[cursor] = write_hex(adr % 16);
+		adr /= 16;
+		cursor--;
+	}
+	s[cursor] = write_hex(adr);
+	return (s);
+}
+
+int	ft_print_pointer(unsigned long p)
+{
+	char	*s;
+	int	adr;
 	if (!p)
 	{
 		write(1, "(nil)", 5);
 		return (5);
 	}
-	adr = (unsigned long)p;
-	write(1, "0x", 2);
-
-
-	return (0);
+	else
+	{
+		write(1, "0x", 2);
+		s = ultohexa(p);
+	}
+	if (!s)
+		return (-1);
+	adr = ft_strlen(s);
+	write(1, s, adr);
+	free(s);
+	return (adr + 2);
 }
+

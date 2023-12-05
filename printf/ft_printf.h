@@ -6,7 +6,7 @@
 /*   By: tlebon <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 17:08:36 by tlebon            #+#    #+#             */
-/*   Updated: 2023/12/04 19:11:47 by tlebon           ###   ########.fr       */
+/*   Updated: 2023/12/05 16:02:05 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_PRINTF_H
@@ -21,7 +21,7 @@ int	ft_printf(const char *s, ...);
 
 int	ft_print_char(char c);
 int	ft_print_str(const char *s);
-int	ft_print_pointer(void *p);
+int	ft_print_pointer(unsigned long p);
 int	ft_print_int(int n);
 int	ft_print_uns_int(unsigned int u);
 int	ft_print_hex_low(int i);

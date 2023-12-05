@@ -6,11 +6,12 @@
 /*   By: tlebon <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 17:11:47 by tlebon            #+#    #+#             */
-/*   Updated: 2023/12/05 14:00:17 by tlebon           ###   ########.fr       */
+/*   Updated: 2023/12/05 15:50:47 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"ft_printf.h"
+#include <stdio.h>
 
 static int	choose_arg(char det, va_list *ap)
 {
@@ -19,7 +20,7 @@ static int	choose_arg(char det, va_list *ap)
 	else if (det == 's')
 		return (ft_print_str(va_arg(*ap, char *)));
 	else if (det == 'p')
-		return (ft_print_pointer(va_arg(*ap, void *)));
+		return (ft_print_pointer(va_arg(*ap, unsigned long)));
 	else if (det == 'd')
 		return (ft_print_int(va_arg(*ap, int)));
 	else if (det == 'i')
@@ -70,3 +71,15 @@ int	ft_printf(const char *s, ...)
 	va_end(ap);
 	return (size);
 }
+/*
+int	main()
+{
+	void	*p = malloc(12);
+
+	int	f = ft_printf("%p\n", p);
+
+	int	n = printf("%p\n", p);
+
+	printf("ft : %i\nprintf : %i\n", f, n);
+	return 0;
+}*/
