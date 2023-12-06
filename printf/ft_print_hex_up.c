@@ -52,11 +52,6 @@ int	ft_print_hex_up(int i)
 		return (-1);
 	cursor = count_digit(nbr) - 1;
 	s[cursor + 1] = '\0';
-	if (nbr < 0)
-	{
-		s[0] = '-';
-		nbr *= (-1);
-	}
 	while (nbr > 15)
 	{
 		s[cursor] = write_hex(nbr % 16);

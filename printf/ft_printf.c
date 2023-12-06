@@ -35,22 +35,14 @@ static int	choose_arg(char det, va_list *ap)
 		return (ft_print_char('%'));
 	return (-1);
 }
-
-int	ft_printf(const char *s, ...)
+static int	writing_loop(const char *s, va_list *pap)
 {
-	va_list	ap;
-	va_list	*pap;
-	int		size;
-	int		buff;
+	int	size;
+	int	buff;
 	size_t	cu;
 
-	va_start(ap, s);
-	pap = &ap;
-	size = 0;
-	buff = 0;
 	cu = 0;
-	if (!s)
-		return (-1);
+	size = 0;
 	while (s[cu])
 	{
 		if (s[cu] == '%')
@@ -68,18 +60,24 @@ int	ft_printf(const char *s, ...)
 			size++;
 		}
 	}
+
+	return size;
+}
+
+int	ft_printf(const char *s, ...)
+{
+	va_list	ap;
+	va_list	*pap;
+	int		size;
+
+	va_start(ap, s);
+	pap = &ap;
+	size = 0;
+	if (!s)
+		return (-1);
+// debut modifs
+	size = writing_loop(s, pap);
+//fin modifs
 	va_end(ap);
 	return (size);
 }
-/*
-int	main()
-{
-	void	*p = malloc(12);
-
-	int	f = ft_printf("%p\n", p);
-
-	int	n = printf("%p\n", p);
-
-	printf("ft : %i\nprintf : %i\n", f, n);
-	return 0;
-}*/

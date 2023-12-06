@@ -11,17 +11,12 @@
 /* ************************************************************************** */
 
 #include"ft_printf.h"
-#include <stdio.h>
+
 static int	count_digit(unsigned long n)
 {
 	int	count;
 
 	count = 1;
-	if (n < 0)
-	{
-		n *= (-1);
-		count++;
-	}
 	while (n > 15)
 	{
 		count++;
@@ -42,11 +37,11 @@ static char	write_hex(unsigned long n)
 
 char	*ultohexa(unsigned long adr)
 {
-	int	cursor;
+	int		cursor;
 	char	*s;
 
 	s = malloc((count_digit(adr) + 1) * sizeof(char));
-	if(!s)
+	if (!s)
 		return (NULL);
 	cursor = count_digit(adr) - 1;
 	s[cursor + 1] = '\0';
@@ -63,7 +58,8 @@ char	*ultohexa(unsigned long adr)
 int	ft_print_pointer(unsigned long p)
 {
 	char	*s;
-	int	adr;
+	int		adr;
+
 	if (!p)
 	{
 		write(1, "(nil)", 5);
@@ -81,4 +77,3 @@ int	ft_print_pointer(unsigned long p)
 	free(s);
 	return (adr + 2);
 }
-
