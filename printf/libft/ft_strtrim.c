@@ -6,12 +6,12 @@
 /*   By: tlebon <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 17:21:54 by tlebon            #+#    #+#             */
-/*   Updated: 2023/11/24 17:56:04 by tlebon           ###   ########.fr       */
+/*   Updated: 2023/12/06 16:40:24 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include"libft.h"
 
-static size_t	find_start(char const *s, char const *set)
+static int	find_start(char const *s, char const *set)
 {
 	size_t	i;
 	size_t	p;
@@ -30,10 +30,10 @@ static size_t	find_start(char const *s, char const *set)
 			return (i);
 		i++;
 	}
-	return (0);
+	return (-1);
 }
 
-static size_t	find_end(char const *s, char const *set)
+static int	find_end(char const *s, char const *set)
 {
 	size_t	i;
 	size_t	p;
@@ -52,27 +52,28 @@ static size_t	find_end(char const *s, char const *set)
 			return (i);
 		i--;
 	}
-	return (0);
+	return (-1);
 }
 
 char	*ft_strtrim(char const *s, char const *set)
 {
 	char	*trim;
-	size_t	i;
+	int		i;
 
 	if (!s || !set)
 		return (NULL);
-	if (find_end(s, set) == 0)
+	if (find_end(s, set) == -1 || find_start(s, set) == -1)
+	{
 		trim = malloc(1);
+		if (!trim)
+			return (NULL);
+		trim[0] = '\0';
+		return (trim);
+	}
 	else
 		trim = malloc((find_end(s, set) - find_start(s, set) + 2));
 	if (trim == NULL)
 		return (NULL);
-	if (find_end(s, set) == 0)
-	{
-		trim[0] = '\0';
-		return (trim);
-	}
 	i = 0;
 	while (i < find_end(s, set) - find_start(s, set) + 1)
 	{
