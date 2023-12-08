@@ -6,7 +6,7 @@
 /*   By: tlebon <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 17:11:47 by tlebon            #+#    #+#             */
-/*   Updated: 2023/12/05 15:50:47 by tlebon           ###   ########.fr       */
+/*   Updated: 2023/12/08 16:32:54 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,11 @@ static int	choose_arg(char det, va_list *ap)
 		return (ft_print_char('%'));
 	return (-1);
 }
+
 static int	writing_loop(const char *s, va_list *pap)
 {
-	int	size;
-	int	buff;
+	int		size;
+	int		buff;
 	size_t	cu;
 
 	cu = 0;
@@ -60,8 +61,7 @@ static int	writing_loop(const char *s, va_list *pap)
 			size++;
 		}
 	}
-
-	return size;
+	return (size);
 }
 
 int	ft_printf(const char *s, ...)
@@ -72,12 +72,9 @@ int	ft_printf(const char *s, ...)
 
 	va_start(ap, s);
 	pap = &ap;
-	size = 0;
 	if (!s)
 		return (-1);
-// debut modifs
 	size = writing_loop(s, pap);
-//fin modifs
 	va_end(ap);
 	return (size);
 }

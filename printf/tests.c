@@ -118,6 +118,16 @@ int	main(void)
 	ft = ft_printf("%%\n");
 	Test_return_value(ft, print);
 
+	//Test all
+	
+	printf("Test all :\n");
+	
+	printf("1.\n");
+	print = printf("char : %c\nstring : %s\nPointer : %p\nInt : %i\nDec : %d\n ");
+	ft = ft_printf("%%\n");
+	Test_return_value(ft, print);
+
+
 
 
 
