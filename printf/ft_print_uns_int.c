@@ -9,7 +9,7 @@
 /*   Updated: 2023/12/04 19:16:13 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+#include "ft_printf.h"
 #include"libft/libft.h"
 
 static int	ucount_digit(unsigned int n)

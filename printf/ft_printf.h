@@ -5,26 +5,23 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/28 17:08:36 by tlebon            #+#    #+#             */
-/*   Updated: 2023/12/05 16:02:05 by tlebon           ###   ########.fr       */
+/*   Created: 2023/12/11 17:16:12 by tlebon            #+#    #+#             */
+/*   Updated: 2023/12/11 17:16:18 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #ifndef FT_PRINTF_H
-# define FT_PRINTF_H
-# include <stdarg.h>
-# include <stddef.h> 
-# include <unistd.h>
-# include <stdlib.h>
-# include"libft/libft.h"
+#define FT_PRINTF_H
 
-int	ft_printf(const char *s, ...);
+#include"libft/libft.h"
 
-int	ft_print_char(char c);
-int	ft_print_str(const char *s);
-int	ft_print_pointer(unsigned long p);
-int	ft_print_int(int n);
-int	ft_print_uns_int(unsigned int u);
-int	ft_print_hex_low(int i);
-int	ft_print_hex_up(int i);
+int ft_printf(const char *s, ...);
+int ft_print_char(char c);
+int ft_print_str(const char *s);
+int ft_print_pointer(unsigned long p);
+int ft_print_int(int n);
+int ft_print_uns_int(unsigned int u);
+int ft_print_hex_low(int i);
+int ft_print_hex_up(int i);
 
-#endif
+#endif 
