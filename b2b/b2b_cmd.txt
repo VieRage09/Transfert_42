@@ -1,20 +1,40 @@
 /// Groups & user related ///
 
-	useradd <name> :					Create user named <name>
+	useradd <name> :					Create user
+named <nameudo
 
 	groupadd <name> :					Create group named <name>
 	groupdel <name> :					Delete group
 
 	adduser <user> <grp> :				Add user to group grp (ex : sudo)
 	id <user> :							List user groups
-	
+
+
+/// Password related ///	
+
+vi /etc/login.defs					Modify to change passwd retries, expiration time of a password, time before being able to change a password and numbers of days before expiration to send a warning message 
+
+libpam-pwquality					To install : allow better quality pw control
+/etc/pam.d/common-password				Modify listed options below to modify pw policy
+
+minlen=n						pw has to be n char long
+ucredit=-1						pw has to have at least 1 uppercase (value = 1 means max 1 uppercase)
+dcredit=-1						pw has to have at least 1 digit
+lcredit=-1						pw has to have at least 1 lowercase
+maxrepeat=n						max n consecutive identical chars
+difok=n							number of change required in the new pw
+reject_username						pw cannot contain username 
+enforce_for_root					the policy applies for root pw
+
+
 /// Sudo related ///
 	
 	sudo -v :							Check sudopowers of the current user
 
 /// Sudo config ///
 
-	Defaults passwd_trie=n				Set password tries for sudo to n
+	Defaults passwd_trie=n				Set password tries for
+sudo to n
 	Defaults badpass_message="str"		Print str when wrong passwd for sudo 
 	Defaults secure_path="<path>"		Set up the path used while running sudo command
 	Defaults logfile="<path>"			Set up the path for the logs 
@@ -22,10 +42,28 @@
 										using sudo
 	Defaults iolog_dir="<path>"			Set up the path for the logs of the inputs and outputs
 
+
 /// Usefull ///
 	
+	hostname <name> 				Change temporaly the hostname 
+	sudo vi /etc/hostname				Modifie le fichier
+								contenant le hostname 
+							--> Change
+								définitivement le hostname après un reboot
+
 	reboot :							bah gros
 	su <user> : 						Switch user, - for root.
 	getent <database> <precision> :		List infos from database, with precision restriction
 
+/// SSH ///
 
+vi /etc/ssh/sshd_config 			Modify the config file of ssh
+						(modify the 14th line to modify the running port for ssh)
+						(modify the 32th line :
+						replace by no to disable connecting with ssh as root)
+
+
+/// UFW ///
+
+ufw enable					Enable ufw firewall 
+ufw allow <port>				Allow <port> to be opened 
