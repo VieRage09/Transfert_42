@@ -1,7 +1,6 @@
 /// Groups & user related ///
 
-	useradd <name> :					Create user
-named <nameudo
+	useradd <name> :					Create user named <nameudo
 
 	groupadd <name> :					Create group named <name>
 	groupdel <name> :					Delete group
@@ -24,17 +23,18 @@ lcredit=-1						pw has to have at least 1 lowercase
 maxrepeat=n						max n consecutive identical chars
 difok=n							number of change required in the new pw
 reject_username						pw cannot contain username 
-enforce_for_root					the policy applies for root pw
+enforce_for_root					the policy applies for root pw (doesn't apply difok for root)
 
 
 /// Sudo related ///
 	
-	sudo -v :							Check sudopowers of the current user
+	sudo -l :							List sudopowers of the current user
+	sudo -k :							Reset the timestamp for sudo --> pw will be asked again
+	sudo -v : 							expend the timestamp for 15 min
 
 /// Sudo config ///
 
-	Defaults passwd_trie=n				Set password tries for
-sudo to n
+	Defaults passwd_trie=n				Set password tries for sudo to n
 	Defaults badpass_message="str"		Print str when wrong passwd for sudo 
 	Defaults secure_path="<path>"		Set up the path used while running sudo command
 	Defaults logfile="<path>"			Set up the path for the logs 
@@ -53,14 +53,16 @@ sudo to n
 
 	reboot :							bah gros
 	su <user> : 						Switch user, - for root.
+	passwd 								Change pw of current user
 	getent <database> <precision> :		List infos from database, with precision restriction
 
 /// SSH ///
 
 vi /etc/ssh/sshd_config 			Modify the config file of ssh
 						(modify the 14th line to modify the running port for ssh)
-						(modify the 32th line :
+						(modify the 33th line :
 						replace by no to disable connecting with ssh as root)
+sudo service ssh status				show the status of ssh
 
 
 /// UFW ///
