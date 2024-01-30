@@ -1,4 +1,6 @@
 #!/bin/bash
+
+
 echo "Introduction msg blablabla"
 
 echo "	# Architecture: $(uname -a)"

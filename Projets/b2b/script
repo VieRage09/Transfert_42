@@ -1,13 +1,13 @@
-P	architecture and kernel version : uname -a
-	Number of CPU (physical) : lscpu | grep 'CPU(s)'
-P	Number of CPU (virtual) : nproc
-	Available RAM : free --mega -t | grep 'Mem' | awk -F " " '{printf $3}'
+	# architecture and kernel version : uname -a
+	# Number of CPU (physical) : lscpu | grep 'CPU(s)'
+	# Number of CPU (virtual) : nproc
+	# A vailable RAM : free --mega -t | grep 'Mem' | awk -F " " '{printf $3}'
 	disk usage : df 
 	CPU load :
-AR	last reboot : last reboot
+	# last reboot : last reboot
 	LVM use : lvdisplay ou bien lvm lvscan
-AR	Number of active connections : ss -s
-	Number of user active : w | wc -l   le tout -2
-AR	MAC adress : ip a | grep 'link/ether' | awk -F " " '{print $2}'
-P	IPv4 adress : hostname -I 
-	Sudo cmd executed : cat /var/log/sudo/sudo.log | wc -l le tout /2
+	Number of active connections : ss -s
+	# Number of user active : w | wc -l   le tout -2
+	# MAC adress : ip a | grep 'link/ether' | awk -F " " '{print $2}'
+	# IPv4 adress : hostname -I 
+	# Sudo cmd executed : cat /var/log/sudo/sudo.log | wc -l le tout /2
