@@ -1,7 +1,7 @@
 	# architecture and kernel version : uname -a
 	# Number of CPU (physical) : lscpu | grep 'CPU(s)'
 	# Number of CPU (virtual) : nproc
-	# A vailable RAM : free --mega -t | grep 'Mem' | awk -F " " '{printf $3}'
+	# Available RAM : free --mega -t | grep 'Mem' | awk -F " " '{printf $3}'
 	disk usage : df 
 	CPU load :
 	# last reboot : last reboot

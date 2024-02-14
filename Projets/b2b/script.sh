@@ -3,6 +3,5 @@
 
 echo "Introduction msg blablabla"
 
-echo "	# Architecture: $(uname -a)"
-
-echo "	# MAC address: $(ip a | grep 'link/ether' | awk -F " " '{print$2}')"
+echo "	# Architecture: $(uname -a)"A
+echo "	# MAC address: $(ip a | grep 'link/ether' | awk -F " " '{print$2}')"A

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 16:55:59 by tlebon            #+#    #+#             */
-/*   Updated: 2024/01/18 20:32:11 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/01/29 19:08:59 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
@@ -37,28 +37,29 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	substr[i - start] = '\0';
 	return (substr);
 }
+
 // Use ft_strjoin on s1 and s2 then free them before returning the joined string
 char	*lucas_safe(char *s1, char *s2)
 {
 	char	*lucas;
-	
+
 	lucas = ft_strjoin(s1, s2);
 	free(s1);
 	free(s2);
 	if (!lucas)
-	{
 		return (NULL);
-	}
-	return (lucas);	
+	return (lucas);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*join;
 	size_t	i;
-	size_t len1 = ft_strlen(s1);
-	size_t len2 = ft_strlen(s2);
+	size_t	len1;
+	size_t	len2;
 
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
 	if (!s1 || !s2)
 		return (NULL);
 	i = 0;
