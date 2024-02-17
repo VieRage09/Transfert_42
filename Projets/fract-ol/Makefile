@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/16 17:14:35 by tlebon            #+#    #+#              #
-#    Updated: 2024/02/17 17:53:58 by tlebon           ###   ########.fr        #
+#    Updated: 2024/02/17 22:19:10 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ INC =	-I ./includes\
 		-I ./includes/mlx\
 #################################
 tryout: $(MLX) $(LIBFT)
-	$(CC) $(CFLAGS) $(SRC) -L $(MLX_PATH) -lmlx -lXext -lX11 -L $(LIBFT_PATH) -lft
+	$(CC) $(CFLAGS) -o $(NAME) $(SRC) -L $(MLX_PATH) -lmlx -lXext -lX11 -L $(LIBFT_PATH) -lft
 
 all: $(MLX) $(LIBFT) $(NAME)
 
