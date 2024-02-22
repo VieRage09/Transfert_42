@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 00:02:04 by tlebon            #+#    #+#             */
-/*   Updated: 2024/02/22 03:38:15 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/02/22 04:58:02 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,33 @@ void	put_pixel_to_image(t_img_data *s_img, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-void	get_color_gradient(int iter, int max_iter, int *gradient)
+int	get_color_gradient(int iter, int max_iter, int *gradient)
 {
+	return (gradient[max_iter - iter]);
+}
+
+// int	*create_gradient(int grad_length)
+// {
+// 	int		*grad;
+// 	int		i;
+// 	int		base;
+	
+// 	grad = malloc((grad_length + 1) * sizeof(int));
+// 	if (!grad)
+// 		return (NULL);
+// 	i = 0;
+// 	base = create_trgb(256, 0, 0, 256);
+// 	while (i <= grad_length)
+// 	{
+// 		grad[i] = create_trgb(256, i * 256 / grad_length, 0, 256 - i *0.9);
+// 		i++;
+// 	}
+// 	return (grad);
+// }
+
+int	*create_gradient(int grad_length)
+{
+	
 	
 }
 // Gere les arguments en entree et les check

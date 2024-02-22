@@ -6,12 +6,13 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 15:07:14 by tlebon            #+#    #+#             */
-/*   Updated: 2024/02/22 03:36:55 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/02/22 03:56:43 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //
 #include<stdio.h>
+#include<time.h>
 //
 #include<unistd.h>
 #include<stdlib.h>
@@ -72,6 +73,8 @@ void	set_reso_struct(t_reso *s_reso, int x_reso, int y_reso);
 
 // Utils
 int		create_trgb(int t, int r, int g, int b);
+int		*create_gradient(int color_nb);
+int	get_color_gradient(int iter, int max_iter, int *gradient);
 void	put_pixel_to_image(t_img_data *s_img, int x, int y, int color);
 int		menu (int ac, char *av[]);
 
@@ -80,7 +83,7 @@ int		escape_keyhook(int keycode, t_mlx_data *s_mlx);
 int		cross_button_hook(t_mlx_data *s_mlx);
 
 // Fractal
-int		draw_julman(t_img_data *s_img, t_reso *s_reso, int max_iter);
+int		draw_julman(t_img_data *s_img, t_reso *s_reso, int max_iter, int *gradient);
 int		julman_pt_check(t_cpx_pt *s_cpx_pt, double x, double y, int max_iter);
 
 #endif

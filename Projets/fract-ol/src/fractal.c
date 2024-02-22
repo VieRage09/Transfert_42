@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 01:13:28 by tlebon            #+#    #+#             */
-/*   Updated: 2024/02/22 03:36:39 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/02/22 03:41:39 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	julman_pt_check(t_cpx_pt *s_init, double x, double y, int max_iter)
 	return (iter);
 }
 
-int	draw_julman(t_img_data *s_img, t_reso *s_reso, int max_iter)
+int	draw_julman(t_img_data *s_img, t_reso *s_reso, int max_iter, int *gradient)
 {
 	t_frame	s_frame;
 	t_cpx_pt s_cpx_pt;
@@ -56,7 +56,7 @@ int	draw_julman(t_img_data *s_img, t_reso *s_reso, int max_iter)
 			if (it == max_iter)
 				put_pixel_to_image(s_img, x, y, 0x00000000);
 			else
-				put_pixel_to_image(s_img, x, y, it);
+				put_pixel_to_image(s_img, x, y, get_color_gradient(it, max_iter, gradient));
 			y++;
 		}
 		x++;
