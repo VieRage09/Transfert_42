@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tlebon <marvin@42.fr>                      +#+  +:+       +#+         #
+#    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/10 17:36:09 by tlebon            #+#    #+#              #
-#    Updated: 2023/12/11 18:01:29 by tlebon           ###   ########.fr        #
+#    Updated: 2024/02/22 06:37:19 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,9 @@ SRC =				\
 		ft_strlen.c	\
 		ft_strnstr.c	\
 		ft_substr.c	\
+		ft_putchar.c	\
+		ft_putstr.c	\
+		ft_atod.c		\
 
 SRCB =					\
 		ft_lstnew.c	\

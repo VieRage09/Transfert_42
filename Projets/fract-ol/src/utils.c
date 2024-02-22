@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 00:02:04 by tlebon            #+#    #+#             */
-/*   Updated: 2024/02/22 04:58:02 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/02/22 06:21:01 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ void	put_pixel_to_image(t_img_data *s_img, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-int	get_color_gradient(int iter, int max_iter, int *gradient)
+int	get_color_gradient(int iter, int *gradient)
 {
-	return (gradient[max_iter - iter]);
+	return (gradient[iter]);
 }
 
 // int	*create_gradient(int grad_length)
@@ -58,8 +58,26 @@ int	get_color_gradient(int iter, int max_iter, int *gradient)
 
 int	*create_gradient(int grad_length)
 {
+	int	*grad;
+	int	i;
 	
-	
+	grad = malloc((grad_length + 1) * sizeof(int));
+	if (!grad)
+		return (NULL);	
+	grad[grad_length - 1] = create_trgb(0, 0, 0, 0);
+	i = 0;
+	while (i < grad_length - 1)
+	{
+		grad[i] = create_trgb(256, 150 * i / grad_length, 0, 256 * i / grad_length);
+		// if (i < grad_length / 3)
+		// 	grad[i] = create_trgb(255, 0, 0, 255 - i * 3);	
+		// else if (i >= grad_length / 3 && i < 2 * grad_length / 3)
+		// 	grad[i] = create_trgb(255, 255 - i * 3, 0, 0);
+		// else
+		// 	grad[i] = create_trgb(255, 0, 255 - i * 3, 0);
+		i++;
+	}
+	return (grad);
 }
 // Gere les arguments en entree et les check
 int	menu (int ac, char *av[])

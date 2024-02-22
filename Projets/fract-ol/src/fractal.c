@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 01:13:28 by tlebon            #+#    #+#             */
-/*   Updated: 2024/02/22 03:41:39 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/02/22 06:13:46 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,27 +36,27 @@ int	julman_pt_check(t_cpx_pt *s_init, double x, double y, int max_iter)
 	return (iter);
 }
 
-int	draw_julman(t_img_data *s_img, t_reso *s_reso, int max_iter, int *gradient)
+int	draw_julman(t_img_data *s_img, int max_iter, t_cpx_pt *s_init, int *gradient)
 {
 	t_frame	s_frame;
-	t_cpx_pt s_cpx_pt;
 	int it;
 	int	x;
 	int	y;
-		
-	set_frame_struct(&s_frame, 'm', s_reso->x_reso, s_reso->y_reso);
-	set_cpx_pt_struct(&s_cpx_pt, 0, 0);
+	
+	if (s_init->r == 0 && s_init->i == 0)
+		set_frame_struct(&s_frame, 'm', s_img->x_reso, s_img->y_reso);
+	else
+		set_frame_struct(&s_frame, 'j', s_img->x_reso, s_img->y_reso);
 	x = 0;
-	while (x < s_reso->x_reso)
+	while (x < s_img->x_reso)
 	{
 		y = 0;
-		while (y < s_reso->y_reso)
+		while (y < s_img->y_reso)
 		{
-			it = julman_pt_check(&s_cpx_pt, (x / s_frame.zoom_x) + s_frame.x1, (y / s_frame.zoom_y) + s_frame.y1, max_iter);
-			if (it == max_iter)
-				put_pixel_to_image(s_img, x, y, 0x00000000);
-			else
-				put_pixel_to_image(s_img, x, y, get_color_gradient(it, max_iter, gradient));
+			it = julman_pt_check(s_init, (x / s_frame.zoom_x) + s_frame.x1,
+								 (y / s_frame.zoom_y) + s_frame.y1, max_iter);
+			put_pixel_to_image(s_img, x, y, 
+									get_color_gradient(it, gradient));
 			y++;
 		}
 		x++;

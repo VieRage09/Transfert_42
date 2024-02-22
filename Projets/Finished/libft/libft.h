@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlebon <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 17:42:22 by tlebon            #+#    #+#             */
-/*   Updated: 2023/11/24 16:48:37 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/02/17 17:14:46 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #ifndef LIBFT_H
 # define LIBFT_H
 # include <stddef.h>
@@ -68,6 +69,8 @@ void	*ft_calloc(size_t nmemb, size_t size);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 
+void	ft_putchar(char c);
+void	ft_putstr(char *s);
 void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
