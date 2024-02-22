@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/16 17:14:35 by tlebon            #+#    #+#              #
-#    Updated: 2024/02/17 22:19:10 by tlebon           ###   ########.fr        #
+#    Updated: 2024/02/22 01:16:58 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,8 +19,13 @@ CFLAGS = -Wall -Werror -Wextra
 
 #SOURCES#########################
 SRC_PATH = ./src
-SRC = $(SRC_PATH)/main.c
-OBJ = $(SRC.c=.o)
+SRC = 								\
+		$(SRC_PATH)/main.c			\
+		$(SRC_PATH)/constructors.c	\
+		$(SRC_PATH)/utils.c			\
+		$(SRC_PATH)/hooks.c			\
+		$(SRC_PATH)/fractal.c		\
+#OBJ = $(SRC.c=.o)
 #################################
 
 #LIBFT###########################
