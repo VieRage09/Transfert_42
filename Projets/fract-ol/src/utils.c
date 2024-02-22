@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 00:02:04 by tlebon            #+#    #+#             */
-/*   Updated: 2024/02/22 06:21:01 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/02/22 11:23:39 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,15 @@ void	put_pixel_to_image(t_img_data *s_img, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-int	get_color_gradient(int iter, int *gradient)
+int	get_color_gradient(int iter, int max_iter, long *gradient)
 {
-	return (gradient[iter]);
+	int	color;
+	
+	if (iter == max_iter)
+		return (0);
+	color = gradient [(10 * iter / max_iter)];
+	
+	return (color);
 }
 
 // int	*create_gradient(int grad_length)
@@ -68,13 +74,31 @@ int	*create_gradient(int grad_length)
 	i = 0;
 	while (i < grad_length - 1)
 	{
-		grad[i] = create_trgb(256, 150 * i / grad_length, 0, 256 * i / grad_length);
+	grad[i] = create_trgb(256, 150 / (1+i*2.5), 0, 256 * i / grad_length);
 		// if (i < grad_length / 3)
 		// 	grad[i] = create_trgb(255, 0, 0, 255 - i * 3);	
 		// else if (i >= grad_length / 3 && i < 2 * grad_length / 3)
 		// 	grad[i] = create_trgb(255, 255 - i * 3, 0, 0);
 		// else
 		// 	grad[i] = create_trgb(255, 0, 255 - i * 3, 0);
+		i++;
+	}
+	return (grad);
+}
+long	*load_gradient(int fd, int grad_length)
+{
+	long	*grad;
+	int	i;
+	char	*buff;	
+	grad = malloc(sizeof(long) * (grad_length + 1));
+	if (!grad)
+		return (NULL);
+	i = 0;
+	while (i < grad_length)
+	{
+		buff = get_next_line(fd);
+		grad[i] = ft_atol(buff);
+		// grad[i] = fd;
 		i++;
 	}
 	return (grad);
@@ -92,6 +116,11 @@ int	menu (int ac, char *av[])
 		ft_putstr("This program only takes \"m\" (for Mandelbrot set) or \"j\" (for Julia set) as first parameter\n");
 		exit(1);
 	}
+	else if (av[1][0] == 'j' && ac < 4)
+	{
+		ft_putstr("This program need a starting point for the Julia set\nTry ./fractol j 0.285 0.01\n");
+		exit(1);
+	}	
 	else
 		return (av[1][0]);
 	return (0);

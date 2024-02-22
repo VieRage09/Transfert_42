@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 17:42:22 by tlebon            #+#    #+#             */
-/*   Updated: 2024/02/22 07:02:13 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/02/22 10:41:43 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <stddef.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include "get_next_line.h"
 
 typedef struct s_list
 {
@@ -56,6 +57,7 @@ int		ft_tolower(int c);
 
 int		ft_atoi(const char *nstr);
 float	ft_atof(const char *nptr);
+long	ft_atol(const char *nptr);
 char	*ft_itoa(int n);
 
 void	*ft_memset(void *s, int c, size_t n);
