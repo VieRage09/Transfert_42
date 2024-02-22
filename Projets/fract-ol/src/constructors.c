@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 23:53:19 by tlebon            #+#    #+#             */
-/*   Updated: 2024/02/22 06:12:23 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/02/22 07:15:39 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ void	set_frame_struct(t_frame *s_frame, char c, int x_size, int y_size)
 	}
 	else if (c == 'j')
 	{
-		s_frame->x1 = -1.5;
-		s_frame->x2 = 1.5;
+		s_frame->x1 = -1;
+		s_frame->x2 = 1;
 		s_frame->y1 = -1.2;
 		s_frame->y2 = 1.2;
 		s_frame->zoom_x = x_size / (s_frame->x2 - s_frame->x1);

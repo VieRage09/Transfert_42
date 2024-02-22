@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/10 17:36:09 by tlebon            #+#    #+#              #
-#    Updated: 2024/02/22 06:37:19 by tlebon           ###   ########.fr        #
+#    Updated: 2024/02/22 07:03:44 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,7 @@ SRC =				\
 		ft_substr.c	\
 		ft_putchar.c	\
 		ft_putstr.c	\
-		ft_atod.c		\
+		ft_atof.c		\
 
 SRCB =					\
 		ft_lstnew.c	\

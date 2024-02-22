@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:55:43 by tlebon            #+#    #+#             */
-/*   Updated: 2024/02/22 06:23:17 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/02/22 07:32:31 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	main(int ac, char *av[])
 	if (fract_type == 'm')
 		draw_julman(&s_img, max_iter, cpx_pt_constructor(0, 0), gradient);
 	else if (fract_type == 'j')
-		draw_julman(&s_img, max_iter, cpx_pt_struct_constructor(ft_atoi(av[3]), ft_atoi(av[4])), gradient);
+		draw_julman(&s_img, max_iter, cpx_pt_constructor(ft_atof(av[3]), ft_atof(av[4])), gradient);
 	mlx_put_image_to_window(s_mlx.mlx, s_mlx.win, s_img.img, 0, 0);
 	mlx_key_hook(s_mlx.win, escape_keyhook, &s_mlx);
 	mlx_hook(s_mlx.win, 17, 1L<<5, cross_button_hook, &s_mlx); 

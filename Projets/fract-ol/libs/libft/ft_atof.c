@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atod.c                                          :+:      :+:    :+:   */
+/*   ft_atof.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:24:39 by tlebon            #+#    #+#             */
-/*   Updated: 2024/02/22 06:40:06 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/02/22 07:09:01 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ static int	ft_isspace(char c)
 		return (0);
 }
 
-int	ft_atod(const char *nptr)
+float	ft_atof(const char *nptr)
 {
-	int	i;
-	int	nbr;
-	int	sign;
-	int	point;
+	int		i;
+	float	nbr;
+	int		sign;
+	int		point;
 
 	i = 0;
 	nbr = 0;
@@ -37,13 +37,14 @@ int	ft_atod(const char *nptr)
 			sign = sign * (-1);
 		i++;
 	}
-	while ((ft_isdigit(nptr[i]) || nptr[i] == '.') && point <= 1)
+	i = ft_strlen(nptr) - 1;
+	while ((ft_isdigit(nptr[i]) || nptr[i] == '.') && point <= 1 && i >= 0)
 	{
 		if (nptr[i] == '.')
 			point++;
 		else
-			nbr = nbr * 10 + (nptr[i] - '0');
-		i++;
+			nbr = nbr / 10 + (nptr[i] - '0');
+		i--;
 	}
 	return (sign * nbr);
 }

@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 15:07:14 by tlebon            #+#    #+#             */
-/*   Updated: 2024/02/22 06:13:29 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/02/22 07:22:50 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ int		cross_button_hook(t_mlx_data *s_mlx);
 
 // Fractal
 int		draw_julman(t_img_data *s_img, int max_iter, t_cpx_pt *s_init, int *gradient);
-int		julman_pt_check(t_cpx_pt *s_cpx_pt, double x, double y, int max_iter);
+int		man_pt_check(t_cpx_pt *s_cpx_pt, double x, double y, int max_iter);
+int		jul_pt_check(t_cpx_pt *s_init, double x, double y, int max_iter);
 
 #endif
