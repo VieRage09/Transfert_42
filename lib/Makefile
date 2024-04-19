@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/10 17:36:09 by tlebon            #+#    #+#              #
-#    Updated: 2024/04/16 19:45:12 by tlebon           ###   ########.fr        #
+#    Updated: 2024/04/19 19:02:46 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,6 +56,7 @@ SRC =					\
 		ft_atof.c		\
 		ft_atol.c		\
 		ft_free_tab.c	\
+		ft_print_str_tab.c	\
 		get_next_line/get_next_line.c		\
 		get_next_line/get_next_line_utils.c	\
 		get_next_line/get_next_line_bonus.c	\

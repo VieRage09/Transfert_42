@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 17:42:22 by tlebon            #+#    #+#             */
-/*   Updated: 2024/04/05 19:30:21 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/04/19 18:59:47 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strtrim(char const *s1, char const *set);
 char	**ft_split(char const *s, char c);
-void	ft_free_tab(void **tab);
+void	ft_print_str_tab(char **tab);
 
 int		ft_toupper(int c);
 int		ft_tolower(int c);
@@ -70,6 +70,7 @@ void	*ft_memchr(const void *s, int c, size_t n);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 
 void	*ft_calloc(size_t nmemb, size_t size);
+void	ft_free_tab(void **tab);
 
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
