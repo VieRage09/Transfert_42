@@ -6,7 +6,7 @@
 /*   By: tlebon <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:59:16 by tlebon            #+#    #+#             */
-/*   Updated: 2023/11/24 16:06:47 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/05/18 18:10:58 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include"libft.h"
@@ -30,9 +30,4 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 		i++;
 	}
 	return (0);
-}
-
-int	main()
-{
-	printf("%i\n", ft_strncmp("HOME=/home/tlebon", "HOME=", 5));
 }
