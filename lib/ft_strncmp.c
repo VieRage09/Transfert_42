@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include"libft.h"
+#include <stdio.h>
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
@@ -29,4 +30,9 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 		i++;
 	}
 	return (0);
+}
+
+int	main()
+{
+	printf("%i\n", ft_strncmp("HOME=/home/tlebon", "HOME=", 5));
 }

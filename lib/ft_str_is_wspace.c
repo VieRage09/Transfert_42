@@ -1,36 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atol.c                                          :+:      :+:    :+:   */
+/*   ft_str_is_wspace.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/22 10:40:26 by tlebon            #+#    #+#             */
-/*   Updated: 2024/05/18 17:59:38 by tlebon           ###   ########.fr       */
+/*   Created: 2024/05/18 18:02:03 by tlebon            #+#    #+#             */
+/*   Updated: 2024/05/18 18:03:54 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"libft.h"
+#include "libft.h"
 
-long	ft_atol(const char *nptr)
+int	ft_str_is_wspace(char *str)
 {
-	int		i;
-	long	nbr;
-	int		sign;
+	int	i;
 
 	i = 0;
-	nbr = 0;
-	sign = 1;
-	while (ft_isspace(nptr[i]))
-		i++;
-	if (nptr[i] == '-')
-		sign = sign * (-1);
-	if (nptr[i] == '+' || nptr[i] == '-')
-		i++;
-	while (ft_isdigit(nptr[i]))
+	while (str[i])
 	{
-		nbr = nbr * 10 + (nptr[i] - '0');
+		if (!ft_isspace(str[i]))
+			return (1);
 		i++;
 	}
-	return (sign * nbr);
+	return (0);
 }

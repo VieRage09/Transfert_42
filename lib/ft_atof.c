@@ -6,20 +6,12 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:24:39 by tlebon            #+#    #+#             */
-/*   Updated: 2024/02/27 19:29:57 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/05/18 17:52:33 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"libft.h"
 #include<stdio.h>
-
-static int	ft_isspace(char c)
-{
-	if ((c >= 9 && c <= 13) || c == ' ')
-		return (1);
-	else
-		return (0);
-}
 
 static double	get_decimal(const char *nptr, int index)
 {
