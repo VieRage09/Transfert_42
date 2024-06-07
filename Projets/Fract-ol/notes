@@ -1,0 +1,18 @@
+check makefile (notamment le fait que le make ne cree pas de .o lors de la compilation)				
+norminette
+Check graphic opti pour gradient couleur jcp comment faire (check wiki mandelbrot fonction sinusoidale)
+valgrind 
+check si les msg error doivent etre print sur stderror ou stdout
+check any printf residus
+
+
+check img offset avant la correction
+
+bonus :
+
+color switch 
+one more fract
+
+optionnel :
+rester appuye lance plusieurs fois la commande 
+changer sois meme le point d'origin pour l'ensemble de julia
