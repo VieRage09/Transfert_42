@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 23:53:19 by tlebon            #+#    #+#             */
-/*   Updated: 2024/06/05 21:33:54 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/06/07 21:17:47 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ t_mlx_data	*new_mlx_data(t_reso *s_reso, char *win_name)
 
 	s_mlx = malloc(sizeof(t_mlx_data));
 	if (!s_mlx)
+	{
+		perror("Malloc failed");
 		return (NULL);
+	}
 	s_mlx->mlx = mlx_init();
 	if (!s_mlx->mlx)
 	{
@@ -47,7 +50,10 @@ t_img_data	*new_img_data(t_mlx_data *s_mlx, t_reso *s_reso)
 
 	s_img = malloc(sizeof(t_img_data));
 	if (!s_img)
+	{
+		perror("Malloc failed");
 		return (NULL);
+	}
 	s_img->img = mlx_new_image(s_mlx->mlx, s_reso->x_reso, s_reso->y_reso);
 	if (!(s_img->img))
 	{
@@ -71,30 +77,31 @@ t_img_data	*new_img_data(t_mlx_data *s_mlx, t_reso *s_reso)
 t_fract	*new_fract(t_cpx_pt *s_init, t_reso *s_reso,
 	int max_iter, t_color **grad)
 {
-	t_fract	*s_fract;
+	t_fract	*s_frc;
 
 	if (!s_init || !grad || !s_reso)
 		return (NULL);
-	s_fract = malloc(sizeof(t_fract));
-	if (!s_fract)
-		return (NULL);
-	s_fract->s_init = s_init;
-	s_fract->gradient = grad;
-	if (s_init->r == 0 && s_init->i == 0)
-		s_fract->s_frame = new_frame(-3.15, 1.65, -1.2, 1.2);
-	else
-		s_fract->s_frame = new_frame(-1, 1, -1.2, 1.2);
-	if (!(s_fract->s_frame))
+	s_frc = malloc(sizeof(t_fract));
+	if (!s_frc)
 	{
-		free(s_fract);
+		perror("Malloc failed");
 		return (NULL);
 	}
-	s_fract->max_iter = max_iter;
-	s_fract->zoom_x = s_reso->x_reso
-		/ (s_fract->s_frame->x2 - s_fract->s_frame->x1);
-	s_fract->zoom_y = s_reso->y_reso
-		/ (s_fract->s_frame->y2 - s_fract->s_frame->y1);
-	return (s_fract);
+	s_frc->s_init = s_init;
+	s_frc->gradient = grad;
+	if (s_init->r == 0 && s_init->i == 0)
+		s_frc->s_frame = new_frame(-3.15, 1.65, -1.2, 1.2);
+	else
+		s_frc->s_frame = new_frame(-1, 1, -1.2, 1.2);
+	if (!(s_frc->s_frame))
+	{
+		free(s_frc);
+		return (NULL);
+	}
+	s_frc->max_iter = max_iter;
+	s_frc->zoom_x = s_reso->x_reso / (s_frc->s_frame->x2 - s_frc->s_frame->x1);
+	s_frc->zoom_y = s_reso->y_reso / (s_frc->s_frame->y2 - s_frc->s_frame->y1);
+	return (s_frc);
 }
 
 // Returns a pointer to a struct containing all the data needed to draw and 
@@ -108,16 +115,19 @@ t_global	*new_global(t_cpx_pt *s_init, t_reso *s_reso,
 		return (NULL);
 	s_glb = malloc(sizeof(t_global));
 	if (!s_glb)
+	{
+		perror("Malloc failed");
 		return (NULL);
+	}
 	s_glb->s_mlx = new_mlx_data(s_reso, "Fract-ol");
 	if (!(s_glb->s_mlx))
-		return (free_global(s_glb));
+		free_global_ex(s_glb, EXIT_FAILURE);
 	s_glb->s_img = new_img_data(s_glb->s_mlx, s_reso);
 	if (!(s_glb->s_img))
-		return (free_global(s_glb));
+		free_global_ex(s_glb, EXIT_FAILURE);
 	s_glb->s_fract = new_fract(s_init, s_reso, max_iter, grad);
 	if (!(s_glb->s_fract))
-		return (free_global(s_glb));
+		free_global_ex(s_glb, EXIT_FAILURE);
 	return (s_glb);
 }
 
@@ -128,7 +138,10 @@ t_frame	*new_frame(double x1, double x2, double y1, double y2)
 
 	s_frame = malloc(sizeof(t_frame));
 	if (!s_frame)
+	{
+		perror("Malloc failed");
 		return (NULL);
+	}
 	s_frame->x1 = x1;
 	s_frame->x2 = x2;
 	s_frame->y1 = y1;

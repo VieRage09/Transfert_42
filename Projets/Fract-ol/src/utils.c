@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 22:26:32 by tlebon            #+#    #+#             */
-/*   Updated: 2024/06/05 21:49:51 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/06/07 22:02:18 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	create_trgb(int t, int r, int g, int b)
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
-/////////////////////////////////////////////// Fait fi du "offset" ??? a checker
+/////////////////////////// Fait fi du "offset" ??? a checker
 // More efficient function than mlx_pixel_put present in mlx
 // Draws on an image by writting directly to the memory
 void	put_pixel_to_image(t_img_data *s_img, int x, int y, int color)
@@ -48,4 +48,60 @@ void	put_pixel_to_image(t_img_data *s_img, int x, int y, int color)
 
 	dst = s_img->addr + (x * s_img->bit_per_pixel / 8 + y * s_img->line_length);
 	*(unsigned int *)dst = color;
+}
+
+// Opens the file corresponding to the value of key : from 1 to 6
+// Returns the fd openned or -1 on error
+int	open_grad(int key)
+{
+	int		fd;
+
+	if (key == 1)
+		fd = open("gradients/grad_1.txt", O_RDONLY);
+	else if (key == 2)
+		fd = open("gradients/grad_2.txt", O_RDONLY);
+	else if (key == 3)
+		fd = open("gradients/grad_3.txt", O_RDONLY);
+	else if (key == 4)
+		fd = open("gradients/grad_4.txt", O_RDONLY);
+	else if (key == 5)
+		fd = open("gradients/grad_5.txt", O_RDONLY);
+	else if (key == 6)
+		fd = open("gradients/grad_6.txt", O_RDONLY);
+	else
+		return (-1);
+	if (fd < 0)
+		perror("Open failed");
+	return (fd);
+}
+
+// Uses get_next_line to read a gradient file
+// Returns a color struct corresponding to the gradient
+// Returns NULL on error
+t_color	*load_color(int fd)
+{
+	char	*line;
+	int		r;
+	int		g;
+	int		b;
+
+	line = get_next_line(fd);
+	r = ft_atoi(line);
+	free(line);
+	line = get_next_line(fd);
+	g = ft_atoi(line);
+	free(line);
+	line = get_next_line(fd);
+	b = ft_atoi(line);
+	free(line);
+	line = get_next_line(fd);
+	if (line[0] != '#')
+	{
+		free(line);
+		return (NULL);
+	}
+	free(line);
+	if (r == 0 && g == 0 && b == 0)
+		return (NULL);
+	return (new_color(r, g, b));
 }

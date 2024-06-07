@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 15:07:14 by tlebon            #+#    #+#             */
-/*   Updated: 2024/06/05 20:56:00 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/06/07 20:51:59by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,6 @@
 
 # include<stdio.h> // for perror
 # include<errno.h> // for perror
-// #include<unistd.h>
-// #include<stdlib.h>
-// #include<string.h>
 # include<math.h> // for fabs 
 # include<fcntl.h> // for open
 # include"libs/mlx/mlx.h" // duh
@@ -103,32 +100,36 @@ t_global		*new_global(t_cpx_pt *s_init, t_reso *s_reso, int max_iter,
 					t_color **grad);
 t_frame			*new_frame(double x1, double x2, double y1, double y2);
 
-// Constructors_utils	4 
+// Constructors_utils	5 
 
 t_cpx_pt		*new_cpx_pt(double reel, double imaginary);
 t_color			*new_color(int r, int g, int b);
-void			*free_global(t_global *s_global);
+void			free_colors(t_color *begin_color, t_color *end_color);
+void			*free_global_ex(t_global *s_global, int status);
 void			free_fract(t_fract *s_fract);
 
-// Utils				3 V menu a bien securiser
+// Utils				5 V menu a bien securiser
 void			menu(int ac, char *av[]);
 int				create_trgb(int t, int r, int g, int b);
 void			put_pixel_to_image(t_img_data *s_img, int x, int y, int color);
+int				open_grad(int key);
+t_color			*load_color(int fd);
 
 // Grad					4
 
-t_color			**load_grad_stops(int fd, int stop_nb);
 int				grad_size(t_color **grad);
 int				get_color_grad(int iter, int max_iter, t_color **grad,
 					int grad_len);
-int				get_color(int iter, int max_iter);
 t_color			**bicolor_grad(t_color *start, t_color *end, int n);
-// Setters 				3 V
+void			free_grad(t_color **grad);
+// Setters 				5 V
 
 void			set_reso(t_reso *s_reso, int x_reso, int y_reso);
 void			set_frame_zoom(t_global *s_glb, double zoom,
 					int x_pos, int y_pos);
 void			shift_frame(t_global *s_glb, char dir);
+void			shift_gradient(t_global *s_glb, int key);
+void			shift_init_point(t_global *s_glb, int key);
 
 // Hooks				4 V
 

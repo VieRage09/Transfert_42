@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 01:13:28 by tlebon            #+#    #+#             */
-/*   Updated: 2024/06/05 21:53:37 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/06/07 17:44:56 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,9 @@ int	draw_julman(t_img_data *s_img, t_fract *s_fract)
 				iter = jul_pt_check(s_fract->s_init, (x / s_fract->zoom_x)
 						+ s_fract->s_frame->x1, (y / s_fract->zoom_y)
 						+ s_fract->s_frame->y1, s_fract->max_iter);
-			put_pixel_to_image(s_img, x, y, get_color_grad(iter, s_fract->max_iter, 
-				s_fract->gradient, grad_size(s_fract->gradient)));
+			put_pixel_to_image(s_img, x, y,
+				get_color_grad(iter, s_fract->max_iter, s_fract->gradient,
+					grad_size(s_fract->gradient)));
 		}
 	}	
 	return (0);

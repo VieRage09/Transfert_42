@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/16 17:14:35 by tlebon            #+#    #+#              #
-#    Updated: 2024/05/28 19:51:08 by tlebon           ###   ########.fr        #
+#    Updated: 2024/06/07 22:05:59 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ CFLAGS = -Wall -Werror -Wextra
 #SOURCES#########################
 SRC_PATH = ./src
 SRC = 										\
-		$(SRC_PATH)/main.c					\
+		$(SRC_PATH)/main.c							\
 		$(SRC_PATH)/constructors.c			\
 		$(SRC_PATH)/constructors_utils.c	\
 		$(SRC_PATH)/utils.c					\
@@ -50,31 +50,33 @@ OTHER_LINK = -lm
 
 OBJ = $(SRC:.c=.o)
 
-all: $(MLX) lib $(NAME)
+all: mlx lib $(NAME)
 
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(MLX_LINK) $(LIBFT_LINK) $(OTHER_LINK)
 
-debug: $(MLX) lib
-	$(CC) -g $(CFLAGS) -o $(NAME) $(SRC) $(MLX_LINK) $(LIBFT_LINK) $(OTHER_LINK)
+debug: mlx lib
+	$(CC) $(CFLAGS) -o $(NAME) $(SRC) $(MLX_LINK) $(LIBFT_LINK) $(OTHER_LINK) -g
 	
-$(MLX):
+mlx:
 	make -C $(MLX_PATH)
 
 lib:
 	make -C $(LIBFT_PATH) libft.a
 
-libftclean:
+libclean:
 	make -C $(LIBFT_PATH) clean
-libftfclean:
+	make -C $(MLX_PATH) clean
+libfclean:
 	make -C $(LIBFT_PATH) fclean
+	make -C $(MLX_PATH) clean
 
-clean: libftclean
+clean: libclean
 	rm -rf $(OBJ)
 
-fclean: clean libftfclean
+fclean: clean libfclean
 	rm -rf $(NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all debug mlx lib libclean libfclean clean fclean re
