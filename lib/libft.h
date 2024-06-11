@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 17:42:22 by tlebon            #+#    #+#             */
-/*   Updated: 2024/05/18 18:04:20 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/06/11 19:39:50 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int		ft_atoi(const char *nstr);
 double	ft_atof(const char *nptr);
 long	ft_atol(const char *nptr);
 char	*ft_itoa(int n);
+char	*ft_dtoa(double d, int decimals);
 
 void	*ft_memset(void *s, int c, size_t n);
 void	ft_bzero(void *s, size_t n);

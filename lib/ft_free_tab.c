@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 19:26:17 by tlebon            #+#    #+#             */
-/*   Updated: 2024/06/08 18:56:02 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/06/11 20:40:44 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	ft_free_tab(void **tab)
 {
-	if (!tab)
-		return ;
 	int	i;
 
+	if (!tab)
+		return ;
 	i = 0;
 	while (tab[i])
 	{

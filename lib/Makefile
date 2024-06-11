@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/10 17:36:09 by tlebon            #+#    #+#              #
-#    Updated: 2024/05/18 18:05:52 by tlebon           ###   ########.fr        #
+#    Updated: 2024/06/11 19:40:10 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ SRC =						\
 		ft_atol.c			\
 		ft_bzero.c			\
 		ft_calloc.c			\
+		ft_dtoa.c			\
 		ft_free_tab.c		\
 		ft_isalnum.c		\
 		ft_isalpha.c		\
