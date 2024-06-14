@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlebon <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 19:52:59 by tlebon            #+#    #+#             */
-/*   Updated: 2023/12/06 17:29:00 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/06/14 19:46:14 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include"libft.h"
 
 static int	count_words(char const *s, char c)
@@ -36,12 +37,14 @@ static int	count_words(char const *s, char c)
 
 static void	free_tab(char **tab, int count)
 {
-	while (count >= 0)
+	while (count > 0)
 	{
-		free(tab[count]);
+		if (tab[count - 1])
+			free(tab[count - 1]);
 		count--;
 	}
-	free(tab);
+	if (tab)
+		free(tab);
 }
 
 static int	find_start(char const *s, char c)
@@ -71,10 +74,7 @@ static int	fill_tab(char **tab, char const *s, char c, int count)
 		i++;
 	tab[count] = ft_substr(s, start, i);
 	if (tab[count] == NULL)
-	{
-		free_tab(tab, count);
 		return (-1);
-	}
 	return (start + i);
 }
 
@@ -96,7 +96,10 @@ char	**ft_split(char const *s, char c)
 	{
 		buff = fill_tab(tab, s + curs, c, count);
 		if (buff == -1)
+		{
+			free_tab(tab, count);
 			return (NULL);
+		}
 		curs += buff;
 		count++;
 	}
