@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_print_tab.c                                     :+:      :+:    :+:   */
+/*   ft_print_str_tab.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 18:32:37 by tlebon            #+#    #+#             */
-/*   Updated: 2024/04/19 18:47:35 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/09/29 17:31:27 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_print_str_tab(char **tab)
+int	ft_print_str_tab(char **tab)
 {
 	if (!tab)
-		return ;
+		return (1);
 	while (*tab)
 	{
 		ft_putstr(*tab);
 		ft_putstr("\n");
 		(tab)++;
 	}
-	return ;
+	return (0);
 }

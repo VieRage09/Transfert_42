@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 17:42:22 by tlebon            #+#    #+#             */
-/*   Updated: 2024/06/11 19:39:50 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/09/29 17:31:42 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strtrim(char const *s1, char const *set);
 char	**ft_split(char const *s, char c);
-void	ft_print_str_tab(char **tab);
+int		ft_print_str_tab(char **tab);
 
 int		ft_toupper(int c);
 int		ft_tolower(int c);
