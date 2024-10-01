@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/09 19:29:02 by tlebon            #+#    #+#             */
-/*   Updated: 2024/07/25 21:09:37 by tlebon           ###   ########.fr       */
+/*   Created: 2023/12/11 17:16:12 by tlebon            #+#    #+#             */
+/*   Updated: 2024/02/27 11:41:26 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>		// for memset
-#include <stdio.h>		// for printf
-#include <stdlib.h>		// for malloc
-#include <unistd.h>		// for write usleep
-#include <sys/time.h>	// for gettimeofday
-#include <pthread.h>	// for pthread functions
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
 
-#ifndef PHILO_H
-# define PHILO_H
+# include"../libft.h"
+# include<stdarg.h>
 
-typedef struct s_philo
-{
-	int	*infos_tab;
-	
-}t_philo;
+int	ft_printf(const char *s, ...);
+int	ft_print_char(char c);
+int	ft_print_str(const char *s);
+int	ft_print_pointer(unsigned long p);
+int	ft_print_int(int n);
+int	ft_print_uns_int(unsigned int u);
+int	ft_print_hex_low(int i);
+int	ft_print_hex_up(int i);
 
-
-#endif
+#endif 

@@ -1,44 +1,61 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
+#    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/09 19:17:15 by tlebon            #+#    #+#              #
-#    Updated: 2024/07/09 21:36:57 by tlebon           ###   ########.fr        #
+#    Updated: 2024/10/01 18:05:32 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = philo
+NAME = minishell
 
 #-------------------------------------------------------------- COMPILATION ---#
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -pthread
+LFLAGS = -lreadline
+CFLAGS = -g -Wall -Werror -Wextra
 #------------------------------------------------------------------------------#
 
 #------------------------------------------------------------------- HEADER ---#
-HDR = philo.h
+HDR_PATH = include
+HDR = $(HDR_PATH)/minishell.h
 #------------------------------------------------------------------------------#
 
 #---------------------------------------------------------------------- SRC ---#
 SRC_PATH = src
 SRC =																		\
+		$(SRC_PATH)/bin/cd.c												\
+		$(SRC_PATH)/bin/pwd.c												\
+		$(SRC_PATH)/bin/env.c												\
+		$(SRC_PATH)/execute.c												\
 		$(SRC_PATH)/main.c													\
 #------------------------------------------------------------------------------#
 
+#-------------------------------------------------------------------- LIBFT ---#
+LIB_PATH = include/lib
+LIB = $(LIB_PATH)/libft.a
+#------------------------------------------------------------------------------#
+
+
 OBJ = $(SRC:.c=.o)
 
-all: $(NAME)
+all: lib $(NAME)
 
 $(NAME): $(OBJ) $(HDR)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LIB)
+
+lib:
+	make -C $(LIB_PATH)
 
 clean:
 	rm -rf $(OBJ)
+	make -C $(LIB_PATH) clean
 
 fclean: clean
 	rm -rf $(NAME)
+	make -C $(LIB_PATH) fclean
 
 re : fclean all
 
