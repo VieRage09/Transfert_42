@@ -17,12 +17,13 @@
 #include <unistd.h>		// chdir, getcwd, fork
 #include <stdio.h>		// printf
 #include <stdlib.h>		// getenv
+#include <fcntl.h>      // open
 
 #include <sys/types.h> // opendir, readdir, closedir
 #include <dirent.h>	   // //////////////////////////
 
-#include <readline/readline.h>	// readline
-#include <readline/history.h>	// add_history
+// #include <readline/readline.h>	// readline
+// #include <readline/history.h>	// add_history
 
 #include <sys/wait.h>			// Wait duh
 

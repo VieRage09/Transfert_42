@@ -29,6 +29,7 @@ SRC =																		\
 		$(SRC_PATH)/bin/cd.c												\
 		$(SRC_PATH)/bin/pwd.c												\
 		$(SRC_PATH)/bin/env.c												\
+		$(SRC_PATH)/bool.c													\
 		$(SRC_PATH)/execute.c												\
 		$(SRC_PATH)/main.c													\
 #------------------------------------------------------------------------------#
