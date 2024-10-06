@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 17:15:30 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/01 18:57:23 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/06 13:18:07 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,76 +96,5 @@ int execute_lone_cmd(char *cmd, char **env)
 	return (127);
 }
 
-
-// A partir d'une commande (string entre le debut et un pipe, 
-// un pipe et la fin ou 2 pipes), renvoie le fd a utiliser comme input
-int	get_fdin(char **cmd_tab, int position, char **prompt_tab)
-{
-	int		i;
-	char	*infile_path;
-
-	i = 0;
-	while (cmd_tab[i])
-	{
-		if (is_input_redirector(cmd_tab[i]) && cmd_tab[i + 1])
-			return (open_infile(cmd_tab[i + 1]));
-		// TODO : Mettre en place le heredoc
-		i++;
-	}
-	if (position > 0 && is_pipe(prompt_tab[position - 1]))
-		return (?) // entree read du pipe d'avant
-	return (0);
-}
-
-int	get_fdout(char **cmd_tab, int position, char **prompt_tab)
-{
-	int		i;
-	char	*outfile_path;
-
-	i = 0;
-	while (cmd_tab[i])
-	{
-		if (is_output_redirector(cmd_tab[i]) && cmd_tab[i + 1])
-			return (open_outfile(cmd_tab[i + 1], 0));
-		i++;
-	}
-	if (prompt_tab[position + 1] && is_pipe(prompt_tab[position + 1]))
-		return (?) // entree write du pipe d'apres
-	return (1);
-}
-
-int execute_prompt(char **prompt_tab, char **env)
-{
-	char	**cmd_tab;
-	int		i;
-	int		fdin;
-	int		fdout;
-	int		pipefd[2];
-
-	// OPen the pipe
-
-	i = 0;
-	while (prompt_tab[i])
-	{
-		cmd_tab = ft_split(prompt_tab[i], ' ');
-		if (!cmd_tab)
-			return (1);
-		fdin = get_fdin(cmd_tab, i, prompt_tab);
-		fdout = get_fdout(cmd_tab, i, prompt_tab);
-		if (fdin == -1 || fdout == -1)
-			return (2);
-		fork();
-
-	}
-	return (0);
-}
-
-int	execute_cmd(char *cmd, int fdin, int fdout, char **env)
-{
-
-		redirect(dd)
-
-}
-
-
 // < Makefile cat | ls | echo > outfile
+

@@ -27,3 +27,5 @@ int	is_output_redirector(char *str)
 		return (1);
 	return (0);
 }
+
+// TODO : Ajouter les double operateur de redirection >> << 
