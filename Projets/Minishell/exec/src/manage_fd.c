@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:14:16 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/06 13:24:49 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/08 23:32:50 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,41 +69,4 @@ int	open_outfile(char *file_path, int append)
 	if (fd == -1)
 		perror("Open failed");
 	return (fd);
-}
-
-// A partir d'une commande (string entre le debut et un pipe, 
-// un pipe et la fin ou 2 pipes), renvoie le fd a utiliser comme input
-int	get_fdin(char **cmd_tab, int position, char **prompt_tab)
-{
-	int		i;
-	char	*infile_path;
-
-	i = 0;
-	while (cmd_tab[i])
-	{
-		if (is_input_redirector(cmd_tab[i]) && cmd_tab[i + 1])
-			return (open_infile(cmd_tab[i + 1]));
-		// TODO : Mettre en place le heredoc
-		i++;
-	}
-	if (position > 0 && is_pipe(prompt_tab[position - 1]))
-		return (0); // entree read du pipe d'avant
-	return (0);
-}
-
-int	get_fdout(char **cmd_tab, int position, char **prompt_tab)
-{
-	int		i;
-	char	*outfile_path;
-
-	i = 0;
-	while (cmd_tab[i])
-	{
-		if (is_output_redirector(cmd_tab[i]) && cmd_tab[i + 1])
-			return (open_outfile(cmd_tab[i + 1], 0));
-		i++;
-	}
-	if (prompt_tab[position + 1] && is_pipe(prompt_tab[position + 1]))
-		return (1); // entree write du pipe d'apres
-	return (1);
 }

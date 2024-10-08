@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/06 21:28:03 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/08 23:32:50 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,23 @@
 // #include <readline/history.h>	// add_history
 
 #include <sys/wait.h>			// Wait duh
+
+#define R_IN			1         // "< redirect input"
+#define R_OUT			2         // "> redirect output"
+#define R_OUT_APPEND	3        // ">> redirect output in append mode"
+#define HEREDOC			4        // "<< redirect input until specified delimiter"
+#define ARG				5        // "argument of a command"
+#define CMD				6        // "command"
+#define PIPE			7        // "| use the left part as an arg for the right part"
+
+
+typedef struct s_token // contient l'element de la commande + son type
+{
+    char			*str; // l'element 
+    int				type; // le type
+    struct s_token	*prev;
+    struct s_token	*next;
+}					t_token;
 
 ///// BUILTIN /////////////////////////////////////////////////////////////////
 
@@ -50,11 +67,6 @@ int     is_output_redirector(char *str);
 // MANAGE_FD.C      4   X
 int     open_infile(char *file_path);
 int     open_outfile(char *file_path, int append);
-int     get_fdin(char **cmd_tab, int position, char **prompt_tab);
-int     get_fdout(char **cmd_tab, int position, char **prompt_tab);
-
-
-int     prepare_cmd_tab(char ***cmd_tab);
 
 
 #endif
