@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/09 19:17:15 by tlebon            #+#    #+#              #
-#    Updated: 2024/10/08 23:32:24 by tlebon           ###   ########.fr        #
+#    Updated: 2024/10/10 16:24:44 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,10 +29,12 @@ SRC =																		\
 		$(SRC_PATH)/bin/cd.c												\
 		$(SRC_PATH)/bin/pwd.c												\
 		$(SRC_PATH)/bin/env.c												\
-		$(SRC_PATH)/bool.c													\
+		$(SRC_PATH)/command.c												\
 		$(SRC_PATH)/execute.c												\
-		$(SRC_PATH)/manage_fd.c												\
+		$(SRC_PATH)/in_out_files.c											\
 		$(SRC_PATH)/main.c													\
+		$(SRC_PATH)/pipe.c													\
+		$(SRC_PATH)/utils.c													\
 #------------------------------------------------------------------------------#
 
 #-------------------------------------------------------------------- LIBFT ---#
