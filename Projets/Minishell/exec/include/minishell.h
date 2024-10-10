@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/08 23:32:50 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/10 01:14:31 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int		print_env(char **env);
 ///////////////////////////////////////////////////////////////////////////////
 
 // EXECUTE.C		3	X
+char	*get_cmd_path(char *cmd);
 int     execute_lone_cmd(char *cmd, char **env);
 
 // BOOL.C           3   X
