@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/10 18:16:10 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/11 01:39:48 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,5 @@ int		create_pipe(t_token *s_token, int *pipefd[]);
 // UTILS.C			2	X
 char	*lst_str_chr(t_list *s_list, char *str);
 void	print_cmd(t_token *s_token);
+t_token	*search_next_pipe(t_token *s_token);
 #endif

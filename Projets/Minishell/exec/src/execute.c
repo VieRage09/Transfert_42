@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:22:46 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/10 16:33:53 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/11 01:10:45 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void execute_cmd(int fdin, char **cmd_tab, int fdout, char **env)
 	char *path;
 	int ret;
 
+	if (!cmd_tab || !env)
+		return ;
 	ret = redirect_input(fdin, fdout);
 	if (ret != 0)
 	{

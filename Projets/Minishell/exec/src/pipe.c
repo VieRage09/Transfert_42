@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:06:40 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/10 18:15:34 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/11 00:44:22 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int create_pipe(t_token *s_token, int *pipefd[])
 				perror("Pipe failed");
 				return (2);
 			}
+			printf("Pipe created\n");
 			return (0);
 		}
 		curs = curs->next;

@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:14:16 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/10 18:27:40 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/11 01:29:51 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int find_fdout(t_token *s_token, int *pipefd)
 			return (open_outfile(curs->next->str, 1));
 		curs = curs->next;
 	}
-	if (curs->type == PIPE)
+	if (curs && curs->type == PIPE)
 	{
 		return (pipefd[1]);
 		// Envoyer le fd du pipefd[2], entree WRITE;

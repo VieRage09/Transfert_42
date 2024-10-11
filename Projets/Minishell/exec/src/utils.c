@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 17:15:30 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/10 16:19:09 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/11 01:39:32 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,20 @@ void print_cmd(t_token *s_token)
 		curs = curs->next;
 	}
 	ft_print_str("\n");
+}
+
+t_token	*search_next_pipe(t_token *s_token)
+{
+	t_token	*curs;
+
+	if (!s_token)
+		return (NULL);
+	curs = s_token;
+	while (curs)
+	{
+		if (curs->type == PIPE)
+			return (curs);
+		curs = curs->next;
+	}
+	return (NULL);
 }

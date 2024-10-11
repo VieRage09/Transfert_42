@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:03:53 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/10 18:39:47 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/11 02:01:16 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,20 @@ t_token *search_next_cmd(t_token *s_token)
 char **prepare_cmd_tab(t_token *s_token)
 {
 	t_token *curs;
+	t_token	*cmd_token;
 	char **tab;
 	int n_arg;
 
 	if (!s_token)
 		return (NULL);
-	curs = s_token;
+	cmd_token = search_next_cmd(s_token);
+	// printf("%s\n", cmd_token->str);
+	if (!cmd_token)
+		return (NULL);
+	curs = cmd_token;
+	printf("PUTE\n");
+	printf("%s\n", curs->next->str); // 0 PROBLEMES
+	printf("%s\n", curs->str);			// SEGFAULT LA CON DE SES MORTS
 	n_arg = 0;
 	while (curs->next && curs->next->type == ARG)
 	{
@@ -51,8 +59,8 @@ char **prepare_cmd_tab(t_token *s_token)
 	tab = malloc((n_arg + 2) * sizeof(char *));
 	if (!tab)
 		return (NULL);
-	tab[0] = s_token->str;
-	curs = s_token->next;
+	tab[0] = cmd_token->str;
+	curs = cmd_token->next;
 	n_arg = 1;
 	while (curs && curs->type == ARG)
 	{
@@ -60,7 +68,7 @@ char **prepare_cmd_tab(t_token *s_token)
 		n_arg++;
 		curs = curs->next;
 	}
-	tab[n_arg] = (char *)0;
+	printf("%s\n", tab[0]);
 	return (tab);
 }
 
