@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 17:39:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/11 01:41:36 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/11 19:20:03 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@ int launch_exec(t_token *s_token, char **env)
 	char **cmd_tab;
 	int id;
 	int *pipefd;
+	int	*rdpipe;	// Pour premiere exec : Pas besoin d'etre init
+					// Pour seconde exec  : Est init a l'entree READ du premier pipe cree
+					// Pour troisieme exec: Doit toujours pointer vers l'entree READ du 1er pour l'enfant
+					// puis doit pointer vers l'entree READ du deuxieme pipe cree 
 
 	if (!s_token || !env)
 	{
@@ -27,14 +31,16 @@ int launch_exec(t_token *s_token, char **env)
 	}
 	while (s_token)
 	{
+		print_cmd(s_token);
 		if (create_pipe(s_token, &pipefd) > 0)
 			return (3);
-		if (pipefd)
-			printf("pipefd[0] = %i / pipefd[1] = %i\n", pipefd[0], pipefd[1]);
-		fdin = find_fdin(s_token, pipefd);
+		
+		// if (pipefd)
+		// 	printf("pipefd[0] = %i / pipefd[1] = %i\n", pipefd[0], pipefd[1]);
+		fdin = find_fdin(s_token, rdpipe);
 		fdout = find_fdout(s_token, pipefd);
 		printf("fdin =		%i / fdout =	 %i\n", fdin, fdout);
-		cmd_tab = prepare_cmd_tab(s_token);
+		cmd_tab = prepare_cmd_tab(s_token); // divergence builtin a partir de la ?
 		printf("Cmd tab :\n");
 		ft_print_str_tab(cmd_tab);
 		if (!cmd_tab)

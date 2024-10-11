@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:14:16 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/11 01:29:51 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/11 19:09:29 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	open_outfile(char *file_path, int append)
 // returns the fd of the WRITE end of pipefd
 // Returns STDIN if nothing above happens
 // TODO : handle heredoc
-int find_fdin(t_token *s_token, int *pipefd)
+int find_fdin(t_token *s_token, int *rdpipe)
 {
 	t_token *curs;
 
@@ -91,7 +91,7 @@ int find_fdin(t_token *s_token, int *pipefd)
 	if (s_token->prev && s_token->prev->type == PIPE)
 	{
 		// Envoyer le fd du pipefd[2], entree READ;
-		return (pipefd[0]);
+		return (*rdpipe);
 	}
 	return (STDIN_FILENO);
 }

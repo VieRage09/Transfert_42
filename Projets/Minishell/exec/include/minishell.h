@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/11 01:39:48 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/11 19:20:09 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,12 @@ void	execute_cmd(int fdin, char **cmd_tab, int fdout, char **env);
 // IN_OUT_FILES.C	5   X
 int     open_infile(char *file_path);
 int     open_outfile(char *file_path, int append);
-int		find_fdin(t_token *s_token, int *pipefd);
+int		find_fdin(t_token *s_token, int *rdpipe);
 int		find_fdout(t_token *s_token, int *pipefd);
 int		redirect_input(int fdin, int fdout);
 
 // PIPE.C			1	X
-int		create_pipe(t_token *s_token, int *pipefd[]);
+int		create_pipe(t_token *s_token, int **pipefd);
 
 // UTILS.C			2	X
 char	*lst_str_chr(t_list *s_list, char *str);

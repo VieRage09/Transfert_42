@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:03:53 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/11 02:01:16 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/11 16:58:35 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,9 @@ char **prepare_cmd_tab(t_token *s_token)
 	if (!s_token)
 		return (NULL);
 	cmd_token = search_next_cmd(s_token);
-	// printf("%s\n", cmd_token->str);
 	if (!cmd_token)
 		return (NULL);
 	curs = cmd_token;
-	printf("PUTE\n");
-	printf("%s\n", curs->next->str); // 0 PROBLEMES
-	printf("%s\n", curs->str);			// SEGFAULT LA CON DE SES MORTS
 	n_arg = 0;
 	while (curs->next && curs->next->type == ARG)
 	{
@@ -68,7 +64,6 @@ char **prepare_cmd_tab(t_token *s_token)
 		n_arg++;
 		curs = curs->next;
 	}
-	printf("%s\n", tab[0]);
 	return (tab);
 }
 

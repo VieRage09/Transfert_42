@@ -6,13 +6,13 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:06:40 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/11 00:44:22 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/11 19:20:25 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int create_pipe(t_token *s_token, int *pipefd[])
+int create_pipe(t_token *s_token, int **pipefd)
 {
 	t_token *curs;
 
@@ -23,10 +23,14 @@ int create_pipe(t_token *s_token, int *pipefd[])
 	{
 		if (curs->type == PIPE)
 		{
+			*pipefd = malloc(2 * sizeof(int));
+			if (!*pipefd)
+				return (2);
 			if (pipe(*pipefd) != 0)
 			{
 				perror("Pipe failed");
-				return (2);
+				free(*pipefd);
+				return (3);
 			}
 			printf("Pipe created\n");
 			return (0);
