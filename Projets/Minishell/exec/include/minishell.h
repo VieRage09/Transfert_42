@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/11 19:20:09 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/11 21:06:50 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,14 @@ typedef struct s_token // contient l'element de la commande + son type
     struct s_token	*next;
 }					t_token;
 
+typedef struct s_exec
+{
+    int     fdin;
+    int     fdout;
+    char    **cmd_tab;
+    char    **env_tab;
+}               t_exec;
+
 ///// BUILTIN /////////////////////////////////////////////////////////////////
 
 // CD.C				1	X
@@ -62,7 +70,7 @@ char	**prepare_cmd_tab(t_token *s_token);
 char	*get_cmd_path(char *cmd);
 
 // EXECUTE.C		1	X
-void	execute_cmd(int fdin, char **cmd_tab, int fdout, char **env);
+void	execute_cmd(t_exec *s_exec);
 
 // IN_OUT_FILES.C	5   X
 int     open_infile(char *file_path);

@@ -6,39 +6,39 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:22:46 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/11 01:10:45 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/11 21:06:30 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void execute_cmd(int fdin, char **cmd_tab, int fdout, char **env)
+void execute_cmd(t_exec *s_exec)
 {
 	char *path;
 	int ret;
 
-	if (!cmd_tab || !env)
+	if (!s_exec)
 		return ;
-	ret = redirect_input(fdin, fdout);
+	ret = redirect_input(s_exec->fdin, s_exec->fdout);
 	if (ret != 0)
 	{
 		printf("Redirect input error : %i\n", ret);
 		return;
 	}
-	path = get_cmd_path(cmd_tab[0]);
+	path = get_cmd_path(s_exec->cmd_tab[0]);
 	if (!path)
-		path = cmd_tab[0];
-	if (fdin != STDIN_FILENO)
+		path = s_exec->cmd_tab[0];
+	if (s_exec->fdin != STDIN_FILENO)
 	{
-		if (close(fdin) != 0)
+		if (close(s_exec->fdin) != 0)
 			perror("Close failed");
 	}
-	if (fdout != STDOUT_FILENO)
+	if (s_exec->fdout != STDOUT_FILENO)
 	{
-		if (close(fdout) != 0)
+		if (close(s_exec->fdout) != 0)
 			perror("Close failed");
 	}
-	if (execve(path, cmd_tab, env) != 0)
+	if (execve(path, s_exec->cmd_tab, s_exec->env_tab) != 0)
 	{
 		perror("Execve failed");
 		return;

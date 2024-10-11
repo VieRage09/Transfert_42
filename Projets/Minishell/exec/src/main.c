@@ -6,23 +6,48 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 17:39:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/11 19:20:03 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/11 20:53:42by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+t_exec *init_s_exec(t_token *s_token, int *pipefd, int *rdpipe, char **env)
+{
+	t_exec *s_exec;
+
+	if (!s_token || !env)
+		return (NULL);
+	s_exec = malloc(sizeof(t_exec *));
+	if (!s_exec)
+		return (NULL);
+	s_exec->fdin = find_fdin(s_token, rdpipe);
+	s_exec->fdout = find_fdout(s_token, pipefd);
+	if (s_exec->fdin < 0 || s_exec->fdout < 0)
+		return (NULL);
+	printf("fdin =		%i / fdout =	 %i\n", s_exec->fdin, s_exec->fdout);
+	s_exec->cmd_tab = prepare_cmd_tab(s_token);
+	if (!s_exec->cmd_tab)
+	{
+		printf("prepare_cmd_tab function error\n");
+		return (4);
+	}
+	s_exec->env_tab = env;
+	return (s_exec);
+}
+
 int launch_exec(t_token *s_token, char **env)
 {
-	int fdin;
-	int fdout;
-	char **cmd_tab;
+	t_exec *s_exec;
+	// int fdin;
+	// int fdout;
+	// char **cmd_tab;
 	int id;
 	int *pipefd;
-	int	*rdpipe;	// Pour premiere exec : Pas besoin d'etre init
-					// Pour seconde exec  : Est init a l'entree READ du premier pipe cree
-					// Pour troisieme exec: Doit toujours pointer vers l'entree READ du 1er pour l'enfant
-					// puis doit pointer vers l'entree READ du deuxieme pipe cree 
+	int *rdpipe; // Pour premiere exec : Pas besoin d'etre init
+				 // Pour seconde exec  : Est init a l'entree READ du premier pipe cree
+				 // Pour troisieme exec: Doit toujours pointer vers l'entree READ du 1er pour l'enfant
+				 // puis doit pointer vers l'entree READ du deuxieme pipe cree
 
 	if (!s_token || !env)
 	{
@@ -34,32 +59,26 @@ int launch_exec(t_token *s_token, char **env)
 		print_cmd(s_token);
 		if (create_pipe(s_token, &pipefd) > 0)
 			return (3);
-		
-		// if (pipefd)
-		// 	printf("pipefd[0] = %i / pipefd[1] = %i\n", pipefd[0], pipefd[1]);
-		fdin = find_fdin(s_token, rdpipe);
-		fdout = find_fdout(s_token, pipefd);
-		printf("fdin =		%i / fdout =	 %i\n", fdin, fdout);
-		cmd_tab = prepare_cmd_tab(s_token); // divergence builtin a partir de la ?
-		printf("Cmd tab :\n");
-		ft_print_str_tab(cmd_tab);
-		if (!cmd_tab)
-		{
-			printf("prepare_cmd_tab function error\n");
-			return (4);
-		}
+		s_exec = init_s_exec(s_token, pipefd, rdpipe, env);
+		ft_print_str_tab(s_exec->cmd_tab);
+
 		id = fork();
 		if (id == -1)
 		{
 			perror("Fork failed");
-			ft_free_tab((void **)cmd_tab);
 			return (5);
 		}
 		if (id == 0)
-			execute_cmd(fdin, cmd_tab, fdout, env);
+			execute_cmd(s_exec);
+		// Sauf erreur le child reste et meurt dans execute_cmd
 		s_token = search_next_pipe(s_token);
 		if (s_token)
 			s_token = s_token->next;
+		// if (pipefd)
+		// {
+		// 	if (close(pipefd[0]) != 0 || close(pipefd[1]) != 0)
+		// 		perror("Close failed");
+		// }
 	}
 	return (0);
 }
@@ -158,6 +177,6 @@ int main(int ac, char **av, char **env)
 	print_cmd(s_token);
 	launch_exec(s_token, env);
 	while (wait(NULL) != -1)
-	;
+		;
 	return (0);
 }
