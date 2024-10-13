@@ -6,11 +6,11 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 08:05:37 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/13 08:20:39 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/13 20:41:15 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	is_builtin(char **cmd_tab)
 {

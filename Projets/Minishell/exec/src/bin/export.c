@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:41:33 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/13 09:17:27 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/13 20:16:21 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	invalid_name(char *name)
 // Valeur de retour :
 // = 1 Des qu'il y a un unvalid name 
 // A PRECISER
-int	exec_export(char **cmd_tab, t_env *s_env)
+int	exec_export(char **cmd_tab, t_env *s_env, char ***env)
 {
 	t_env	*curs;
 	int		i;
@@ -74,8 +74,6 @@ int	exec_export(char **cmd_tab, t_env *s_env)
 	if (!cmd_tab || !s_env)
 		return (1);
 	curs = s_env;
-	while (curs->next)
-		curs = curs->next;
 	i = 1;
 	ret = 0;
 	while (cmd_tab[i])
@@ -91,9 +89,11 @@ int	exec_export(char **cmd_tab, t_env *s_env)
 			continue ;
 		}
 		curs->next = new_s_env_node(name_value[0], name_value[1], curs);
+		
 		ft_free_tab((void **)name_value);
 		curs = curs->next;
 		i++;
 	}
+	update_env_tab(s_env, env);
 	return (ret);
 }

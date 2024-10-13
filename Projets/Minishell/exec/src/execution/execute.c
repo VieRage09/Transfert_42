@@ -6,12 +6,17 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:22:46 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/13 09:18:48 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/13 20:10:58 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+// Is executed by child process of exec_cmd
+// Search for path of the cmd via get_cmd_path
+// Close fdin and fdout if they are != of STDIN or STDOUT
+// Execute the cmd via execve
+// AJOUTER DES TRUCS SI EXECVE FAIL
 static void execute(t_exec *s_exec)
 {
 	char *path;
@@ -38,13 +43,17 @@ static void execute(t_exec *s_exec)
 	}
 }
 
+// Creates a new process via fork
+// Child process redirects STDIN and STDOUT to fdin and fdout then execute cmd
+// Parent process only returns id of child process
+// Returns -1 on error
 int exec_cmd(t_exec *s_exec)
 {
 	int id;
 
 	if (!s_exec)
 		return (-1);
-	
+
 	id = fork();
 	if (id == -1)
 	{
@@ -58,32 +67,77 @@ int exec_cmd(t_exec *s_exec)
 			printf("Redirect input error :\n");
 			return (-1);
 		}
-		execute(s_exec); 
+		execute(s_exec);
 	}
 	return (id);
 }
 
-int	exec_builtin(t_exec *s_exec)
+// Is executed by child process of exec_builtin
+// Closes fdin and fdout if != of STDIN or STDOUT
+// Compare the cmd of cmd_tab (cmd_tab[0]) and launch the correct builtin
+// Returns -1 on error or builtin values
+static int execute_builtin(t_exec *s_exec, t_env *s_env)
 {
+	if (s_exec->fdin != STDIN_FILENO)
+		if (close(s_exec->fdin) != 0)
+			perror("Close failed");
+	if (s_exec->fdout != STDOUT_FILENO)
+		if (close(s_exec->fdout) != 0)
+			perror("Close failed");
 	if (!s_exec)
-		return (1);
+		return (-1);
 	if (ft_strncmp(s_exec->cmd_tab[0], "echo", ft_strlen(s_exec->cmd_tab[0])) == 0)
 		return (exec_echo());
 	else if (ft_strncmp(s_exec->cmd_tab[0], "cd", ft_strlen(s_exec->cmd_tab[0])) == 0)
-		return (exec_cd(s_exec->cmd_tab[1]));
+		return (exec_cd(s_exec->cmd_tab));
 	else if (ft_strncmp(s_exec->cmd_tab[0], "pwd", ft_strlen(s_exec->cmd_tab[0])) == 0)
 		return (exec_pwd());
 	else if (ft_strncmp(s_exec->cmd_tab[0], "export", ft_strlen(s_exec->cmd_tab[0])) == 0)
-		return (exec_export(s_exec->cmd_tab, NULL));
+		return (exec_export(s_exec->cmd_tab, s_env, &(s_exec->env_tab)));
 	else if (ft_strncmp(s_exec->cmd_tab[0], "unset", ft_strlen(s_exec->cmd_tab[0])) == 0)
-		return (exec_unset());
+		return (exec_unset(s_exec->cmd_tab, s_env, &(s_exec->env_tab)));
 	else if (ft_strncmp(s_exec->cmd_tab[0], "env", ft_strlen(s_exec->cmd_tab[0])) == 0)
 		return (exec_env(s_exec->env_tab));
 	else if (ft_strncmp(s_exec->cmd_tab[0], "exit", ft_strlen(s_exec->cmd_tab[0])) == 0)
 		return (exec_exit());
-	return (0);
+	return (-1);
 }
 
+// Creates a new process via fork
+// Child process redirects STDIN and STDOUT to fdin and fdout
+// then execute then exit execute_builtin
+// Parent process only returns child id or -1 on error
+int exec_builtin(t_exec *s_exec, t_env *s_env)
+{
+	int id;
+
+	if (!s_exec)
+		return (-1);
+
+	id = fork();
+	if (id == -1)
+	{
+		perror("Fork failed");
+		return (-1);
+	}
+	if (id == 0)
+	{
+		if (redirect_input(s_exec->fdin, s_exec->fdout) != 0)
+		{
+			printf("Redirect input error :\n");
+			return (-1);
+		}
+		exit(execute_builtin(s_exec, s_env));
+	}
+	return (id);
+}
+
+// Used to go to a new cycle of execution
+// Searches for a pipe in s_token list
+// If there is one, move the head of s_token list to the token after the pipe
+// Closes writing end of the current pipe and update rd_pipe to the reading end
+// of the current pipe
+// If no pipe is found, s_token will be set to NULL and the exec loop will stop
 void continue_exec(t_token **s_token, int **pipefd, int *rdpipe)
 {
 	*s_token = search_next_pipe(*s_token);

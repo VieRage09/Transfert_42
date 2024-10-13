@@ -36,14 +36,14 @@ t_exec *init_s_exec(t_token *s_token, int *pipefd, int *rdpipe, char **env)
 	return (s_exec);
 }
 
-int launch_exec(t_token *s_token, char **env)
+int launch_exec(t_token *s_token, char **env, t_env *s_env)
 {
 	t_exec *s_exec;
 	int id;
 	int *pipefd;
 	int *rdpipe;
 
-	if (!s_token || !env)
+	if (!s_token || !env || !s_env)
 	{
 		printf("s_token or env_list of env is NULL\n");
 		return (1);
@@ -60,7 +60,7 @@ int launch_exec(t_token *s_token, char **env)
 		if (!s_exec)
 			return (3);
 		if (is_builtin(s_exec->cmd_tab) > 0)
-			exec_builtin(s_exec);
+			exec_builtin(s_exec, s_env);
 		else
 			id = exec_cmd(s_exec);
 		// Normalement l'enfant ne sort pas de exec  mais ATTENTION
@@ -87,10 +87,12 @@ int main(int ac, char **av, char **env)
 	t_token *r_out;
 	t_token *pipe;
 	t_token *pipe2;
+	t_env	*s_env;
 	if (ac == 0)
 		return 1;
 	printf("%s\n", av[0]);
 
+	s_env = create_env_lst(env);
 	cmd1 = malloc(sizeof(t_token));
 	cmd2 = malloc(sizeof(t_token));
 	cmd3 = malloc(sizeof(t_token));
@@ -106,12 +108,12 @@ int main(int ac, char **av, char **env)
 
 	s_token = cmd1;
 
-	cmd1->str = "cd";
+	cmd1->str = "pwd";
 	cmd1->type = CMD;
 	cmd1->prev = NULL;
-	cmd1->next = arg1;
+	cmd1->next = pipe;
 
-	arg1->str = "..";
+	arg1->str = "-e";
 	arg1->type = ARG;
 	arg1->prev = cmd1;
 	arg1->next = r_in;
@@ -158,8 +160,8 @@ int main(int ac, char **av, char **env)
 
 	pipe->str = "|";
 	pipe->type = PIPE;
-	pipe->prev = infile;
-	pipe->next = cmd2;
+	pipe->prev = cmd1;
+	pipe->next = cmd3;
 
 	pipe2->str = "|";
 	pipe2->type = PIPE;
@@ -184,7 +186,7 @@ int main(int ac, char **av, char **env)
 	// ft_print_str_tab(cmd_tab);
 	// printf("cmd = %s\narg = %s\n", cmd_tab[0], cmd_tab[1]);
 	print_cmd(s_token);
-	int	ret = launch_exec(s_token, env);
+	int	ret = launch_exec(s_token, env, s_env);
 	while (wait(NULL) != -1)
 		;
 	return (ret);

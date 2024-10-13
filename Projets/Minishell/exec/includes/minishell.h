@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/13 08:44:57 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/13 20:16:18 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ typedef struct s_exec
 ///// BUILTIN /////////////////////////////////////////////////////////////////
 
 // CD.C				1	X
-int		exec_cd(char *path);
+int		exec_cd(char **cmd_tab);
 
 // ECHO.C			1	X
 int		exec_echo();
@@ -75,13 +75,16 @@ int		exec_env(char **env);
 int		exec_exit();
 
 // EXPORT.C			1	X
-int		exec_export(char **args, t_env *s_env);
+int		exec_export(char **args, t_env *s_env, char ***env);
 
 // PWD.C			1	X
 int		exec_pwd(void);
 
 // UNSET.C			1	X
-int		exec_unset();
+int		exec_unset(char **cmd_tab, t_env *s_env, char ***env);
+
+// BIN_UTILS.C		1	X
+int		update_env_tab(t_env *s_env, char ***env_pt);
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -95,7 +98,7 @@ char	*get_cmd_path(char *cmd);
 
 // EXECUTE.C		1	X
 int		exec_cmd(t_exec *s_exec);
-int		exec_builtin(t_exec *s_exec);
+int		exec_builtin(t_exec *s_exec, t_env *s_env);
 void	continue_exec(t_token **s_token, int **pipefd, int *rdpipe);
 
 // IN_OUT_FILES.C	5   X
@@ -112,4 +115,14 @@ int		create_pipe(t_token *s_token, int **pipefd);
 char	*lst_str_chr(t_list *s_list, char *str);
 void	print_cmd(t_token *s_token);
 t_token	*search_next_pipe(t_token *s_token);
+
+
+
+//////////// PARSING //////////////////////////////////////////////////////////
+
+// ENV_UTILS.C		4	X
+void	append_env_lst(t_env **head, t_env *new_env);
+t_env   *create_env_lst(char **v_env);
+void    free_env_lst(t_env  *head);
+
 #endif
