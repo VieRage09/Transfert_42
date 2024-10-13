@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/09 19:17:15 by tlebon            #+#    #+#              #
-#    Updated: 2024/10/10 16:24:44 by tlebon           ###   ########.fr        #
+#    Updated: 2024/10/13 08:49:53 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,8 +27,13 @@ HDR = $(HDR_PATH)/minishell.h
 SRC_PATH = src
 SRC =																		\
 		$(SRC_PATH)/bin/cd.c												\
-		$(SRC_PATH)/bin/pwd.c												\
+		$(SRC_PATH)/bin/echo.c												\
 		$(SRC_PATH)/bin/env.c												\
+		$(SRC_PATH)/bin/exit.c												\
+		$(SRC_PATH)/bin/export.c											\
+		$(SRC_PATH)/bin/pwd.c												\
+		$(SRC_PATH)/bin/unset.c												\
+		$(SRC_PATH)/bool.c													\
 		$(SRC_PATH)/command.c												\
 		$(SRC_PATH)/execute.c												\
 		$(SRC_PATH)/in_out_files.c											\

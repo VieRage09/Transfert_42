@@ -1,20 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/29 17:41:55 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/13 08:44:11 by tlebon           ###   ########.fr       */
+/*   Created: 2024/10/13 08:29:04 by tlebon            #+#    #+#             */
+/*   Updated: 2024/10/13 08:42:49 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// On realloc env avec var en moins
-int	exec_unset()
+int	exec_echo()
 {
-	printf("Builtin not available for now\n");
 	return (0);
 }

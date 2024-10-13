@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/11 21:06:50 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/13 08:44:57 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,15 @@ typedef struct s_token // contient l'element de la commande + son type
     int				type; // le type
     struct s_token	*prev;
     struct s_token	*next;
-}					t_token;
+}				t_token;
+
+typedef struct  s_env
+{
+	char			*name;
+    char            *str;
+    struct s_env    *next;   
+    struct s_env    *prev; 
+}               t_env;
 
 typedef struct s_exec
 {
@@ -55,14 +63,30 @@ typedef struct s_exec
 ///// BUILTIN /////////////////////////////////////////////////////////////////
 
 // CD.C				1	X
-int		change_directory(char *path);
+int		exec_cd(char *path);
 
-// PWD.C			1	X
-void	print_working_directory(void);
+// ECHO.C			1	X
+int		exec_echo();
 
 // ENV.C			1	X
-int		print_env(char **env);
+int		exec_env(char **env);
+
+// EXIT.C			1	X
+int		exec_exit();
+
+// EXPORT.C			1	X
+int		exec_export(char **args, t_env *s_env);
+
+// PWD.C			1	X
+int		exec_pwd(void);
+
+// UNSET.C			1	X
+int		exec_unset();
+
 ///////////////////////////////////////////////////////////////////////////////
+
+// BOOL.C			1	X
+int		is_builtin(char **cmd_tab);
 
 // COMMAND.C		4	X
 t_token	*search_next_cmd(t_token *s_token);
@@ -70,7 +94,9 @@ char	**prepare_cmd_tab(t_token *s_token);
 char	*get_cmd_path(char *cmd);
 
 // EXECUTE.C		1	X
-void	execute_cmd(t_exec *s_exec);
+int		exec_cmd(t_exec *s_exec);
+int		exec_builtin(t_exec *s_exec);
+void	continue_exec(t_token **s_token, int **pipefd, int *rdpipe);
 
 // IN_OUT_FILES.C	5   X
 int     open_infile(char *file_path);

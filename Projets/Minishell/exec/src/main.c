@@ -41,10 +41,7 @@ int launch_exec(t_token *s_token, char **env)
 	t_exec *s_exec;
 	int id;
 	int *pipefd;
-	int *rdpipe; // Pour premiere exec : Pas besoin d'etre init
-				 // Pour seconde exec  : Est init a l'entree READ du premier pipe cree
-				 // Pour troisieme exec: Doit toujours pointer vers l'entree READ du 1er pour l'enfant
-				 // puis doit pointer vers l'entree READ du deuxieme pipe cree
+	int *rdpipe;
 
 	if (!s_token || !env)
 	{
@@ -57,32 +54,19 @@ int launch_exec(t_token *s_token, char **env)
 	*rdpipe = -1;
 	while (s_token)
 	{
-		print_cmd(s_token);
 		if (create_pipe(s_token, &pipefd) > 0)
 			return (2);
 		s_exec = init_s_exec(s_token, pipefd, rdpipe, env);
 		if (!s_exec)
 			return (3);
-		id = fork();
-		if (id == -1)
-		{
-			perror("Fork failed");
-			return (4);
-		}
-		if (id == 0)
-			execute_cmd(s_exec);
+		if (is_builtin(s_exec->cmd_tab) > 0)
+			exec_builtin(s_exec);
 		else
-		{
-			// Sauf erreur le child reste et meurt dans execute_cmd
-			s_token = search_next_pipe(s_token);
-			if (s_token)
-			{
-				s_token = s_token->next;
-				if (close(pipefd[1]) != 0)
-					perror("Close (main process) failed");
-				*rdpipe = pipefd[0];
-			}
-		}
+			id = exec_cmd(s_exec);
+		// Normalement l'enfant ne sort pas de exec  mais ATTENTION
+		continue_exec(&s_token, &pipefd, rdpipe);
+		if (id < 0)
+			return (4);
 	}
 	return (0);
 }
@@ -93,48 +77,64 @@ int main(int ac, char **av, char **env)
 	t_token *s_token;
 	t_token *cmd1;
 	t_token *cmd2;
+	t_token *cmd3;
 	t_token *arg1;
 	t_token *arg2;
+	t_token *arg3;
 	t_token *infile;
 	t_token *outfile;
 	t_token *r_in;
 	t_token *r_out;
 	t_token *pipe;
+	t_token *pipe2;
 	if (ac == 0)
 		return 1;
 	printf("%s\n", av[0]);
 
 	cmd1 = malloc(sizeof(t_token));
 	cmd2 = malloc(sizeof(t_token));
+	cmd3 = malloc(sizeof(t_token));
 	arg1 = malloc(sizeof(t_token));
 	arg2 = malloc(sizeof(t_token));
+	arg3 = malloc(sizeof(t_token));
 	infile = malloc(sizeof(t_token));
 	outfile = malloc(sizeof(t_token));
 	r_in = malloc(sizeof(t_token));
 	r_out = malloc(sizeof(t_token));
 	pipe = malloc(sizeof(t_token));
+	pipe2 = malloc(sizeof(t_token));
 
 	s_token = cmd1;
 
-	cmd1->str = "cat";
+	cmd1->str = "cd";
 	cmd1->type = CMD;
 	cmd1->prev = NULL;
 	cmd1->next = arg1;
 
-	arg1->str = "-e";
+	arg1->str = "..";
 	arg1->type = ARG;
 	arg1->prev = cmd1;
 	arg1->next = r_in;
 
-	cmd2->str = "cat";
+	cmd2->str = "ls";
 	cmd2->type = CMD;
 	cmd2->prev = pipe;
 	cmd2->next = arg2;
 
-	arg2->str = "-e";
+	arg2->str = "-a";
 	arg2->type = ARG;
 	arg2->prev = cmd2;
-	arg2->next = r_out;
+	arg2->next = pipe2;
+
+	cmd3->str = "cat";
+	cmd3->type = CMD;
+	cmd3->prev = pipe;
+	cmd3->next = arg3;
+
+	arg3->str = "-e";
+	arg3->type = ARG;
+	arg3->prev = cmd3;
+	arg3->next = r_out;
 
 	r_in->str = "<";
 	r_in->type = R_IN;
@@ -161,6 +161,11 @@ int main(int ac, char **av, char **env)
 	pipe->prev = infile;
 	pipe->next = cmd2;
 
+	pipe2->str = "|";
+	pipe2->type = PIPE;
+	pipe2->prev = arg2;
+	pipe2->next = cmd3;
+
 	// t_token *command;
 	// int fdin;
 	// int fdout;
@@ -178,8 +183,9 @@ int main(int ac, char **av, char **env)
 
 	// ft_print_str_tab(cmd_tab);
 	// printf("cmd = %s\narg = %s\n", cmd_tab[0], cmd_tab[1]);
-	launch_exec(s_token, env);
+	print_cmd(s_token);
+	int	ret = launch_exec(s_token, env);
 	while (wait(NULL) != -1)
 		;
-	return (0);
+	return (ret);
 }

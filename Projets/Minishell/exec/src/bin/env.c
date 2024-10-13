@@ -6,13 +6,13 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:28:47 by tlebon            #+#    #+#             */
-/*   Updated: 2024/09/29 17:34:54 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/13 08:30:58 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	print_env(char **env)
+int	exec_env(char **env)
 {
 	return (ft_print_str_tab(env));
 }

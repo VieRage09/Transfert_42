@@ -1,1 +1,10 @@
-infile test txt$$
+.$
+..$
+include$
+makefile$
+minishell$
+out$
+pipex$
+src$
+test$
+.vscode$

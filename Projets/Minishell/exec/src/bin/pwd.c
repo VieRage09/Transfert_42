@@ -6,21 +6,25 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:34:52 by tlebon            #+#    #+#             */
-/*   Updated: 2024/09/27 19:42:40 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/13 08:36:30 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // Check si il y a des subtilitees :
-// Avec le comportement de cd dans bash pour adapter le comportement 
+// Avec le comportement de pwd dans bash pour adapter le comportement 
+// Dans bash, si $PWD est unset : la cmd pwd marche quand meme
 // Avec getcwd notamment avec les parametres (leaks ? error management ?)
 // Uses getcwd to get working directory then prints it
-void print_working_directory(void)
+int exec_pwd(void)
 {
 	char	*path;
 
 	path = getcwd(NULL, 0);
+	if (!path)
+		return (1);
 	printf("%s\n", path);
-	free(path);	
+	free(path);
+	return (0);
 }

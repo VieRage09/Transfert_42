@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:37:31 by tlebon            #+#    #+#             */
-/*   Updated: 2024/09/29 20:49:28 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/13 09:20:45 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 // Attention SEGFAULT dans cas suivant : mkdir a --> cd a --> mkdir b --> cd b
 // Si en etant dans b on supprime a : cd .. lance une erreur mais le 2eme appel a cd .. 
 // doit revenir effectivement en arriere soit au repertoire de base
-int change_directory(char *path)
+int exec_cd(char *path)
 {
 	char	*old_pwd;
 	
@@ -40,6 +40,7 @@ int change_directory(char *path)
 			perror("cd");
 			return (1);
 		}
+		exec_pwd();
 	}
 	else
 	{
@@ -49,6 +50,6 @@ int change_directory(char *path)
 			return (1);
 		}
 	}
-	print_working_directory(); // A ENLEVER
+	exec_pwd();
 	return (0);
 }
