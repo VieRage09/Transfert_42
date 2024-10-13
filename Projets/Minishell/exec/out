@@ -1,6 +1,1 @@
-include
-makefile
-out
-pipex
-src
-test
+infile test txt$$

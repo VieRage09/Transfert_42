@@ -30,7 +30,7 @@ t_exec *init_s_exec(t_token *s_token, int *pipefd, int *rdpipe, char **env)
 	if (!s_exec->cmd_tab)
 	{
 		printf("prepare_cmd_tab function error\n");
-		return (4);
+		return (NULL);
 	}
 	s_exec->env_tab = env;
 	return (s_exec);
@@ -39,9 +39,6 @@ t_exec *init_s_exec(t_token *s_token, int *pipefd, int *rdpipe, char **env)
 int launch_exec(t_token *s_token, char **env)
 {
 	t_exec *s_exec;
-	// int fdin;
-	// int fdout;
-	// char **cmd_tab;
 	int id;
 	int *pipefd;
 	int *rdpipe; // Pour premiere exec : Pas besoin d'etre init
@@ -54,31 +51,38 @@ int launch_exec(t_token *s_token, char **env)
 		printf("s_token or env_list of env is NULL\n");
 		return (1);
 	}
+	rdpipe = malloc(sizeof(int));
+	if (!rdpipe)
+		return (1);
+	*rdpipe = -1;
 	while (s_token)
 	{
 		print_cmd(s_token);
 		if (create_pipe(s_token, &pipefd) > 0)
-			return (3);
+			return (2);
 		s_exec = init_s_exec(s_token, pipefd, rdpipe, env);
-		ft_print_str_tab(s_exec->cmd_tab);
-
+		if (!s_exec)
+			return (3);
 		id = fork();
 		if (id == -1)
 		{
 			perror("Fork failed");
-			return (5);
+			return (4);
 		}
 		if (id == 0)
 			execute_cmd(s_exec);
-		// Sauf erreur le child reste et meurt dans execute_cmd
-		s_token = search_next_pipe(s_token);
-		if (s_token)
-			s_token = s_token->next;
-		// if (pipefd)
-		// {
-		// 	if (close(pipefd[0]) != 0 || close(pipefd[1]) != 0)
-		// 		perror("Close failed");
-		// }
+		else
+		{
+			// Sauf erreur le child reste et meurt dans execute_cmd
+			s_token = search_next_pipe(s_token);
+			if (s_token)
+			{
+				s_token = s_token->next;
+				if (close(pipefd[1]) != 0)
+					perror("Close (main process) failed");
+				*rdpipe = pipefd[0];
+			}
+		}
 	}
 	return (0);
 }
@@ -174,7 +178,6 @@ int main(int ac, char **av, char **env)
 
 	// ft_print_str_tab(cmd_tab);
 	// printf("cmd = %s\narg = %s\n", cmd_tab[0], cmd_tab[1]);
-	print_cmd(s_token);
 	launch_exec(s_token, env);
 	while (wait(NULL) != -1)
 		;
