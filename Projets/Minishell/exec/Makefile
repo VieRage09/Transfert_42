@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/09 19:17:15 by tlebon            #+#    #+#              #
-#    Updated: 2024/10/14 18:57:52 by tlebon           ###   ########.fr        #
+#    Updated: 2024/10/14 20:07:31 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,37 +59,34 @@ SRCS		= $(addprefix $(SRC_PATH), $(SRC))
 
 
 #------------------------------------------------------------------------OBJ---#
-OBJ_PATH	= obj/
 OBJ			= $(SRC:.c=.o)
-OBJS		=$(addprefix $(OBJ_PATH), $(OBJ)))
+OBJS		= $(addprefix $(OBJ_PATH), $(OBJ))
+OBJ_PATH	= obj/
 #------------------------------------------------------------------------------#
+
+
+#------------------------------------------------------------------------HDR---#
+HDR			=	includes/minishell.h										\
+#------------------------------------------------------------------------------#
+
+vpath %.c $(SRC_PATH) $(SRC_PATH)(BIN_PATH) $(SRC_PATH)$(EXEC_PATH) $(SRC_PATH)$(PARS_PATH)
 
 all: $(NAME)
 
-$(OBJ_PATH)%.o: $(SRC_PATH)%.c
-	$(CC) $(CFLAGS) -c $< -o $@ $(INC)
-
-$(OBJS): $(OBJ_PATH)
-
-$(OBJ_PATH):
-	mkdir $@
-	mkdir $@$(BIN_PATH)
-	mkdir $@$(EXEC_PATH)
-	mkdir $@$(PARS_PATH)
-
-$(NAME): lib $(OBJS)
+$(NAME): $(OBJS)
+	make -C $(LIBFT_PATH)
 	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $(OBJS) $(LIBFT) $(INC)
 
-lib:
-	make -C $(LIBFT_PATH)
+$(OBJ_PATH)%.o: $(SRC_PATH)%.c $(HDR)
+	mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@ $(INC)
 
 clean:
-	make -C $(LIBFT_PATH) clean 
 	rm -rf $(OBJ_PATH) 	
 
 fclean: clean
+	make -C $(LIBFT_PATH) fclean  
 	rm -rf $(NAME)
-	make -C $(LIB_PATH) fclean
 
 re : fclean all
 
