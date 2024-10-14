@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/09 19:17:15 by tlebon            #+#    #+#              #
-#    Updated: 2024/10/14 20:07:31 by tlebon           ###   ########.fr        #
+#    Updated: 2024/10/14 21:38:51 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = minishell
 #-------------------------------------------------------------- COMPILATION ---#
 CC = cc
 LFLAGS = -lreadline
-CFLAGS = -g -Wall -Werror -Wextra
+# CFLAGS = -g -Wall -Werror -Wextra
 #------------------------------------------------------------------------------#
 
 #-------------------------------------------------------------------- LIBFT ---#
@@ -51,7 +51,14 @@ SRC =																		\
 		$(EXEC_PATH)in_out_files.c											\
 		$(EXEC_PATH)pipe.c													\
 		$(EXEC_PATH)utils.c													\
+		$(PARS_PATH)debug.c													\
 		$(PARS_PATH)env_utils.c												\
+		$(PARS_PATH)error.c													\
+		$(PARS_PATH)misc.c													\
+		$(PARS_PATH)parsing_utils.c											\
+		$(PARS_PATH)parsing_utils2.c										\
+		$(PARS_PATH)parsing.c												\
+		$(PARS_PATH)tokenisator.c											\
 		main.c																\
 
 SRCS		= $(addprefix $(SRC_PATH), $(SRC))
@@ -75,7 +82,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	make -C $(LIBFT_PATH)
-	$(CC) $(CFLAGS) $(LFLAGS) -o $@ $(OBJS) $(LIBFT) $(INC)
+	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBFT) $(LFLAGS) $(INC)
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c $(HDR)
 	mkdir -p $(dir $@)

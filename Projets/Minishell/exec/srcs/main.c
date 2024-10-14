@@ -6,12 +6,18 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 17:39:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/11 20:53:42by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/14 21:43:35 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// Mallocs and initialize an s_exec structure
+// Assigns its arguments required to exec a cmd block
+// Gets the correct fdin and fdout according to the cmd block we want to exec
+// Mallocs a cmd tab containing only the cmd and its args 
+// Returns the structure created
+// Returns NULL on error
 t_exec *init_s_exec(t_token *s_token, int *pipefd, int *rdpipe, char **env)
 {
 	t_exec *s_exec;
@@ -36,6 +42,18 @@ t_exec *init_s_exec(t_token *s_token, int *pipefd, int *rdpipe, char **env)
 	return (s_exec);
 }
 
+// Entry function used to prepare everyting and execute the prompt
+// Creates a loop, which means thatEvery cycle :
+// A pipe is created if needed
+// An s_struct is initialized 
+// An execution function is called, whether the cmd block is a builtin or a cmd
+// The reading head (s_token) of the prompt is set to the next cmd block
+// The loop stops when every cmd block have been executed
+
+// TODO : 
+//	- Recupere la return value
+//	- Mettre en place le system de wait pour process zombie
+//	- Gere le cas ou les fonctions d'exec fail et retourne une valeur au lieu d'exit
 int launch_exec(t_token *s_token, char **env, t_env *s_env)
 {
 	t_exec *s_exec;
@@ -71,123 +89,155 @@ int launch_exec(t_token *s_token, char **env, t_env *s_env)
 	return (0);
 }
 
-int main(int ac, char **av, char **env)
-// int main(void)
+// int main(int ac, char **av, char **env)
+// // int main(void)
+// {
+// 	t_token *s_token;
+// 	t_token *cmd1;
+// 	t_token *cmd2;
+// 	t_token *cmd3;
+// 	t_token *arg1;
+// 	t_token *arg2;
+// 	t_token *arg3;
+// 	t_token *infile;
+// 	t_token *outfile;
+// 	t_token *r_in;
+// 	t_token *r_out;
+// 	t_token *pipe;
+// 	t_token *pipe2;
+// 	t_env	*s_env;
+// 	if (ac == 0)
+// 		return 1;
+// 	printf("%s\n", av[0]);
+
+// 	s_env = create_env_lst(env);
+// 	cmd1 = malloc(sizeof(t_token));
+// 	cmd2 = malloc(sizeof(t_token));
+// 	cmd3 = malloc(sizeof(t_token));
+// 	arg1 = malloc(sizeof(t_token));
+// 	arg2 = malloc(sizeof(t_token));
+// 	arg3 = malloc(sizeof(t_token));
+// 	infile = malloc(sizeof(t_token));
+// 	outfile = malloc(sizeof(t_token));
+// 	r_in = malloc(sizeof(t_token));
+// 	r_out = malloc(sizeof(t_token));
+// 	pipe = malloc(sizeof(t_token));
+// 	pipe2 = malloc(sizeof(t_token));
+
+// 	s_token = cmd1;
+
+// 	cmd1->str = "pwd";
+// 	cmd1->type = CMD;
+// 	cmd1->prev = NULL;
+// 	cmd1->next = pipe;
+
+// 	arg1->str = "-e";
+// 	arg1->type = ARG;
+// 	arg1->prev = cmd1;
+// 	arg1->next = r_in;
+
+// 	cmd2->str = "ls";
+// 	cmd2->type = CMD;
+// 	cmd2->prev = pipe;
+// 	cmd2->next = arg2;
+
+// 	arg2->str = "-a";
+// 	arg2->type = ARG;
+// 	arg2->prev = cmd2;
+// 	arg2->next = pipe2;
+
+// 	cmd3->str = "cat";
+// 	cmd3->type = CMD;
+// 	cmd3->prev = pipe;
+// 	cmd3->next = arg3;
+
+// 	arg3->str = "-e";
+// 	arg3->type = ARG;
+// 	arg3->prev = cmd3;
+// 	arg3->next = r_out;
+
+// 	r_in->str = "<";
+// 	r_in->type = R_IN;
+// 	r_in->prev = arg1;
+// 	r_in->next = infile;
+
+// 	infile->str = "test";
+// 	infile->type = ARG;
+// 	infile->prev = r_in;
+// 	infile->next = pipe;
+
+// 	r_out->str = ">";
+// 	r_out->type = R_OUT;
+// 	r_out->prev = arg2;
+// 	r_out->next = outfile;
+
+// 	outfile->str = "out";
+// 	outfile->type = ARG;
+// 	outfile->prev = r_out;
+// 	outfile->next = NULL;
+
+// 	pipe->str = "|";
+// 	pipe->type = PIPE;
+// 	pipe->prev = cmd1;
+// 	pipe->next = cmd3;
+
+// 	pipe2->str = "|";
+// 	pipe2->type = PIPE;
+// 	pipe2->prev = arg2;
+// 	pipe2->next = cmd3;
+
+// 	print_cmd(s_token);
+// 	int	ret = launch_exec(s_token, env, s_env);
+// 	while (wait(NULL) != -1)
+// 		;
+// 	return (ret);
+// }
+
+
+
+bool	empty_line(char *line)
 {
-	t_token *s_token;
-	t_token *cmd1;
-	t_token *cmd2;
-	t_token *cmd3;
-	t_token *arg1;
-	t_token *arg2;
-	t_token *arg3;
-	t_token *infile;
-	t_token *outfile;
-	t_token *r_in;
-	t_token *r_out;
-	t_token *pipe;
-	t_token *pipe2;
-	t_env	*s_env;
-	if (ac == 0)
-		return 1;
-	printf("%s\n", av[0]);
+	int	i;
 
-	s_env = create_env_lst(env);
-	cmd1 = malloc(sizeof(t_token));
-	cmd2 = malloc(sizeof(t_token));
-	cmd3 = malloc(sizeof(t_token));
-	arg1 = malloc(sizeof(t_token));
-	arg2 = malloc(sizeof(t_token));
-	arg3 = malloc(sizeof(t_token));
-	infile = malloc(sizeof(t_token));
-	outfile = malloc(sizeof(t_token));
-	r_in = malloc(sizeof(t_token));
-	r_out = malloc(sizeof(t_token));
-	pipe = malloc(sizeof(t_token));
-	pipe2 = malloc(sizeof(t_token));
+	i = 0;
+	while (line[i] && line[i] == ' ')
+		i++;
+	if (i == (int)ft_strlen(line))
+	{
+		free(line);
+		return (true);
+	}
+	return (false);
+}
 
-	s_token = cmd1;
+int	main(int ac, char **av, char **env)
+{
+	char	*raw_fruits;
+	t_token	*fruit_salad;
+    t_env   *env_lst;
+	int 	i;
 
-	cmd1->str = "pwd";
-	cmd1->type = CMD;
-	cmd1->prev = NULL;
-	cmd1->next = pipe;
+    env_lst = create_env_lst(env);
+    //display_env_lst(env_lst);
 
-	arg1->str = "-e";
-	arg1->type = ARG;
-	arg1->prev = cmd1;
-	arg1->next = r_in;
-
-	cmd2->str = "ls";
-	cmd2->type = CMD;
-	cmd2->prev = pipe;
-	cmd2->next = arg2;
-
-	arg2->str = "-a";
-	arg2->type = ARG;
-	arg2->prev = cmd2;
-	arg2->next = pipe2;
-
-	cmd3->str = "cat";
-	cmd3->type = CMD;
-	cmd3->prev = pipe;
-	cmd3->next = arg3;
-
-	arg3->str = "-e";
-	arg3->type = ARG;
-	arg3->prev = cmd3;
-	arg3->next = r_out;
-
-	r_in->str = "<";
-	r_in->type = R_IN;
-	r_in->prev = arg1;
-	r_in->next = infile;
-
-	infile->str = "test";
-	infile->type = ARG;
-	infile->prev = r_in;
-	infile->next = pipe;
-
-	r_out->str = ">";
-	r_out->type = R_OUT;
-	r_out->prev = arg2;
-	r_out->next = outfile;
-
-	outfile->str = "out";
-	outfile->type = ARG;
-	outfile->prev = r_out;
-	outfile->next = NULL;
-
-	pipe->str = "|";
-	pipe->type = PIPE;
-	pipe->prev = cmd1;
-	pipe->next = cmd3;
-
-	pipe2->str = "|";
-	pipe2->type = PIPE;
-	pipe2->prev = arg2;
-	pipe2->next = cmd3;
-
-	// t_token *command;
-	// int fdin;
-	// int fdout;
-	// char	**cmd_tab;
-
-	// fdin = find_fdin(command);
-	// printf("fdin = %i : %s\n", fdin, get_next_line(fdin));
-
-	// fdout = find_fdout(command);
-	// printf("fdout = %i : %s\n", fdout, get_next_line(fdout));
-
-	// cmd_tab = prepare_cmd_tab(command);
-	// if (!cmd_tab)
-	// 	printf("NUUUUUUL\n");
-
-	// ft_print_str_tab(cmd_tab);
-	// printf("cmd = %s\narg = %s\n", cmd_tab[0], cmd_tab[1]);
-	print_cmd(s_token);
-	int	ret = launch_exec(s_token, env, s_env);
-	while (wait(NULL) != -1)
+	while(1)
+	{
+		i = 0;
+		raw_fruits = readline("minishell> ");
+		//raw_fruits[ft_strlen(raw_fruits) + 1] = 0;
+		if (empty_line(raw_fruits))
+			continue ;// passe a la prochain iteration du while (autorisee ?)
+		add_history(raw_fruits);
+		if (error_check(raw_fruits))
+			continue ;
+		fruit_salad = let_me_cook(raw_fruits);
+		print_tokens(fruit_salad);
+		launch_exec(fruit_salad, env, env_lst);
+		while (wait(NULL) != -1)
 		;
-	return (ret);
+		free_tokens(fruit_salad);
+	}
+
+	free_env_lst(env_lst);
+	return (0);
 }

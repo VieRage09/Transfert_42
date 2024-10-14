@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/14 17:37:41 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/14 21:38:17 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 // #include <readline/history.h>	// add_history
 
 #include <sys/wait.h>			// Wait duh
+
 
 #define R_IN			1         // "< redirect input"
 #define R_OUT			2         // "> redirect output"
@@ -118,11 +119,52 @@ t_token	*search_next_pipe(t_token *s_token);
 
 
 
-//////////// PARSING //////////////////////////////////////////////////////////
+// PARSING
+# include <stdio.h>
+# include <stdlib.h>
+# include <stdbool.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <limits.h>
+# include <fcntl.h>
+# include <sys/stat.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include "libft.h"
 
-// ENV_UTILS.C		4	X
-void	append_env_lst(t_env **head, t_env *new_env);
+
+bool	is_special(char c);
+bool	is_quote(char c);
+bool	is_wspace(char c);
+int		chunk_len(char *ingredients, int step);
+int		read_type(char	*chunk);
+int		end_of_token(char *ingredients, int step);
+t_token	*let_me_cook(char *ingredients);
+char	**bash_split(char const *s);
+void	clear_str(char	*str);
+size_t	subtil(char	*str);
+void	physio(t_token *fruit_salad);
+
+// VARIABLES D'ENVIRONNEMENT
 t_env   *create_env_lst(char **v_env);
 void    free_env_lst(t_env  *head);
+
+// TOKENS
+t_token	*create_token(const char *str, int type);
+void	append_token(t_token **head, t_token *new_token);
+void	free_tokens(t_token *head);
+
+//ERRORS
+
+bool	error_check(char *line);
+bool	quote_error(char *input);
+bool    cmd_error(char **things);
+
+// DEBUG
+
+void    display_env_lst(t_env   *lst);
+void	print_tokens(t_token *head);
+void	tab_type_reader(char **tab);
+void	read_tab(char **tab);
 
 #endif
