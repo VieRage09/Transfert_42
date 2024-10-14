@@ -6,14 +6,14 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/13 20:16:18 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/14 17:37:41 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef	MINISHELL_H
 # define	MINISHELL_H
 
-#include "lib/libft.h"
+#include "libft.h"
 #include <unistd.h>		// chdir, getcwd, fork
 #include <stdio.h>		// printf
 #include <stdlib.h>		// getenv

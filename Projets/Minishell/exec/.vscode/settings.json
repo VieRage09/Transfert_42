@@ -1,6 +1,7 @@
 {
 	"files.associations": {
 		"minishell.h": "c",
-		"pipex_bonus.h": "c"
+		"pipex_bonus.h": "c",
+		"get_next_line.h": "c"
 	}
 }
