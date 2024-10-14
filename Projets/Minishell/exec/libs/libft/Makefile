@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/10 17:36:09 by tlebon            #+#    #+#              #
-#    Updated: 2024/10/14 18:52:51 by tlebon           ###   ########.fr        #
+#    Updated: 2024/10/14 19:48:37 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -92,44 +92,45 @@ SRC			=																\
 		$(PRINTF_PATH)ft_print_str.c										\
 		$(PRINTF_PATH)ft_print_uns_int.c									\
 
-SRCS		= $(addprefix($(SRC_PATH), $(SRC)))
+SRCS		= $(addprefix $(SRC_PATH), $(SRC))
+
+# Create corresponding object file paths inside obj/ directory
+OBJ			= $(SRC:.c=.o)
+OBJS		= $(addprefix $(OBJ_PATH), $(OBJ))
+OBJ_PATH	= obj/
 #------------------------------------------------------------------------------#
 
 #------------------------------------------------------------------------HDR---#
-HDR		= 	$(INC_PATH)libft.h												\
-			$(INC_PATH)get_next_line.h										\
-			$(INC_PATH)ft_printf.h											\
+HDR		= 	$(INC_PATH)/libft.h												\
+				$(INC_PATH)/get_next_line.h										\
+				$(INC_PATH)/ft_printf.h											\
 #------------------------------------------------------------------------------#
 
-#------------------------------------------------------------------------OBJ---#
-OBJ_PATH	= obj/
-OBJ			= $(SRC:.c=.o)
-OBJS		= $(addprefix $(OBJ_PATH), $(OBJ))
-#------------------------------------------------------------------------------#
+# Use vpath to tell make where to look for .c files
+vpath %.c $(SRC_PATH) $(SRC_PATH)$(GNL_PATH) $(SRC_PATH)$(PRINTF_PATH)
 
-
+# Default target to build the library
 all: $(NAME)
 
-$(OBJ_PATH)%.o: $(SRC_PATH)%.c
+# Rule to create the archive from object files
+$(NAME): $(OBJS)
+	ar crs $@ $^
+
+# Rule to compile source files into object files inside obj/
+$(OBJ_PATH)%.o: $(SRC_PATH)%.c $(HDR)
+	@mkdir -p $(dir $@)  # Create the directory if it doesn't exist
 	$(CC) $(CFLAGS) -c $< -o $@ $(INC)
 
-$(OBJS): $(OBJ_PATH)
-
-$(OBJ_PATH):
-	mkdir $@
-	mkdir $@$(GNL_PATH)
-	mkdir $@$(PRINTF_PATH)
-
-$(NAME) : $(OBJS)
-	ar crs $(NAME) $(OBJS)
-
+# Clean up object files and directories
 clean:
-	rm -rf $(OBJS) $(BNS)
+	rm -rf $(OBJS)
 	rm -rf $(OBJ_PATH)
 
+# Full clean including the library
 fclean: clean
 	rm -rf $(NAME)
 
+# Rebuild everything
 re: fclean all
 
 .PHONY: all clean fclean re
