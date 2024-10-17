@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:41:33 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/17 02:09:00 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/17 19:31:11 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,18 @@ static int	invalid_name(char *name)
 	if (!name)
 		return (1);
 	if (!ft_isalpha(name[0]) && name[0] != '_')
+	{
+		printf("minishell : export : '%s': not a valid identifier\n", name);
 		return (1);
+	}
 	i = 1;
 	while (name[i])
 	{
 		if (!ft_isalnum(name[i]) && name[i] != '_')
+		{	
+			printf("minishell : export : '%s': not a valid identifier\n", name);
 			return (1);
+		}
 		i++;
 	}
 	return (0);
@@ -72,8 +78,10 @@ int	exec_export(char **cmd_tab, t_env **s_env, char ***env)
 {
 	int		i;
 	int		ret;
-	char	**names;
 	t_env	*var;
+	char	*value;
+	char	*trimed_value;
+	char	*name;
 
 	if (!cmd_tab || !*s_env)
 		return (1);
@@ -81,29 +89,41 @@ int	exec_export(char **cmd_tab, t_env **s_env, char ***env)
 	ret = 0;
 	while (cmd_tab[i])
 	{
-		names = ft_split(cmd_tab[i], '=');
-		if (!names)
+		value = ft_strchr(cmd_tab[i], '=');
+		if (!value)
+			name = cmd_tab[i];
+		else
+			name = ft_substr(cmd_tab[i], 0, ft_strlen(cmd_tab[i]) - ft_strlen(value));
+		if (!name)
 			return (2);
-		if (invalid_name(names[0]))
+		if (invalid_name(name))
 		{
-			printf("minishell : export : '%s': not a valid identifier\n", names[0]);
 			ret = 1;
-			ft_free_tab((void **)names);
 			i++;
 			continue ;
 		}
-		if (already_exists(*s_env, names[0]) == 0)
-			append_env_lst(s_env, create_env(names[0], names[1])); // Attention a la gestion d'erreur ici
+		if (!value)
+		{
+			i++;
+			continue;
+		}
+		if (ft_strlen(value) == 1)
+			trimed_value = "";
+		else
+			trimed_value = ft_substr(value, 1, ft_strlen(value));
+		if (!trimed_value)
+			return (3);
+		if (already_exists(*s_env, name) == 0)
+			append_env_lst(s_env, create_env(name, trimed_value)); // Attention a la gestion d'erreur ici
 		else
 		{
-			var = find_variable(names[0], *s_env);
+			var = find_variable(name, *s_env);
 			free(var->str);
 			var->str = malloc(sizeof(char));
 			if (!var->str)
-				return (3);
-			var->str = ft_strdup(names[1]);
+				return (4);
+			var->str = ft_strdup(trimed_value);
 		}
-		ft_free_tab((void **)names);
 		update_env_tab(*s_env, env);
 		i++;
 	}

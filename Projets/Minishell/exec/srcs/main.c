@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 17:39:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/17 01:36:35 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/17 20:48:57 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ int	main(int ac, char **av, char **env)
     t_env   *env_lst;
 	int 	i;
 	char	**env_cpy;
+	int		ret;
 
     env_lst = create_env_lst(env);
 	if (update_env_tab(env_lst, &env_cpy) != 0)
@@ -134,15 +135,16 @@ int	main(int ac, char **av, char **env)
 		if (error_check(raw_fruits))
 			continue ;
 		fruit_salad = let_me_cook(raw_fruits, env_lst);
+		tokens_cleaner(fruit_salad, env_lst);
 		print_tokens(fruit_salad);
-		launch_exec(fruit_salad, &env_cpy, &env_lst);
+		ret = launch_exec(fruit_salad, &env_cpy, &env_lst);
 		free_tokens(fruit_salad);	
 		while (wait(NULL) != -1)
 		;
 	}
 
 	free_env_lst(env_lst);
-	return (0);
+	return (ret);
 }
 // int main(int ac, char **av, char **env)
 // // int main(void)
