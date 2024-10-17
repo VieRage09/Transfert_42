@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/09 19:17:15 by tlebon            #+#    #+#              #
-#    Updated: 2024/10/14 21:38:51 by tlebon           ###   ########.fr        #
+#    Updated: 2024/10/16 21:43:12 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,7 +54,6 @@ SRC =																		\
 		$(PARS_PATH)debug.c													\
 		$(PARS_PATH)env_utils.c												\
 		$(PARS_PATH)error.c													\
-		$(PARS_PATH)misc.c													\
 		$(PARS_PATH)parsing_utils.c											\
 		$(PARS_PATH)parsing_utils2.c										\
 		$(PARS_PATH)parsing.c												\
@@ -89,7 +88,7 @@ $(OBJ_PATH)%.o: $(SRC_PATH)%.c $(HDR)
 	$(CC) $(CFLAGS) -c $< -o $@ $(INC)
 
 clean:
-	rm -rf $(OBJ_PATH) 	
+	@rm -rf $(OBJ_PATH) 	
 
 fclean: clean
 	make -C $(LIBFT_PATH) fclean  
@@ -97,4 +96,4 @@ fclean: clean
 
 re : fclean all
 
-.PHONY: all lib clean fclean re
+.PHONY: all clean fclean re

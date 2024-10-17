@@ -1,1 +1,12 @@
-infile test txt
+.
+..
+includes
+libs
+logs
+Makefile
+minishell
+obj
+pipex
+srcs
+test
+.vscode

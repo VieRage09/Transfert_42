@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:22:46 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/14 18:59:09 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/17 01:32:13 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int exec_cmd(t_exec *s_exec)
 // Closes fdin and fdout if != of STDIN or STDOUT
 // Compare the cmd of cmd_tab (cmd_tab[0]) and launch the correct builtin
 // Returns -1 on error or builtin values
-static int execute_builtin(t_exec *s_exec, t_env *s_env)
+static int execute_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt)
 {
 	if (s_exec->fdin != STDIN_FILENO)
 		if (close(s_exec->fdin) != 0)
@@ -93,11 +93,11 @@ static int execute_builtin(t_exec *s_exec, t_env *s_env)
 	else if (ft_strncmp(s_exec->cmd_tab[0], "pwd", ft_strlen(s_exec->cmd_tab[0])) == 0)
 		return (exec_pwd());
 	else if (ft_strncmp(s_exec->cmd_tab[0], "export", ft_strlen(s_exec->cmd_tab[0])) == 0)
-		return (exec_export(s_exec->cmd_tab, s_env, &(s_exec->env_tab)));
+		return (exec_export(s_exec->cmd_tab, s_env, env_pt));
 	else if (ft_strncmp(s_exec->cmd_tab[0], "unset", ft_strlen(s_exec->cmd_tab[0])) == 0)
-		return (exec_unset(s_exec->cmd_tab, s_env, &(s_exec->env_tab)));
+		return (exec_unset(s_exec->cmd_tab, s_env, env_pt));
 	else if (ft_strncmp(s_exec->cmd_tab[0], "env", ft_strlen(s_exec->cmd_tab[0])) == 0)
-		return (exec_env(s_exec->env_tab));
+		return (exec_env(*env_pt));
 	else if (ft_strncmp(s_exec->cmd_tab[0], "exit", ft_strlen(s_exec->cmd_tab[0])) == 0)
 		return (exec_exit());
 	return (-1);
@@ -107,29 +107,18 @@ static int execute_builtin(t_exec *s_exec, t_env *s_env)
 // Child process redirects STDIN and STDOUT to fdin and fdout
 // then execute then exit execute_builtin
 // Parent process only returns child id or -1 on error
-int exec_builtin(t_exec *s_exec, t_env *s_env)
+int exec_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt)
 {
 	int id;
 
-	if (!s_exec)
+	if (!s_exec || !*s_env || !*env_pt)
 		return (-1);
-
-	id = fork();
-	if (id == -1)
+	if (redirect_input(s_exec->fdin, s_exec->fdout) != 0)
 	{
-		perror("Fork failed");
-		return (-1);
-	}
-	if (id == 0)
-	{
-		if (redirect_input(s_exec->fdin, s_exec->fdout) != 0)
-		{
 			printf("Redirect input error :\n");
 			return (-1);
-		}
-		exit(execute_builtin(s_exec, s_env));
 	}
-	return (id);
+	return (execute_builtin(s_exec, s_env, env_pt));
 }
 
 // Used to go to a new cycle of execution
@@ -138,14 +127,14 @@ int exec_builtin(t_exec *s_exec, t_env *s_env)
 // Closes writing end of the current pipe and update rd_pipe to the reading end
 // of the current pipe
 // If no pipe is found, s_token will be set to NULL and the exec loop will stop
-void continue_exec(t_token **s_token, int **pipefd, int *rdpipe)
+void continue_exec(t_token **s_token, int *pipefd, int *rdpipe)
 {
 	*s_token = search_next_pipe(*s_token);
+	
 	if (*s_token)
 	{
 		*s_token = (*s_token)->next;
-		if (close((*pipefd)[1]) != 0)
-			perror("Close (main process) failed");
-		*rdpipe = (*pipefd)[0];
+		*rdpipe = pipefd[0];
 	}
+	free(pipefd);
 }

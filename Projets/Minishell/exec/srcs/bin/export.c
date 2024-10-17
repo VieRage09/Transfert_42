@@ -6,25 +6,11 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:41:33 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/14 18:59:09 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/17 02:09:00 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static t_env	*new_s_env_node(char *name, char *str, t_env *prev)
-{
-	t_env	*s_env;
-
-	s_env = malloc(sizeof(t_env));
-	if (!s_env)
-		return (NULL);
-	s_env->name = name;
-	s_env->str = str;
-	s_env->prev = prev;
-	s_env->next = NULL;
-	return (s_env);
-}
 
 static int	invalid_name(char *name)
 {
@@ -44,6 +30,24 @@ static int	invalid_name(char *name)
 	return (0);
 }
 
+static int	already_exists(t_env *s_env, char *name)
+{
+	t_env	*curs;
+	int		longest;
+
+	curs = s_env;
+	while (curs)
+	{
+		if (ft_strlen(curs->name) > ft_strlen(name))
+			longest =  ft_strlen(curs->name);
+		else
+			longest = ft_strlen(name);
+		if (strncmp(curs->name, name, longest) == 0)
+			return (1);
+		curs = curs->next;
+	}
+	return (0);
+}
 // cmd = export NAME=value
 // Comportement : 
 // 0. Si export NAME (sans '=') --> rien ne se passe
@@ -64,36 +68,44 @@ static int	invalid_name(char *name)
 // Valeur de retour :
 // = 1 Des qu'il y a un unvalid name 
 // A PRECISER
-int	exec_export(char **cmd_tab, t_env *s_env, char ***env)
+int	exec_export(char **cmd_tab, t_env **s_env, char ***env)
 {
-	t_env	*curs;
 	int		i;
 	int		ret;
-	char	**name_value;
+	char	**names;
+	t_env	*var;
 
-	if (!cmd_tab || !s_env)
+	if (!cmd_tab || !*s_env)
 		return (1);
-	curs = s_env;
 	i = 1;
 	ret = 0;
 	while (cmd_tab[i])
 	{
-		name_value = ft_split(cmd_tab[i], '=');
-		if (!name_value)
+		names = ft_split(cmd_tab[i], '=');
+		if (!names)
 			return (2);
-		if (invalid_name(name_value[0]))
+		if (invalid_name(names[0]))
 		{
-			printf("minishell : export : '%s': not a valid identifier\n", name_value[0]);
+			printf("minishell : export : '%s': not a valid identifier\n", names[0]);
 			ret = 1;
-			ft_free_tab((void **)name_value);
+			ft_free_tab((void **)names);
+			i++;
 			continue ;
 		}
-		curs->next = new_s_env_node(name_value[0], name_value[1], curs);
-		
-		ft_free_tab((void **)name_value);
-		curs = curs->next;
+		if (already_exists(*s_env, names[0]) == 0)
+			append_env_lst(s_env, create_env(names[0], names[1])); // Attention a la gestion d'erreur ici
+		else
+		{
+			var = find_variable(names[0], *s_env);
+			free(var->str);
+			var->str = malloc(sizeof(char));
+			if (!var->str)
+				return (3);
+			var->str = ft_strdup(names[1]);
+		}
+		ft_free_tab((void **)names);
+		update_env_tab(*s_env, env);
 		i++;
 	}
-	update_env_tab(s_env, env);
 	return (ret);
 }

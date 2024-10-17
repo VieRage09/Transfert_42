@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:03:53 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/14 18:59:09 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/16 23:07:11 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ char **prepare_cmd_tab(t_token *s_token)
 		n_arg++;
 		curs = curs->next;
 	}
+	tab[n_arg] = NULL;
 	return (tab);
 }
 

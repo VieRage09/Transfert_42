@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 17:55:37 by lberne            #+#    #+#             */
-/*   Updated: 2024/10/14 21:41:22 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/16 21:54:37 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,11 @@ t_env   *create_env_lst(char **v_env)
 
 	env_lst = NULL;
     i = 0;
-    while (v_env[i] && i <= 5) //ici on s'arret a 5 POUR LES TESTS
+    while (v_env[i])
     {
-		//printf("hello create env lst %d\n", i);
 		temp_env = ft_split(v_env[i], '=');
 		name = ft_strdup(temp_env[0]);
 		str = ft_strdup(temp_env[1]);
-		//printf("hello name %s and str %s\n", name, str);
         append_env_lst(&env_lst, create_env(name, str));
         i++;
     }

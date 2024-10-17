@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 17:39:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/14 21:43:35 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/17 01:36:35 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@ t_exec *init_s_exec(t_token *s_token, int *pipefd, int *rdpipe, char **env)
 //	- Recupere la return value
 //	- Mettre en place le system de wait pour process zombie
 //	- Gere le cas ou les fonctions d'exec fail et retourne une valeur au lieu d'exit
-int launch_exec(t_token *s_token, char **env, t_env *s_env)
+int launch_exec(t_token *s_token, char ***env_pt, t_env **s_env)
 {
 	t_exec *s_exec;
 	int id;
 	int *pipefd;
 	int *rdpipe;
 
-	if (!s_token || !env || !s_env)
+	if (!s_token || !*env_pt || !*s_env)
 	{
 		printf("s_token or env_list of env is NULL\n");
 		return (1);
@@ -74,21 +74,76 @@ int launch_exec(t_token *s_token, char **env, t_env *s_env)
 	{
 		if (create_pipe(s_token, &pipefd) > 0)
 			return (2);
-		s_exec = init_s_exec(s_token, pipefd, rdpipe, env);
+		s_exec = init_s_exec(s_token, pipefd, rdpipe, *env_pt);
 		if (!s_exec)
 			return (3);
 		if (is_builtin(s_exec->cmd_tab) > 0)
-			exec_builtin(s_exec, s_env);
+			exec_builtin(s_exec, s_env, env_pt);
 		else
 			id = exec_cmd(s_exec);
 		// Normalement l'enfant ne sort pas de exec  mais ATTENTION
-		continue_exec(&s_token, &pipefd, rdpipe);
+		if (s_exec->fdin != STDIN_FILENO)
+			if (close(s_exec->fdin) != 0)
+				perror("Close failed for fdin");
+		if (s_exec->fdout != STDOUT_FILENO)
+			if (close(s_exec->fdout) != 0)
+				perror("Close failed for fdout");
+		continue_exec(&s_token, pipefd, rdpipe);
+		free(s_exec);
 		if (id < 0)
 			return (4);
 	}
 	return (0);
 }
 
+
+bool	empty_line(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] && line[i] == ' ')
+		i++;
+	if (i == (int)ft_strlen(line))
+	{
+		free(line);
+		return (true);
+	}
+	return (false);
+}
+
+int	main(int ac, char **av, char **env)
+{
+	char	*raw_fruits;
+	t_token	*fruit_salad;
+    t_env   *env_lst;
+	int 	i;
+	char	**env_cpy;
+
+    env_lst = create_env_lst(env);
+	if (update_env_tab(env_lst, &env_cpy) != 0)
+		return (1);
+	while(1)
+	{
+		i = 0;
+		raw_fruits = readline("\033[1;94mminishell> \033[0m");
+		//raw_fruits[ft_strlen(raw_fruits) + 1] = 0;
+		if (empty_line(raw_fruits))
+			continue ;// passe a la prochain iteration du while (autorisee ?)
+		add_history(raw_fruits);
+		if (error_check(raw_fruits))
+			continue ;
+		fruit_salad = let_me_cook(raw_fruits, env_lst);
+		print_tokens(fruit_salad);
+		launch_exec(fruit_salad, &env_cpy, &env_lst);
+		free_tokens(fruit_salad);	
+		while (wait(NULL) != -1)
+		;
+	}
+
+	free_env_lst(env_lst);
+	return (0);
+}
 // int main(int ac, char **av, char **env)
 // // int main(void)
 // {
@@ -194,50 +249,3 @@ int launch_exec(t_token *s_token, char **env, t_env *s_env)
 // }
 
 
-
-bool	empty_line(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i] && line[i] == ' ')
-		i++;
-	if (i == (int)ft_strlen(line))
-	{
-		free(line);
-		return (true);
-	}
-	return (false);
-}
-
-int	main(int ac, char **av, char **env)
-{
-	char	*raw_fruits;
-	t_token	*fruit_salad;
-    t_env   *env_lst;
-	int 	i;
-
-    env_lst = create_env_lst(env);
-    //display_env_lst(env_lst);
-
-	while(1)
-	{
-		i = 0;
-		raw_fruits = readline("minishell> ");
-		//raw_fruits[ft_strlen(raw_fruits) + 1] = 0;
-		if (empty_line(raw_fruits))
-			continue ;// passe a la prochain iteration du while (autorisee ?)
-		add_history(raw_fruits);
-		if (error_check(raw_fruits))
-			continue ;
-		fruit_salad = let_me_cook(raw_fruits);
-		print_tokens(fruit_salad);
-		launch_exec(fruit_salad, env, env_lst);
-		while (wait(NULL) != -1)
-		;
-		free_tokens(fruit_salad);
-	}
-
-	free_env_lst(env_lst);
-	return (0);
-}

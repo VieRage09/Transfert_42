@@ -6,34 +6,11 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 14:39:07 by lberne            #+#    #+#             */
-/*   Updated: 2024/10/14 21:41:22 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/16 21:55:05 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	read_type(char	*chunk)
-{
-	int	len;
-
-	while (chunk)
-	{
-		len = strlen(chunk);
-		if (!ft_strncmp(chunk, "|", len))
-			return(PIPE);
-		else if (!ft_strncmp(chunk, "<", len))
-			return(R_IN);
-		else if (!ft_strncmp(chunk, "<<", len))
-			return(HEREDOC);
-		else if (!ft_strncmp(chunk, ">", len))
-			return(R_OUT);
-		else if (!ft_strncmp(chunk, ">>", len))
-			return(R_OUT_APPEND);
-		else
-			return(-1);
-	}
-	return (-1);
-}
 
 void	free_tokens(t_token *head)
 {
@@ -49,6 +26,9 @@ void	free_tokens(t_token *head)
 
 t_token	*create_token(const char *str, int type)
 {
+	int	i;
+
+	i = 0;
 	t_token	*new_token = (t_token *)malloc(sizeof(t_token));
 	if (!new_token)
 	{
@@ -57,6 +37,13 @@ t_token	*create_token(const char *str, int type)
 	}
 	new_token->str = ft_strdup(str);
 	new_token->type = type;
+	new_token->hello_there = false;
+	while (str[i])
+	{
+		if (is_quote(str[i]) || str[i] == '$')
+			new_token->hello_there = true;
+		i++;
+	}
 	new_token->prev = NULL;
 	new_token->next = NULL;
 	return (new_token);
