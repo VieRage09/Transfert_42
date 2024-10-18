@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/17 01:37:49 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/18 21:27:58 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <stdlib.h>		// getenv
 #include <fcntl.h>      // open
 #include <stdbool.h>	// booleans
+#include <errno.h>      // duh
 
 #include <sys/types.h> // opendir, readdir, closedir
 #include <dirent.h>	   // //////////////////////////
@@ -55,9 +56,9 @@ typedef struct  s_env
 
 typedef struct s_exec
 {
-    int     fdin;
-    int     fdout;
-    char    **cmd_tab;
+    t_token *cmd_block;
+    int     *pipefd;
+    int     readpipe;
     char    **env_tab;
 }               t_exec;
 
@@ -71,9 +72,6 @@ int		exec_echo();
 
 // ENV.C			1	X
 int		exec_env(char **env);
-
-// EXIT.C			1	X
-int		exec_exit();
 
 // EXPORT.C			1	X
 int		exec_export(char **args, t_env **s_env, char ***env_pt);
@@ -103,11 +101,10 @@ int		exec_cmd(t_exec *s_exec);
 int		exec_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt);
 void	continue_exec(t_token **s_token, int *pipefd, int *rdpipe);
 
-// IN_OUT_FILES.C	5   X
+// IN_OUT_FILES.C	4   X
 int     open_infile(char *file_path);
 int     open_outfile(char *file_path, int append);
-int		find_fdin(t_token *s_token, int *rdpipe);
-int		find_fdout(t_token *s_token, int *pipefd);
+int     set_fd_in_out(int *fdin, int *fdout, t_exec *s_exec);
 int		redirect_input(int fdin, int fdout);
 
 // PIPE.C			1	X

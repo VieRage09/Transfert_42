@@ -6,18 +6,18 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:14:16 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/14 18:59:09 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/18 21:23:24 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // Checks for existence and readability of the infile in argument
-// If it exists and is readable, opens it and returns the fd 
+// If it exists and is readable, opens it and returns the fd
 // Returns -1 on failure
-int	open_infile(char *file_path)
+int open_infile(char *file_path)
 {
-	int	fd;
+	int fd;
 
 	if (!file_path)
 		return (-1);
@@ -39,13 +39,13 @@ int	open_infile(char *file_path)
 }
 
 // Checks if the outfile in argument exists and is writable
-// If it doesn't exist, or if it exists and is writable 
+// If it doesn't exist, or if it exists and is writable
 // Opens it and returns the fd
 // Uses O_APPEND Flag when append bool is set up to 1
 // Return -1 on failure
-int	open_outfile(char *file_path, int append)
+int open_outfile(char *file_path, int append)
 {
-	int	fd;
+	int fd;
 
 	if (!file_path)
 		return (-1);
@@ -61,7 +61,7 @@ int	open_outfile(char *file_path, int append)
 		else if (append == 1)
 		{
 			fd = open(file_path, O_WRONLY | O_APPEND);
-			printf ("append 1\n");
+			printf("append 1\n");
 		}
 		else
 			fd = open(file_path, O_WRONLY | O_TRUNC);
@@ -71,57 +71,68 @@ int	open_outfile(char *file_path, int append)
 	return (fd);
 }
 
-// Iterates through s_token until it finds a pipe token or end of list
-// If a R_IN is encountered, open the next arg and returns its fd
-// If no R_IN is encountered, but there is a pipe before the searching area
-// returns the fd of the WRITE end of pipefd
-// Returns STDIN if nothing above happens
-// TODO : handle heredoc
-int find_fdin(t_token *s_token, int *rdpipe)
+// Iterates on the prompt until its end or a token PIPE
+// For each redirection operators encountered, opens the corresponding
+// file and assigns its fd to fdin/out after closing their precedent fd (if it exists)
+// If no redirection operator is encountered but there is a PIPE token before or after 
+// cmd block, assign the correct READ/WRITE entry of pipefd to fdin/fdout
+// Otherwise, assigns STDIN/OUT to fdin/out
+int set_fd_in_out(int *fdin, int *fdout, t_exec *s_exec)
 {
 	t_token *curs;
 
-	curs = s_token;
+	curs = s_exec->cmd_block;
 	while (curs && curs->type != PIPE)
 	{
 		if (curs->type == R_IN && curs->next && curs->next->type == ARG)
-			return (open_infile(curs->next->str));
+		{
+			if (*fdin > 2)
+			{
+				if (close(*fdin) != 0)
+					perror("Close failed");
+			}
+			*fdin = open_infile(curs->next->str);
+		}
+		else if (curs->type == R_OUT && curs->next && curs->next->type == ARG)
+		{
+			if (*fdout > 2)
+			{
+				if (close(*fdout) != 0)
+					perror("Close failed");
+			}
+			*fdout = open_outfile(curs->next->str, 0);
+		}
+		else if (curs->type == R_OUT_APPEND && curs->next && curs->next->type == ARG)
+		{
+			if (*fdout > 2)
+			{
+				if (close(*fdout) != 0)
+					perror("Close failed");
+			}
+			*fdout = open_outfile(curs->next->str, 1);
+		}
 		curs = curs->next;
+		if (*fdin == -1 || *fdout == -1)
+			return (1);
 	}
-	if (s_token->prev && s_token->prev->type == PIPE)
+	if (*fdin == -2) // donc aucun operateur de redirection n'a ete trouve ou il y en a un mais il est seul cette grosse merde
 	{
-	printf("rdpipe returned as fdin\n");
-		// Envoyer le fd du pipefd[2], entree READ;
-		return (*rdpipe);
+		if (s_exec->cmd_block->prev && s_exec->cmd_block->prev->type == PIPE)
+		{
+			printf("rdpipe returned as fdin\n");
+			*fdin = s_exec->readpipe;
+		}
+		else
+			*fdin = STDIN_FILENO;
 	}
-	return (STDIN_FILENO);
-}
-
-// Iterates through s_token until it finds a pipe token or end of list
-// If a R_OUT of R_OUT_APPEND is encountered
-// opens the next arg in append mode or not and returns its fd
-// If no R_OUT nor R_OUT_APPEND is encountered, but there is a pipe
-// returns the fd of the WRITE end of pipefd
-// Returns STDOUT if nothing above happens
-int find_fdout(t_token *s_token, int *pipefd)
-{
-	t_token *curs;
-
-	curs = s_token;
-	while (curs && curs->type != PIPE)
+	if (*fdout == -2)
 	{
-		if (curs->type == R_OUT && curs->next && curs->next->type == ARG)
-			return (open_outfile(curs->next->str, 0));
-		if (curs->type == R_OUT_APPEND && curs->next && curs->next->type == ARG)
-			return (open_outfile(curs->next->str, 1));
-		curs = curs->next;
+		if (curs && curs->type == PIPE)
+			*fdout = s_exec->pipefd[1];
+		else
+			*fdout = STDOUT_FILENO;
 	}
-	if (curs && curs->type == PIPE)
-	{
-		return (pipefd[1]);
-		// Envoyer le fd du pipefd[2], entree WRITE;
-	}
-	return (STDOUT_FILENO);
+	return (0);
 }
 
 int redirect_input(int fdin, int fdout)

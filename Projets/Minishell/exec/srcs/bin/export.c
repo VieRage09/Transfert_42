@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:41:33 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/17 19:31:11 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/17 22:22:04 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,42 @@ static int	already_exists(t_env *s_env, char *name)
 	}
 	return (0);
 }
+
+static int	assign_check_arg(char *var, char **value, char **name, int *ret)
+{
+	*value = ft_strchr(var, '=');
+	if (!*value)
+		*name = var;
+	else
+		*name = ft_substr(var, 0, ft_strlen(var) - ft_strlen(*value));
+	if (!name)
+		return (1);
+	if (invalid_name(*name))
+	{
+		*ret = 1;
+		return (1);
+	}
+	if (!*value)
+		return (1);
+	return (0);
+}
+
+static int	update_env(t_env **env_lst, char *name, char *value, char ***env_pt)
+{
+	t_env	*var;
+
+	if (already_exists(*env_lst, name) == 0)
+		append_env_lst(env_lst, create_env(name, value)); // Attention a la gestion d'erreur ici
+	else
+	{
+		var = find_variable(name, *env_lst);
+		free(var->str);
+		var->str = ft_strdup(value);
+	}
+	if (update_env_tab(*env_lst, env_pt) != 0)
+		return (1);
+	return (0);
+}
 // cmd = export NAME=value
 // Comportement : 
 // 0. Si export NAME (sans '=') --> rien ne se passe
@@ -78,7 +114,6 @@ int	exec_export(char **cmd_tab, t_env **s_env, char ***env)
 {
 	int		i;
 	int		ret;
-	t_env	*var;
 	char	*value;
 	char	*trimed_value;
 	char	*name;
@@ -89,43 +124,16 @@ int	exec_export(char **cmd_tab, t_env **s_env, char ***env)
 	ret = 0;
 	while (cmd_tab[i])
 	{
-		value = ft_strchr(cmd_tab[i], '=');
-		if (!value)
-			name = cmd_tab[i];
-		else
-			name = ft_substr(cmd_tab[i], 0, ft_strlen(cmd_tab[i]) - ft_strlen(value));
-		if (!name)
-			return (2);
-		if (invalid_name(name))
-		{
-			ret = 1;
-			i++;
-			continue ;
-		}
-		if (!value)
-		{
-			i++;
+		if (assign_check_arg(cmd_tab[i++], &value, &name, &ret) != 0)
 			continue;
-		}
 		if (ft_strlen(value) == 1)
 			trimed_value = "";
 		else
 			trimed_value = ft_substr(value, 1, ft_strlen(value));
 		if (!trimed_value)
 			return (3);
-		if (already_exists(*s_env, name) == 0)
-			append_env_lst(s_env, create_env(name, trimed_value)); // Attention a la gestion d'erreur ici
-		else
-		{
-			var = find_variable(name, *s_env);
-			free(var->str);
-			var->str = malloc(sizeof(char));
-			if (!var->str)
-				return (4);
-			var->str = ft_strdup(trimed_value);
-		}
-		update_env_tab(*s_env, env);
-		i++;
+		if (update_env(s_env, name, trimed_value, env) != 0)
+			return (4);
 	}
 	return (ret);
 }

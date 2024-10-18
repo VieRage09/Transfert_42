@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/09 19:17:15 by tlebon            #+#    #+#              #
-#    Updated: 2024/10/16 21:43:12 by tlebon           ###   ########.fr        #
+#    Updated: 2024/10/18 21:37:11 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 
 #-------------------------------------------------------------- COMPILATION ---#
 CC = cc
-LFLAGS = -lreadline
+LFLAGS = -lreadline -g
 # CFLAGS = -g -Wall -Werror -Wextra
 #------------------------------------------------------------------------------#
 
@@ -41,7 +41,6 @@ SRC =																		\
 		$(BIN_PATH)cd.c														\
 		$(BIN_PATH)echo.c													\
 		$(BIN_PATH)env.c													\
-		$(BIN_PATH)exit.c													\
 		$(BIN_PATH)export.c													\
 		$(BIN_PATH)pwd.c													\
 		$(BIN_PATH)unset.c													\

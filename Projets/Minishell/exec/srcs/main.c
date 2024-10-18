@@ -6,11 +6,12 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 17:39:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/17 20:48:57 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/18 21:28:16 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 
 // Mallocs and initialize an s_exec structure
 // Assigns its arguments required to exec a cmd block
@@ -22,22 +23,17 @@ t_exec *init_s_exec(t_token *s_token, int *pipefd, int *rdpipe, char **env)
 {
 	t_exec *s_exec;
 
-	if (!s_token || !env)
+	if (!s_token || !env || !rdpipe) // pipefd et rdpipe ??
 		return (NULL);
 	s_exec = malloc(sizeof(t_exec *));
 	if (!s_exec)
 		return (NULL);
-	s_exec->fdin = find_fdin(s_token, rdpipe);
-	s_exec->fdout = find_fdout(s_token, pipefd);
-	if (s_exec->fdin < 0 || s_exec->fdout < 0)
-		return (NULL);
-	printf("fdin =		%i / fdout =	 %i\n", s_exec->fdin, s_exec->fdout);
-	s_exec->cmd_tab = prepare_cmd_tab(s_token);
-	if (!s_exec->cmd_tab)
-	{
-		printf("prepare_cmd_tab function error\n");
-		return (NULL);
-	}
+	s_exec->cmd_block = s_token;
+	if (pipefd)
+		s_exec->pipefd = pipefd;
+	else
+		s_exec->pipefd = NULL;
+	s_exec->readpipe = *rdpipe;
 	s_exec->env_tab = env;
 	return (s_exec);
 }
@@ -72,22 +68,23 @@ int launch_exec(t_token *s_token, char ***env_pt, t_env **s_env)
 	*rdpipe = -1;
 	while (s_token)
 	{
+		//Gerer les heredocs : parcourir dans l'ordre le prompt pour recup tous les heredocs ouverts
 		if (create_pipe(s_token, &pipefd) > 0)
 			return (2);
 		s_exec = init_s_exec(s_token, pipefd, rdpipe, *env_pt);
 		if (!s_exec)
 			return (3);
-		if (is_builtin(s_exec->cmd_tab) > 0)
-			exec_builtin(s_exec, s_env, env_pt);
-		else
+		// if (is_builtin(s_exec->cmd_tab) > 0)
+		// 	exec_builtin(s_exec, s_env, env_pt);
+		// else
 			id = exec_cmd(s_exec);
 		// Normalement l'enfant ne sort pas de exec  mais ATTENTION
-		if (s_exec->fdin != STDIN_FILENO)
-			if (close(s_exec->fdin) != 0)
-				perror("Close failed for fdin");
-		if (s_exec->fdout != STDOUT_FILENO)
-			if (close(s_exec->fdout) != 0)
-				perror("Close failed for fdout");
+		// if (s_exec->fdin != STDIN_FILENO)
+		// 	if (close(s_exec->fdin) != 0)
+		// 		perror("Close failed for fdin");
+		// if (s_exec->fdout != STDOUT_FILENO)
+		// 	if (close(s_exec->fdout) != 0)
+		// 		perror("Close failed for fdout");
 		continue_exec(&s_token, pipefd, rdpipe);
 		free(s_exec);
 		if (id < 0)
