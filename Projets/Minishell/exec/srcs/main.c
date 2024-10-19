@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 17:39:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/18 21:28:16 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/19 19:15:20 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_exec *init_s_exec(t_token *s_token, int *pipefd, int *rdpipe, char **env)
 
 	if (!s_token || !env || !rdpipe) // pipefd et rdpipe ??
 		return (NULL);
-	s_exec = malloc(sizeof(t_exec *));
+	s_exec = malloc(sizeof(t_exec));
 	if (!s_exec)
 		return (NULL);
 	s_exec->cmd_block = s_token;

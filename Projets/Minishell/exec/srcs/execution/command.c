@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:03:53 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/18 22:24:57 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/19 18:30:01 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ char **prepare_cmd_tab(t_token *s_token)
 	cmd_token = search_next_cmd(s_token);
 	if (!cmd_token)
 		return (NULL);
-	printf("chck1\n");
 	curs = cmd_token;
 	n_arg = 0;
 	while (curs->next && curs->next->type == ARG)
@@ -53,11 +52,9 @@ char **prepare_cmd_tab(t_token *s_token)
 		n_arg++;
 		curs = curs->next;
 	}
-	printf("chck2\n");
 	tab = malloc((n_arg + 2) * sizeof(char *));
 	if (!tab)
 		return (NULL);
-	printf("chck3\n");
 	tab[0] = cmd_token->str;
 	curs = cmd_token->next;
 	n_arg = 1;

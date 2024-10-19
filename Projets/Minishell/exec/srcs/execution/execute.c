@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:22:46 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/18 21:29:35 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/19 19:36:47 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ static int execute(t_exec *s_exec, int fdin, int fdout)
 	cmd_tab = prepare_cmd_tab(s_exec->cmd_block);
 	if (!cmd_tab)
 		return (1);
-	printf("cmd = %s\n", cmd_tab[0]);
 	path = get_cmd_path(cmd_tab[0]);
 	if (!path)
 		path = cmd_tab[0];
@@ -76,7 +75,7 @@ int exec_cmd(t_exec *s_exec)
 		printf("fdin = %i, fdout = %i\n", fdin, fdout);
 		if (redirect_input(fdin, fdout) != 0)
 		{
-			printf("Redirect input error :\n");
+			ft_putstr_fd("Redirect input error :\n", 2);
 			return (-1);
 		}
 		exit (execute(s_exec, fdin, fdout));
@@ -142,7 +141,12 @@ int exec_cmd(t_exec *s_exec)
 void continue_exec(t_token **s_token, int *pipefd, int *rdpipe)
 {
 	*s_token = search_next_pipe(*s_token);
-	
+	if (pipefd)
+		if (close(pipefd[1]) != 0)
+			perror("Close failed");
+	if (*rdpipe > 0)
+		if (close(*rdpipe) != 0)
+			perror("Close failed");
 	if (*s_token)
 	{
 		*s_token = (*s_token)->next;
