@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:41:33 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/17 22:22:04 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/19 21:02:33 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int	assign_check_arg(char *var, char **value, char **name, int *ret)
 	return (0);
 }
 
-static int	update_env(t_env **env_lst, char *name, char *value, char ***env_pt)
+int	update_env(t_env **env_lst, char *name, char *value, char ***env_pt)
 {
 	t_env	*var;
 

@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:34:52 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/14 18:59:09 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/19 20:41:06 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 // Dans bash, si $PWD est unset : la cmd pwd marche quand meme
 // Avec getcwd notamment avec les parametres (leaks ? error management ?)
 // Uses getcwd to get working directory then prints it
-int exec_pwd(void)
+int exec_pwd(t_env *s_env)
 {
 	char	*path;
 
-	path = getcwd(NULL, 0);
+	path = get_env_str(s_env, "PWD");
 	if (!path)
 		return (1);
 	printf("%s\n", path);

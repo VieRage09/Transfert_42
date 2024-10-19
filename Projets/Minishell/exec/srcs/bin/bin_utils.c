@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 19:02:56 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/17 18:29:21 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/19 20:34:10 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,37 @@ int	update_env_tab(t_env *s_env, char ***env_pt)
 	(*env_pt)[size] = NULL;
 	return (0);
 }
-	
+char	*get_env_str(t_env *s_env, char *name)
+{
+	t_env	*curs;
+
+	if (!s_env || !name)
+		return (NULL);
+	curs = s_env;
+	while (curs)
+	{
+		if (ft_strncmp(name, curs->name, ft_strlen(name) + ft_strlen(curs->name)) == 0)
+			return (curs->str);
+		curs = curs->next;
+	}
+	return (NULL);
+}
+
+int	set_env_str(t_env **s_env, char *name, char *str)
+{
+	t_env	*curs;
+
+	if (!s_env || !name || !name)
+		return (-1);
+	curs = *s_env;
+	while (curs)
+	{
+		if (ft_strncmp(name, curs->name, ft_strlen(name) + ft_strlen(curs->name)) == 0)
+			break;
+		curs = curs->next;
+	}
+	if (curs->str)
+		free(curs->str);
+	curs->str = str;
+	return (0);
+}

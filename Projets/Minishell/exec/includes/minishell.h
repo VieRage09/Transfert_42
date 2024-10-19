@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/18 21:27:58 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/19 21:02:47 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ typedef struct s_exec
 ///// BUILTIN /////////////////////////////////////////////////////////////////
 
 // CD.C				1	X
-int		exec_cd(char **cmd_tab);
+int		exec_cd(char **cmd_tab, t_env **s_env, char ***env_pt);
 
 // ECHO.C			1	X
 int		exec_echo();
@@ -74,22 +74,24 @@ int		exec_echo();
 int		exec_env(char **env);
 
 // EXPORT.C			1	X
+int     update_env(t_env **env_lst, char *name, char *value, char ***env_pt);
 int		exec_export(char **args, t_env **s_env, char ***env_pt);
 
 // PWD.C			1	X
-int		exec_pwd(void);
+int		exec_pwd(t_env *s_env);
 
 // UNSET.C			1	X
+t_env	*find_variable(char *name, t_env *s_env);   // a peu pres equivalent avec get_env_str
 int		exec_unset(char **cmd_tab, t_env **s_env, char ***env_pt);
 
 // BIN_UTILS.C		1	X
 int		update_env_tab(t_env *s_env, char ***env_pt);
-t_env	*find_variable(char *name, t_env *s_env);
-
+char    *get_env_str(t_env *s_env, char *name);     // ----------------------
+int     set_env_str(t_env **s_env, char *name, char *str);
 ///////////////////////////////////////////////////////////////////////////////
 
 // BOOL.C			1	X
-int		is_builtin(char **cmd_tab);
+int		is_builtin(t_token *cmd_block);
 
 // COMMAND.C		4	X
 t_token	*search_next_cmd(t_token *s_token);
