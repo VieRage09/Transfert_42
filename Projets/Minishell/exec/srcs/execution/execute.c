@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:22:46 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/19 21:06:33 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/21 00:34:58 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 static int execute(t_exec *s_exec, int fdin, int fdout)
 {
 	char *path;
-	char	**cmd_tab;
-	
+	char **cmd_tab;
+
 	if (!s_exec)
 		return (1);
 	cmd_tab = prepare_cmd_tab(s_exec->cmd_block);
@@ -30,16 +30,6 @@ static int execute(t_exec *s_exec, int fdin, int fdout)
 	path = get_cmd_path(cmd_tab[0]);
 	if (!path)
 		path = cmd_tab[0];
-	if (fdin != STDIN_FILENO)
-	{
-		if (close(fdin) != 0)
-			perror("Close failed");
-	}
-	if (fdout != STDOUT_FILENO)
-	{
-		if (close(fdout) != 0)
-			perror("Close failed");
-	}
 	if (execve(path, cmd_tab, s_exec->env_tab) != 0)
 	{
 		perror("Execve failed");
@@ -71,14 +61,14 @@ int exec_cmd(t_exec *s_exec)
 	if (id == 0)
 	{
 		if (set_fd_in_out(&fdin, &fdout, s_exec) != 0)
-			exit (1);
+			exit(1);
 		printf("fdin = %i, fdout = %i\n", fdin, fdout);
 		if (redirect_input(fdin, fdout) != 0)
 		{
 			ft_putstr_fd("Redirect input error :\n", 2);
 			return (-1);
 		}
-		exit (execute(s_exec, fdin, fdout));
+		exit(execute(s_exec, fdin, fdout));
 	}
 	return (id);
 }
@@ -89,10 +79,9 @@ int exec_cmd(t_exec *s_exec)
 // Returns -1 on error or builtin values
 static int execute_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt)
 {
-	char	**cmd_tab;
+	char **cmd_tab;
 
 	cmd_tab = prepare_cmd_tab(s_exec->cmd_block);
-	printf("Cmd tab[0] = %s\n", cmd_tab[0]);
 	if (!cmd_tab)
 		return (1);
 	if (!s_exec)
@@ -123,36 +112,29 @@ int exec_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt)
 	int id;
 	int fdin;
 	int fdout;
-	
+	int	saved_stdin;
+	int	saved_stdout;
+
 	fdin = -2;
 	fdout = -2;
 	if (!s_exec || !*s_env || !*env_pt)
 		return (-1);
-	id = fork();
-	if (id == -1)
+	if (set_fd_in_out(&fdin, &fdout, s_exec) != 0)
+		return (1);
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
+	if (redirect_input(fdin, fdout) != 0)
 	{
-		perror("Fork failed");
+		ft_putstr_fd("Redirect input error :\n", 2);
 		return (-1);
 	}
-	if (id == 0)
+	(execute_builtin(s_exec, s_env, env_pt));
+	if (redirect_input(saved_stdin, saved_stdout) != 0)
 	{
-		if (set_fd_in_out(&fdin, &fdout, s_exec) != 0)
-			exit (1);
-		printf("fdin = %i, fdout = %i\n", fdin, fdout);
-		if (redirect_input(fdin, fdout) != 0)
-		{
-			printf("Redirect input error :\n");
-			return (-1);
-		}
-		if (fdin != STDIN_FILENO)
-			if (close(fdin) != 0)
-			perror("Close failed");
-		if (fdout != STDOUT_FILENO)
-			if (close(fdout) != 0)
-				perror("Close failed");
-		exit(execute_builtin(s_exec, s_env, env_pt));
+		ft_putstr_fd("Redirection to STDIN STDOUT failed\n", 2);
+		return (-1);
 	}
-	return (id);
+	return (0);
 }
 
 // Used to go to a new cycle of execution

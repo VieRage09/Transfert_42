@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:06:40 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/14 18:59:19 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/20 14:59:18 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int create_pipe(t_token *s_token, int **pipefd)
 {
 	t_token *curs;
 
-	if (!s_token || !(*pipefd))
+	if (!s_token)
 		return (1);
 	curs = s_token;
 	while (curs)

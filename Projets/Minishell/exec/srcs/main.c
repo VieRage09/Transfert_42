@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 17:39:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/19 20:04:07 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/20 23:47:21 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int launch_exec(t_token *s_token, char ***env_pt, t_env **s_env)
 	int *pipefd;
 	int *rdpipe;
 
+
 	if (!s_token || !*env_pt || !*s_env)
 	{
 		printf("s_token or env_list of env is NULL\n");
@@ -75,7 +76,7 @@ int launch_exec(t_token *s_token, char ***env_pt, t_env **s_env)
 		if (!s_exec)
 			return (3);
 		if (is_builtin(s_exec->cmd_block) > 0)
-			exec_builtin(s_exec, s_env, env_pt);
+			id = exec_builtin(s_exec, s_env, env_pt);
 		else
 			id = exec_cmd(s_exec);
 		// Normalement l'enfant ne sort pas de exec  mais ATTENTION

@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:14:16 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/18 21:23:24 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/21 00:07:04 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,12 @@ int redirect_input(int fdin, int fdout)
 		perror("Dup2 failed");
 		return (2);
 	}
+	if (fdin != STDIN_FILENO)
+		if (close(fdin) != 0)
+			perror("Close failed");
+	if (fdout != STDOUT_FILENO)
+		if (close(fdout) != 0)
+			perror("Close failed");
 	// Surement necessaire de fermer le pipe
 	// Voire les fd dupliques genre : les commentaires
 	return (0);
