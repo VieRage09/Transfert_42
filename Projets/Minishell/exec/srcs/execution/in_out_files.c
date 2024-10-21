@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:14:16 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/21 00:07:04 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/22 00:05:31 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,9 @@ int set_fd_in_out(int *fdin, int *fdout, t_exec *s_exec)
 	return (0);
 }
 
+// Redirect STDIN and STDOUT to fdin and fdout
+// Close fdin and fdout after redirection
+// If stin/out is STDIN/OUT the redirection does nothing more but fdin(STDIN) for ex is not closed
 int redirect_input(int fdin, int fdout)
 {
 	if (dup2(fdin, STDIN_FILENO) == -1)

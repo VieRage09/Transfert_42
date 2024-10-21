@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:22:46 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/21 23:26:34 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/22 00:52:23 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,33 @@ static int execute_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt)
 	return (-1);
 }
 
+int	exec_builtin_pipeline(t_exec *s_exec, t_env **s_env, char ***env_pt)
+{
+	int	fdin;
+	int	fdout;
+	int	id;
+
+	fdin = -2;
+	fdout = -2;
+	if (set_fd_in_out(&fdin, &fdout, s_exec) != 0)
+		return (-1);
+	id = fork();
+	if (id == -1)
+	{
+		perror("Fork failed");
+		return (-1);
+	}
+	if (id == 0)
+	{
+		if (redirect_input(fdin, fdout) != 0)
+		{
+			ft_putstr_fd("Redirect input error :\n", 2);
+			return (-1);
+		}
+		exit(execute_builtin(s_exec, s_env, env_pt));
+	}
+	return (id);
+}
 // Creates a new process via fork
 // Child process redirects STDIN and STDOUT to fdin and fdout
 // then execute then exit execute_builtin
@@ -119,8 +146,13 @@ int exec_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt)
 	fdout = -2;
 	if (!s_exec || !*s_env || !*env_pt)
 		return (-1);
+	if (search_next_pipe(s_exec->cmd_block) != NULL)
+	{	
+		printf("Builtin forked\n");
+		return (exec_builtin_pipeline(s_exec, s_env, env_pt));
+	}
 	if (set_fd_in_out(&fdin, &fdout, s_exec) != 0)
-		return (1);
+		return (-1);
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	if (redirect_input(fdin, fdout) != 0)
