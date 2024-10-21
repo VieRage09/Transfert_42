@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:22:46 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/21 00:34:58 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/21 23:26:34 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ static int execute_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt)
 // Parent process only returns child id or -1 on error
 int exec_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt)
 {
-	int id;
+	int ret;
 	int fdin;
 	int fdout;
 	int	saved_stdin;
@@ -128,13 +128,13 @@ int exec_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt)
 		ft_putstr_fd("Redirect input error :\n", 2);
 		return (-1);
 	}
-	(execute_builtin(s_exec, s_env, env_pt));
+	ret = execute_builtin(s_exec, s_env, env_pt);
 	if (redirect_input(saved_stdin, saved_stdout) != 0)
 	{
 		ft_putstr_fd("Redirection to STDIN STDOUT failed\n", 2);
 		return (-1);
 	}
-	return (0);
+	return (ret);
 }
 
 // Used to go to a new cycle of execution
