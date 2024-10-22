@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/22 19:56:36 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/22 23:51:23 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct s_exec
     int     *pipefd;
     int     readpipe;
     char    **env_tab;
-    int     ***hd_tab_pt;
+	int		**hd_tab;
 }               t_exec;
 
 ///// BUILTIN /////////////////////////////////////////////////////////////////
@@ -107,7 +107,8 @@ void	continue_exec(t_token **s_token, int *pipefd, int *rdpipe);
 
 // HERE_DOC.C       2   X
 int     **new_hd_tab(t_token *s_token);
-int     chose_hd_fd(int ***hd_pipes_tab);
+int     chose_hd_fd(int **hd_pipes_tab);
+int		update_hd_tab(t_token *s_token, int ***hd_tab);
 
 // IN_OUT_FILES.C	4   X
 int     open_infile(char *file_path);

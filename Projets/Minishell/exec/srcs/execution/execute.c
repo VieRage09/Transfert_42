@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:22:46 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/22 00:52:23 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/22 23:43:30 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int exec_cmd(t_exec *s_exec)
 	}
 	if (id == 0)
 	{
-		if (set_fd_in_out(&fdin, &fdout, s_exec) != 0)
+		if (set_fd_in_out(&fdin, &fdout, s_exec) != 0) // hd_tab est bien modifie mais dans l'enfant uniquement
 			exit(1);
 		printf("fdin = %i, fdout = %i\n", fdin, fdout);
 		if (redirect_input(fdin, fdout) != 0)
@@ -103,7 +103,7 @@ static int execute_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt)
 	return (-1);
 }
 
-int	exec_builtin_pipeline(t_exec *s_exec, t_env **s_env, char ***env_pt)
+static int	exec_builtin_pipeline(t_exec *s_exec, t_env **s_env, char ***env_pt)
 {
 	int	fdin;
 	int	fdout;

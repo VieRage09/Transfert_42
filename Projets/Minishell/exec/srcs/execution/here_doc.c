@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 22:55:52 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/22 19:56:19 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/22 23:51:13 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	*write_new_hd_pipe(char *delimiter)
 		perror("Pipe failed");
 		return (NULL);
 	}
-	printf(">");
+	ft_putstr(">");
 	input = get_next_line(STDIN_FILENO);
 	while (input)
 	{
@@ -45,7 +45,7 @@ static int	*write_new_hd_pipe(char *delimiter)
 		}
 		write(new_pipe[1], input, ft_strlen(input));
 		free(input);
-		printf(">");
+		ft_putstr(">");
 		input = get_next_line(STDIN_FILENO);
 	}
 	return (NULL);
@@ -87,22 +87,50 @@ int	**new_hd_tab(t_token *s_token)
 	return (hd_pipes_tab);
 }
 
-int	chose_hd_fd(int ***hd_pipes_tab)
+int	chose_hd_fd(int **hd_pipes_tab)
 {
 	int	i;
 
-	if (!*hd_pipes_tab)
+	if (!hd_pipes_tab)
 		return (-1);
 	i = 0;
-	while((*hd_pipes_tab)[i])
+	while(hd_pipes_tab[i])
 	{
-		if ((*hd_pipes_tab)[i][1] == -2)
+		if (hd_pipes_tab[i][1] == -2)
 			i++;
 		else
-		{
-			(*hd_pipes_tab)[i][1] = -2;
-			return ((*hd_pipes_tab)[i][0]);
-		}
+			return (hd_pipes_tab[i][0]);
 	}
 	return (-1);
+}
+
+int	update_hd_tab(t_token *s_token, int ***hd_tab)
+{
+	t_token	*curs;
+	int		i;
+
+	if (!s_token || !(*hd_tab))
+		return (1);
+	curs = s_token;
+	while (curs)
+	{
+		if (is_type(curs, PIPE))
+			return (0);
+		if (is_type(curs, HEREDOC) && curs->next && is_type(curs->next, ARG))
+		{
+			i = 0;
+			while ((*hd_tab)[i])
+			{
+				if ((*hd_tab)[i][1] == -2)
+					i++;
+				else
+				{
+					(*hd_tab)[i][1] = -2;
+					return (0);
+				}
+			}
+		}
+		curs = curs->next;
+	}
+	return (0);
 }

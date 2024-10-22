@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 17:39:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/22 19:56:54 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/22 23:45:05 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@
 // Mallocs a cmd tab containing only the cmd and its args 
 // Returns the structure created
 // Returns NULL on error
-t_exec *init_s_exec(t_token *s_token, int *pipefd, int *rdpipe, char **env, int ***hd_tab)
+t_exec *init_s_exec(t_token *s_token, int *pipefd, int *rdpipe, char **env, int **hd_tab)
 {
 	t_exec *s_exec;
 
-	if (!s_token || !env || !rdpipe || !hd_tab) // pipefd et rdpipe ??
+	if (!s_token || !env || !rdpipe) // pipefd et rdpipe ??
 		return (NULL);
 	s_exec = malloc(sizeof(t_exec));
 	if (!s_exec)
@@ -35,7 +35,7 @@ t_exec *init_s_exec(t_token *s_token, int *pipefd, int *rdpipe, char **env, int 
 		s_exec->pipefd = NULL;
 	s_exec->readpipe = *rdpipe;
 	s_exec->env_tab = env;
-	s_exec->hd_tab_pt = hd_tab;
+	s_exec->hd_tab = hd_tab;
 	return (s_exec);
 }
 
@@ -74,18 +74,17 @@ int launch_exec(t_token *s_token, char ***env_pt, t_env **s_env)
 		return (1);
 	while (s_token)
 	{
-		//Gerer les heredocs : parcourir dans l'ordre le prompt pour recup tous les heredocs ouverts
-		// if (manage_heredoc() != 0)
-		// 	return (2);
 		if (create_pipe(s_token, &pipefd) > 0)
 			return (3);
-		s_exec = init_s_exec(s_token, pipefd, rdpipe, *env_pt, &hd_tab);
+		s_exec = init_s_exec(s_token, pipefd, rdpipe, *env_pt, hd_tab);
 		if (!s_exec)
 			return (4);
 		if (is_builtin(s_exec->cmd_block) > 0)
 			id = exec_builtin(s_exec, s_env, env_pt); // Les builtins semble etre execute dans un process enfant uniquement lors qu'ils appartiennent a une pipeline
 		else
 			id = exec_cmd(s_exec);
+		if (update_hd_tab(s_token, &hd_tab) != 0)
+			return (4);
 		// Normalement l'enfant ne sort pas de exec  mais ATTENTION
 		// if (s_exec->fdin != STDIN_FILENO)
 		// 	if (close(s_exec->fdin) != 0)

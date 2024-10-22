@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:14:16 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/22 19:55:35 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/22 23:40:59 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int set_fd_in_out(int *fdin, int *fdout, t_exec *s_exec)
 			if (*fdin > 2)
 				if (close(*fdin) != 0)
 					perror("Close failed");
-			*fdin = chose_hd_fd(s_exec->hd_tab_pt);
+			*fdin = chose_hd_fd(s_exec->hd_tab);
 		}
 		else if (is_type(curs, R_OUT_APPEND) && curs->next && is_type(curs->next, ARG))
 		{
