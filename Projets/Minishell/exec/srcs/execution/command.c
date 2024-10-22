@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:03:53 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/19 18:30:01 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/22 17:55:26 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ t_token *search_next_cmd(t_token *s_token)
 	t_token *curs;
 
 	curs = s_token;
-	while (curs && curs->type != PIPE)
+	while (curs && !is_type(curs, PIPE))
 	{
-		if (curs->type == CMD)
+		if (is_type(curs, CMD))
 			return (curs);
 		curs = curs->next;
 	}
@@ -47,7 +47,7 @@ char **prepare_cmd_tab(t_token *s_token)
 		return (NULL);
 	curs = cmd_token;
 	n_arg = 0;
-	while (curs->next && curs->next->type == ARG)
+	while (curs->next && is_type(curs->next, ARG))
 	{
 		n_arg++;
 		curs = curs->next;
@@ -58,7 +58,7 @@ char **prepare_cmd_tab(t_token *s_token)
 	tab[0] = cmd_token->str;
 	curs = cmd_token->next;
 	n_arg = 1;
-	while (curs && curs->type == ARG)
+	while (curs && is_type(curs, ARG))
 	{
 		tab[n_arg] = curs->str;
 		n_arg++;

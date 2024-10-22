@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 17:15:30 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/14 18:59:09 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/22 17:53:40 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ t_token	*search_next_pipe(t_token *s_token)
 	curs = s_token;
 	while (curs)
 	{
-		if (curs->type == PIPE)
+		if (is_type(curs, PIPE))
 			return (curs);
 		curs = curs->next;
 	}

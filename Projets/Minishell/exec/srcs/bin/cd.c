@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:37:31 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/22 00:01:00 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/22 17:34:54 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char *expand_path(t_env *s_env, char *path, int *print_pwd)
 	if (path == NULL || ft_strncmp(path, "~", ft_strlen(path)) == 0)
 	{
 		expanded_path = get_env_str(s_env, "HOME");
-		printf("Path found by get_env_str = %s\n", path);
+		printf("Path found by get_env_str = %s\n", expanded_path);
 	}
 	else if (ft_strncmp(path, "-", 1) == 0)
 	{
@@ -53,8 +53,7 @@ int exec_cd(char **cmd_tab, t_env **s_env, char ***env_pt)
 	}
 	path = getcwd(NULL, 0);
 	update_env(s_env, "PWD", path, env_pt);
-	if (ft_strncmp(path, old_pwd, ft_strlen(path) + ft_strlen(old_pwd)) != 0)
-		update_env(s_env, "OLDPWD", old_pwd, env_pt);
+	update_env(s_env, "OLDPWD", old_pwd, env_pt);
 	if (print_pwd)
 		exec_pwd(*s_env);
 	free(path);

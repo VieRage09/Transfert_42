@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:06:40 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/20 14:59:18 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/22 17:53:09 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int create_pipe(t_token *s_token, int **pipefd)
 	curs = s_token;
 	while (curs)
 	{
-		if (curs->type == PIPE)
+		if (is_type(curs, PIPE))
 		{
 			*pipefd = malloc(2 * sizeof(int));
 			if (!*pipefd)

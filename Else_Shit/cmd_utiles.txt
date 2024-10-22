@@ -1,0 +1,8 @@
+valgrind -s --leak-check=full --leak-resolution=high --show-reachable=yes --track-origins=yes
+
+git remote set-url origin [URL du nvx repo]
+
+nm -u check les fonctions interdites --> affiche un arbre de toutes les appellees ds le .out du fichier courrant
+
+scan -build -12 make : 
+

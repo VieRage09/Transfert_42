@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:14:16 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/22 00:05:31 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/22 19:55:35 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,33 +82,34 @@ int set_fd_in_out(int *fdin, int *fdout, t_exec *s_exec)
 	t_token *curs;
 
 	curs = s_exec->cmd_block;
-	while (curs && curs->type != PIPE)
+	while (curs && !is_type(curs, PIPE))
 	{
-		if (curs->type == R_IN && curs->next && curs->next->type == ARG)
+		if (is_type(curs, R_IN) && curs->next && is_type(curs->next,ARG))
 		{
 			if (*fdin > 2)
-			{
 				if (close(*fdin) != 0)
 					perror("Close failed");
-			}
 			*fdin = open_infile(curs->next->str);
 		}
-		else if (curs->type == R_OUT && curs->next && curs->next->type == ARG)
+		else if (is_type(curs, R_OUT) && curs->next && is_type(curs->next, ARG))
 		{
 			if (*fdout > 2)
-			{
 				if (close(*fdout) != 0)
 					perror("Close failed");
-			}
 			*fdout = open_outfile(curs->next->str, 0);
 		}
-		else if (curs->type == R_OUT_APPEND && curs->next && curs->next->type == ARG)
+		else if (is_type(curs, HEREDOC) && curs->next && is_type(curs->next, ARG))
+		{
+			if (*fdin > 2)
+				if (close(*fdin) != 0)
+					perror("Close failed");
+			*fdin = chose_hd_fd(s_exec->hd_tab_pt);
+		}
+		else if (is_type(curs, R_OUT_APPEND) && curs->next && is_type(curs->next, ARG))
 		{
 			if (*fdout > 2)
-			{
 				if (close(*fdout) != 0)
 					perror("Close failed");
-			}
 			*fdout = open_outfile(curs->next->str, 1);
 		}
 		curs = curs->next;
@@ -117,7 +118,7 @@ int set_fd_in_out(int *fdin, int *fdout, t_exec *s_exec)
 	}
 	if (*fdin == -2) // donc aucun operateur de redirection n'a ete trouve ou il y en a un mais il est seul cette grosse merde
 	{
-		if (s_exec->cmd_block->prev && s_exec->cmd_block->prev->type == PIPE)
+		if (s_exec->cmd_block->prev && is_type(s_exec->cmd_block->prev, PIPE))
 		{
 			printf("rdpipe returned as fdin\n");
 			*fdin = s_exec->readpipe;
@@ -127,7 +128,7 @@ int set_fd_in_out(int *fdin, int *fdout, t_exec *s_exec)
 	}
 	if (*fdout == -2)
 	{
-		if (curs && curs->type == PIPE)
+		if (curs && is_type(curs, PIPE))
 			*fdout = s_exec->pipefd[1];
 		else
 			*fdout = STDOUT_FILENO;

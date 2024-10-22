@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/19 21:02:47 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/22 19:56:36 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_exec
     int     *pipefd;
     int     readpipe;
     char    **env_tab;
+    int     ***hd_tab_pt;
 }               t_exec;
 
 ///// BUILTIN /////////////////////////////////////////////////////////////////
@@ -92,6 +93,7 @@ int     set_env_str(t_env **s_env, char *name, char *str);
 
 // BOOL.C			1	X
 int		is_builtin(t_token *cmd_block);
+int     is_type(t_token *s_token, int type);
 
 // COMMAND.C		4	X
 t_token	*search_next_cmd(t_token *s_token);
@@ -102,6 +104,10 @@ char	*get_cmd_path(char *cmd);
 int		exec_cmd(t_exec *s_exec);
 int		exec_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt);
 void	continue_exec(t_token **s_token, int *pipefd, int *rdpipe);
+
+// HERE_DOC.C       2   X
+int     **new_hd_tab(t_token *s_token);
+int     chose_hd_fd(int ***hd_pipes_tab);
 
 // IN_OUT_FILES.C	4   X
 int     open_infile(char *file_path);
