@@ -6,15 +6,15 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:41:33 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/19 21:02:33 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/22 02:31:29 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	invalid_name(char *name)
+static int invalid_name(char *name)
 {
-	int	i;
+	int i;
 
 	if (!name)
 		return (1);
@@ -27,7 +27,7 @@ static int	invalid_name(char *name)
 	while (name[i])
 	{
 		if (!ft_isalnum(name[i]) && name[i] != '_')
-		{	
+		{
 			printf("minishell : export : '%s': not a valid identifier\n", name);
 			return (1);
 		}
@@ -36,16 +36,16 @@ static int	invalid_name(char *name)
 	return (0);
 }
 
-static int	already_exists(t_env *s_env, char *name)
+static int already_exists(t_env *s_env, char *name)
 {
-	t_env	*curs;
-	int		longest;
+	t_env *curs;
+	int longest;
 
 	curs = s_env;
 	while (curs)
 	{
 		if (ft_strlen(curs->name) > ft_strlen(name))
-			longest =  ft_strlen(curs->name);
+			longest = ft_strlen(curs->name);
 		else
 			longest = ft_strlen(name);
 		if (strncmp(curs->name, name, longest) == 0)
@@ -55,7 +55,7 @@ static int	already_exists(t_env *s_env, char *name)
 	return (0);
 }
 
-static int	assign_check_arg(char *var, char **value, char **name, int *ret)
+static int assign_check_arg(char *var, char **value, char **name, int *ret)
 {
 	*value = ft_strchr(var, '=');
 	if (!*value)
@@ -74,9 +74,9 @@ static int	assign_check_arg(char *var, char **value, char **name, int *ret)
 	return (0);
 }
 
-int	update_env(t_env **env_lst, char *name, char *value, char ***env_pt)
+int update_env(t_env **env_lst, char *name, char *value, char ***env_pt)
 {
-	t_env	*var;
+	t_env *var;
 
 	if (already_exists(*env_lst, name) == 0)
 		append_env_lst(env_lst, create_env(name, value)); // Attention a la gestion d'erreur ici
@@ -90,36 +90,95 @@ int	update_env(t_env **env_lst, char *name, char *value, char ***env_pt)
 		return (1);
 	return (0);
 }
+
+static void delete_env_node(t_env **s_env, t_env *node)
+{
+	t_env *curs;
+
+	if (!*s_env || !node)
+		return;
+	free(node->name);
+	free(node->str);
+	if (node->prev && node->next)
+	{
+		node->prev->next = node->next;
+		node->next->prev = node->prev;
+	}
+	else if (node->prev && !node->next)
+		node->prev->next = NULL;
+	else if (node->next && !node->prev)
+	{
+		node->next->prev = NULL;
+		*s_env = node->next;
+	}
+	free(node->prev);
+	free(node->next);
+	return;
+}
+
+// Prints all the env variables in alphabetical order with export in front
+// of all the variables and the values of varibales quoted
+int lone_export(t_env *s_env) // Ne semble pas afficher tout env (ex: var _ absente)
+{
+	t_env	*curs;
+	t_env	*printed;
+	char	*prevprint;
+
+	if (!s_env)
+		return (-1);
+	curs = s_env;
+	printed = curs;
+	prevprint = "";
+	while (curs)
+	{
+		while (curs)
+		{
+			if (ft_strncmp(curs->name, prevprint, ft_strlen(curs->name) + ft_strlen(prevprint)) > 0
+				&& ft_strncmp(curs->name, printed->name, ft_strlen(curs->name) + ft_strlen(printed->name)) < 0)
+				printed = curs;
+			curs = curs->next;
+		}
+		if (ft_strncmp(prevprint, printed->name, ft_strlen(prevprint) + ft_strlen(printed->name)) == 0)
+			break;
+		printf("export %s=\"%s\"\n", printed->name, printed->str);
+		prevprint = printed->name;
+		curs = s_env;
+	}
+	return (0);
+}
+
 // cmd = export NAME=value
-// Comportement : 
+// Comportement :
 // 0. Si export NAME (sans '=') --> rien ne se passe
 // 1. Si NAME n'existe pas encore et est valide (quand est il valide ???)
-// --> Cree une nvelle envariable 
+// --> Cree une nvelle envariable
 // 2. Si NAME existe deja dans env, remplace sa valeur par value (meme si value est vide 'NAME=')
 // 3. Si NAME n'existe pas et value pas precisee
 // --> Cree une nvelle envariable ne correspondant a rien
 
-// Conditions de validite de NAME : 
+// Conditions de validite de NAME :
 // 1. Doit commencer par une lettre ou par '_'
 // 2. Seuls les lettres (maj et min) et les chiffres sont autorises ainsi que '_'
 // Conditions de validite de value : a voir
 
 // cmd = export arg1 arg2 arg3
-// Suis le meme comportement que de base 
+// Suis le meme comportement que de base
 
 // Valeur de retour :
-// = 1 Des qu'il y a un unvalid name 
+// = 1 Des qu'il y a un unvalid name
 // A PRECISER
-int	exec_export(char **cmd_tab, t_env **s_env, char ***env)
+int exec_export(char **cmd_tab, t_env **s_env, char ***env)
 {
-	int		i;
-	int		ret;
-	char	*value;
-	char	*trimed_value;
-	char	*name;
+	int i;
+	int ret;
+	char *value;
+	char *trimed_value;
+	char *name;
 
 	if (!cmd_tab || !*s_env)
 		return (1);
+	if (!cmd_tab[1])
+		return (lone_export(*s_env));
 	i = 1;
 	ret = 0;
 	while (cmd_tab[i])
