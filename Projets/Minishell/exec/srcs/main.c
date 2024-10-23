@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 17:39:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/23 19:58:03 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/24 00:56:06 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,32 @@ int launch_exec(t_token *s_token, char ***env_pt, t_env **s_env)
 	}
 	return (0);
 }
+bool	running = true;
 
+void	exit_(int code)
+{
+	if (code == 1)
+		printf("exit\n");
+	else if (code == 2)
+		printf("exit\n");
+	running = false;
+}
+
+void	handle_sigint(int sig) // ( Ctrl + C)
+{
+	(void)sig;
+	//rl_replace_line("", 0);
+	rl_on_new_line();
+	write(STDOUT_FILENO, "\n", 1);
+	rl_redisplay();
+}
 
 bool	empty_line(char *line)
 {
 	int	i;
 
+	if (!line)
+		return (true);
 	i = 0;
 	while (line[i] && line[i] == ' ')
 		i++;
@@ -114,6 +134,12 @@ bool	empty_line(char *line)
 		return (true);
 	}
 	return (false);
+}
+
+void	free_cuisine(t_token *tokens, char *str)
+{
+	free_tokens(tokens);
+	free(str);	
 }
 
 int	main(int ac, char **av, char **env)
@@ -128,11 +154,13 @@ int	main(int ac, char **av, char **env)
     env_lst = create_env_lst(env);
 	if (update_env_tab(env_lst, &env_cpy) != 0)
 		return (1);
+	signal(SIGINT, handle_sigint); // ( Ctrl-C )
+	signal(SIGQUIT, SIG_IGN); // ( attention, Ctrl-\ est completement ignore)
 	while(1)
 	{
-		i = 0;
 		raw_fruits = readline("\033[1;94mminishell> \033[0m");
-		//raw_fruits[ft_strlen(raw_fruits) + 1] = 0;
+		if (!raw_fruits) // Ctrl + D renvoi NULL, de cette facon il quitte le shell
+			exit_(1);
 		if (empty_line(raw_fruits))
 			continue ;// passe a la prochain iteration du while (autorisee ?)
 		add_history(raw_fruits);
@@ -142,7 +170,7 @@ int	main(int ac, char **av, char **env)
 		tokens_cleaner(fruit_salad, env_lst);
 		print_tokens(fruit_salad);
 		ret = launch_exec(fruit_salad, &env_cpy, &env_lst);
-		free_tokens(fruit_salad);	
+		free_cuisine(fruit_salad, raw_fruits);
 		while (wait(NULL) != -1)
 		;
 	}
@@ -150,108 +178,3 @@ int	main(int ac, char **av, char **env)
 	free_env_lst(env_lst);
 	return (ret);
 }
-// int main(int ac, char **av, char **env)
-// // int main(void)
-// {
-// 	t_token *s_token;
-// 	t_token *cmd1;
-// 	t_token *cmd2;
-// 	t_token *cmd3;
-// 	t_token *arg1;
-// 	t_token *arg2;
-// 	t_token *arg3;
-// 	t_token *infile;
-// 	t_token *outfile;
-// 	t_token *r_in;
-// 	t_token *r_out;
-// 	t_token *pipe;
-// 	t_token *pipe2;
-// 	t_env	*s_env;
-// 	if (ac == 0)
-// 		return 1;
-// 	printf("%s\n", av[0]);
-
-// 	s_env = create_env_lst(env);
-// 	cmd1 = malloc(sizeof(t_token));
-// 	cmd2 = malloc(sizeof(t_token));
-// 	cmd3 = malloc(sizeof(t_token));
-// 	arg1 = malloc(sizeof(t_token));
-// 	arg2 = malloc(sizeof(t_token));
-// 	arg3 = malloc(sizeof(t_token));
-// 	infile = malloc(sizeof(t_token));
-// 	outfile = malloc(sizeof(t_token));
-// 	r_in = malloc(sizeof(t_token));
-// 	r_out = malloc(sizeof(t_token));
-// 	pipe = malloc(sizeof(t_token));
-// 	pipe2 = malloc(sizeof(t_token));
-
-// 	s_token = cmd1;
-
-// 	cmd1->str = "pwd";
-// 	cmd1->type = CMD;
-// 	cmd1->prev = NULL;
-// 	cmd1->next = pipe;
-
-// 	arg1->str = "-e";
-// 	arg1->type = ARG;
-// 	arg1->prev = cmd1;
-// 	arg1->next = r_in;
-
-// 	cmd2->str = "ls";
-// 	cmd2->type = CMD;
-// 	cmd2->prev = pipe;
-// 	cmd2->next = arg2;
-
-// 	arg2->str = "-a";
-// 	arg2->type = ARG;
-// 	arg2->prev = cmd2;
-// 	arg2->next = pipe2;
-
-// 	cmd3->str = "cat";
-// 	cmd3->type = CMD;
-// 	cmd3->prev = pipe;
-// 	cmd3->next = arg3;
-
-// 	arg3->str = "-e";
-// 	arg3->type = ARG;
-// 	arg3->prev = cmd3;
-// 	arg3->next = r_out;
-
-// 	r_in->str = "<";
-// 	r_in->type = R_IN;
-// 	r_in->prev = arg1;
-// 	r_in->next = infile;
-
-// 	infile->str = "test";
-// 	infile->type = ARG;
-// 	infile->prev = r_in;
-// 	infile->next = pipe;
-
-// 	r_out->str = ">";
-// 	r_out->type = R_OUT;
-// 	r_out->prev = arg2;
-// 	r_out->next = outfile;
-
-// 	outfile->str = "out";
-// 	outfile->type = ARG;
-// 	outfile->prev = r_out;
-// 	outfile->next = NULL;
-
-// 	pipe->str = "|";
-// 	pipe->type = PIPE;
-// 	pipe->prev = cmd1;
-// 	pipe->next = cmd3;
-
-// 	pipe2->str = "|";
-// 	pipe2->type = PIPE;
-// 	pipe2->prev = arg2;
-// 	pipe2->next = cmd3;
-
-// 	print_cmd(s_token);
-// 	int	ret = launch_exec(s_token, env, s_env);
-// 	while (wait(NULL) != -1)
-// 		;
-// 	return (ret);
-// }
-
-

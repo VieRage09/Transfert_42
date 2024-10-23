@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 16:24:50 by lberne            #+#    #+#             */
-/*   Updated: 2024/10/16 21:54:49 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/24 00:23:58 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,19 @@ bool	quote_error(char *input)
 
 bool	error_check(char *line)
 {
+	int	i;
+	
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] >= 127)
+		{
+			perror("\033[0;101mnon ascii character\033[0m\n");
+			free(line);
+			return (true);
+		}
+		i++;
+	}
 	if (quote_error(line) || line[0] == '|' || line[ft_strlen(line + 1)] == '|') 
 	{
 		perror("\033[0;101mopen quote or pipe\033[0m\n");

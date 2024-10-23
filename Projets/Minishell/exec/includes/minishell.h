@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/23 18:58:38 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/24 00:55:17 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct  s_env
 {
 	char			*name;
     char            *str;
+	int				ret;
     struct s_env    *next;   
     struct s_env    *prev; 
 }               t_env;
@@ -138,9 +139,10 @@ t_token	*search_next_pipe(t_token *s_token);
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
+# include <signal.h>
 
 
-// PARSING
+
 
 bool	is_special(char c);
 bool	is_quote(char c);
@@ -156,10 +158,10 @@ void	physio(t_token *fruit_salad);
 
 // VARIABLES D'ENVIRONNEMENT
 
-t_env   *create_env(char *name, char *str);
-void    append_env_lst(t_env **head, t_env *new_env);
 t_env   *create_env_lst(char **v_env);
 void    free_env_lst(t_env  *head);
+void    append_env_lst(t_env **head, t_env *new_env);
+t_env   *create_env(char *name, char *str);
 
 // TOKENS
 
@@ -173,6 +175,7 @@ void	tokens_cleaner(t_token *tokens_head, t_env *env_head);
 
 bool	error_check(char *line);
 bool	quote_error(char *input);
+void	exit_(int code);
 
 //SIGNALS
 
@@ -184,5 +187,6 @@ void    display_env_lst(t_env   *lst);
 void	print_tokens(t_token *head);
 void	tab_type_reader(char **tab);
 void	read_tab(char **tab);
+
 
 #endif

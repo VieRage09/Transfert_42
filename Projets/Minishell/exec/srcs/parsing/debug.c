@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 15:31:28 by lberne            #+#    #+#             */
-/*   Updated: 2024/10/16 21:54:35 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/24 00:22:01 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,13 @@ char	*bip_boup(int type) //sert a debug en affichant le type de chaque token
 void	print_tokens(t_token *head)
 {
 	t_token	*current = head;
+	int	i = 1;
 	while (current != NULL)
 	{
-		printf("Token : str = \033[46m%s\033[0m\n", current->str);
+		printf("Token %d : str = \033[46m%s\033[0m\n", i, current->str);
 		printf("type : %d (%s)\n\n", current->type, bip_boup(current->type));
 		current = current->next;
+		i++;
 	}
 }
 
