@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:03:53 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/22 17:55:26 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/23 18:57:49 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,14 +91,14 @@ static char	*get_path(char *cmd, char **cmd_tab)
 	return (NULL);
 }
 
-char *get_cmd_path(char *cmd)
+char *get_cmd_path(t_env *s_env, char *cmd)
 {
 	char	*path;
 	char	**path_tab;
 
 	if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
 		return (cmd);
-	path = getenv("PATH");
+	path = get_env_str(s_env, "PATH");
 	if (!path)
 		return (NULL);
 	path_tab = ft_split(path, ':');

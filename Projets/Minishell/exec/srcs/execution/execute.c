@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:22:46 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/22 23:43:30 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/23 19:55:37 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 // Close fdin and fdout if they are != of STDIN or STDOUT
 // Execute the cmd via execve
 // AJOUTER DES TRUCS SI EXECVE FAIL
-static int execute(t_exec *s_exec, int fdin, int fdout)
+static int execute(t_exec *s_exec, int fdin, int fdout, t_env *s_env)
 {
 	char *path;
 	char **cmd_tab;
@@ -27,7 +27,7 @@ static int execute(t_exec *s_exec, int fdin, int fdout)
 	cmd_tab = prepare_cmd_tab(s_exec->cmd_block);
 	if (!cmd_tab)
 		return (1);
-	path = get_cmd_path(cmd_tab[0]);
+	path = get_cmd_path(s_env, cmd_tab[0]);
 	if (!path)
 		path = cmd_tab[0];
 	if (execve(path, cmd_tab, s_exec->env_tab) != 0)
@@ -42,7 +42,7 @@ static int execute(t_exec *s_exec, int fdin, int fdout)
 // Child process redirects STDIN and STDOUT to fdin and fdout then execute cmd
 // Parent process only returns id of child process
 // Returns -1 on error
-int exec_cmd(t_exec *s_exec)
+int exec_cmd(t_exec *s_exec, t_env *s_env)
 {
 	int id;
 	int fdin;
@@ -68,7 +68,7 @@ int exec_cmd(t_exec *s_exec)
 			ft_putstr_fd("Redirect input error :\n", 2);
 			return (-1);
 		}
-		exit(execute(s_exec, fdin, fdout));
+		exit(execute(s_exec, fdin, fdout, s_env));
 	}
 	return (id);
 }
@@ -87,7 +87,7 @@ static int execute_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt)
 	if (!s_exec)
 		return (-1);
 	if (ft_strncmp(cmd_tab[0], "echo", ft_strlen(cmd_tab[0])) == 0)
-		return (exec_echo());
+		return (exec_echo(cmd_tab));
 	else if (ft_strncmp(cmd_tab[0], "cd", ft_strlen(cmd_tab[0])) == 0)
 		return (exec_cd(cmd_tab, s_env, env_pt));
 	else if (ft_strncmp(cmd_tab[0], "pwd", ft_strlen(cmd_tab[0])) == 0)

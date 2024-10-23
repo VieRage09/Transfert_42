@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/22 23:51:23 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/23 18:58:38 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,10 @@ int     is_type(t_token *s_token, int type);
 // COMMAND.C		4	X
 t_token	*search_next_cmd(t_token *s_token);
 char	**prepare_cmd_tab(t_token *s_token);
-char	*get_cmd_path(char *cmd);
+char	*get_cmd_path(t_env *s_env, char *cmd);
 
 // EXECUTE.C		1	X
-int		exec_cmd(t_exec *s_exec);
+int		exec_cmd(t_exec *s_exec, t_env *s_env);
 int		exec_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt);
 void	continue_exec(t_token **s_token, int *pipefd, int *rdpipe);
 
