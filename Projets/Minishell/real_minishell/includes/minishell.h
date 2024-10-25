@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucas <lucas@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/24 10:34:41 by lucas            ###   ########.fr       */
+/*   Updated: 2024/10/25 02:13:22 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,15 @@ typedef struct s_exec
     int     *pipefd;
     int     readpipe;
     char    **env_tab;
-	int		**hd_tab;
 }               t_exec;
+
+typedef struct s_manager
+{
+	t_exec	*s_exec;
+	int		*rdpipe;
+	int		**hd_tab;
+}				t_manager;
+
 
 ///// BUILTIN /////////////////////////////////////////////////////////////////
 
@@ -87,7 +94,7 @@ t_env	*find_variable(char *name, t_env *s_env);   // a peu pres equivalent avec 
 int		exec_unset(char **cmd_tab, t_env **s_env, char ***env_pt);
 
 // BIN_UTILS.C		1	X
-int		update_env_tab(t_env *s_env, char ***env_pt);
+int		update_env_tab(t_env *s_env, char ***env_pt, int do_free);
 char    *get_env_str(t_env *s_env, char *name);     // ----------------------
 int     set_env_str(t_env **s_env, char *name, char *str);
 ///////////////////////////////////////////////////////////////////////////////
@@ -97,13 +104,12 @@ int		is_builtin(t_token *cmd_block);
 int     is_type(t_token *s_token, int type);
 
 // COMMAND.C		4	X
-t_token	*search_next_cmd(t_token *s_token);
 char	**prepare_cmd_tab(t_token *s_token);
 char	*get_cmd_path(t_env *s_env, char *cmd);
 
 // EXECUTE.C		1	X
-int		exec_cmd(t_exec *s_exec, t_env *s_env);
-int		exec_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt);
+int		exec_cmd(t_manager *s_manager, t_env *s_env);
+int		exec_builtin(t_manager *s_manager, t_env **s_env, char ***env_pt);
 void	continue_exec(t_token **s_token, int *pipefd, int *rdpipe);
 
 // HERE_DOC.C       2   X
@@ -114,8 +120,13 @@ int		update_hd_tab(t_token *s_token, int ***hd_tab);
 // IN_OUT_FILES.C	4   X
 int     open_infile(char *file_path);
 int     open_outfile(char *file_path, int append);
-int     set_fd_in_out(int *fdin, int *fdout, t_exec *s_exec);
+int     set_fd_in_out(int *fdin, int *fdout, t_manager *s_manager);
 int		redirect_input(int fdin, int fdout);
+
+// MANAGER.C		6	X
+void	free_s_manager(t_manager *s_manager);
+void	free_s_exec(t_exec *s_exec);
+int		launch_exec(t_token *s_token, char ***env_pt, t_env **s_env);
 
 // PIPE.C			1	X
 int		create_pipe(t_token *s_token, int **pipefd);
@@ -124,6 +135,8 @@ int		create_pipe(t_token *s_token, int **pipefd);
 char	*lst_str_chr(t_list *s_list, char *str);
 void	print_cmd(t_token *s_token);
 t_token	*search_next_pipe(t_token *s_token);
+t_token	*search_next_cmd(t_token *s_token);
+t_token	*search_next_token(t_token *s_token, int type);
 
 
 

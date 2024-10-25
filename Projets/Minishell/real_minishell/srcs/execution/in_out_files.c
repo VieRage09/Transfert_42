@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:14:16 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/22 23:40:59 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/25 00:21:13 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,13 @@ int open_outfile(char *file_path, int append)
 // If no redirection operator is encountered but there is a PIPE token before or after 
 // cmd block, assign the correct READ/WRITE entry of pipefd to fdin/fdout
 // Otherwise, assigns STDIN/OUT to fdin/out
-int set_fd_in_out(int *fdin, int *fdout, t_exec *s_exec)
+int set_fd_in_out(int *fdin, int *fdout, t_manager *s_manager)
 {
 	t_token *curs;
 
-	curs = s_exec->cmd_block;
+	if (!s_manager)
+		return (1);
+	curs = s_manager->s_exec->cmd_block;
 	while (curs && !is_type(curs, PIPE))
 	{
 		if (is_type(curs, R_IN) && curs->next && is_type(curs->next,ARG))
@@ -103,7 +105,7 @@ int set_fd_in_out(int *fdin, int *fdout, t_exec *s_exec)
 			if (*fdin > 2)
 				if (close(*fdin) != 0)
 					perror("Close failed");
-			*fdin = chose_hd_fd(s_exec->hd_tab);
+			*fdin = chose_hd_fd(s_manager->hd_tab);
 		}
 		else if (is_type(curs, R_OUT_APPEND) && curs->next && is_type(curs->next, ARG))
 		{
@@ -118,10 +120,10 @@ int set_fd_in_out(int *fdin, int *fdout, t_exec *s_exec)
 	}
 	if (*fdin == -2) // donc aucun operateur de redirection n'a ete trouve ou il y en a un mais il est seul cette grosse merde
 	{
-		if (s_exec->cmd_block->prev && is_type(s_exec->cmd_block->prev, PIPE))
+		if (s_manager->s_exec->cmd_block->prev && is_type(s_manager->s_exec->cmd_block->prev, PIPE))
 		{
 			printf("rdpipe returned as fdin\n");
-			*fdin = s_exec->readpipe;
+			*fdin = s_manager->s_exec->readpipe;
 		}
 		else
 			*fdin = STDIN_FILENO;
@@ -129,7 +131,7 @@ int set_fd_in_out(int *fdin, int *fdout, t_exec *s_exec)
 	if (*fdout == -2)
 	{
 		if (curs && is_type(curs, PIPE))
-			*fdout = s_exec->pipefd[1];
+			*fdout = s_manager->s_exec->pipefd[1];
 		else
 			*fdout = STDOUT_FILENO;
 	}

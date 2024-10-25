@@ -6,15 +6,15 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/09 19:17:15 by tlebon            #+#    #+#              #
-#    Updated: 2024/10/22 19:29:47 by tlebon           ###   ########.fr        #
+#    Updated: 2024/10/25 00:31:13 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 #-------------------------------------------------------------- COMPILATION ---#
-CC = cc
-LFLAGS = -lreadline -g
+CC = cc -g
+LFLAGS = -lreadline
 # CFLAGS = -g -Wall -Werror -Wextra
 #------------------------------------------------------------------------------#
 
@@ -49,6 +49,7 @@ SRC =																		\
 		$(EXEC_PATH)execute.c												\
 		$(EXEC_PATH)here_doc.c												\
 		$(EXEC_PATH)in_out_files.c											\
+		$(EXEC_PATH)manager.c												\
 		$(EXEC_PATH)pipe.c													\
 		$(EXEC_PATH)utils.c													\
 		$(PARS_PATH)debug.c													\

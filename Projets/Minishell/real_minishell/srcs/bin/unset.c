@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:41:55 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/17 01:25:31 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/25 02:14:22 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,6 @@ int	exec_unset(char **cmd_tab, t_env **s_env, char ***env)
 		}
 		i++;
 	}
-	update_env_tab(*s_env, env);
+	update_env_tab(*s_env, env, 1);
 	return (0);
 }

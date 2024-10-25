@@ -6,52 +6,17 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:03:53 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/23 18:57:49 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/24 23:52:28 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// Iterates s_token from start (s_token) to a pipe token or end of list
-// Returns a pointer to the first cmd token found
-t_token *search_next_cmd(t_token *s_token)
+static char **create_tab(int n_arg, t_token *cmd_token)
 {
-	t_token *curs;
-
-	curs = s_token;
-	while (curs && !is_type(curs, PIPE))
-	{
-		if (is_type(curs, CMD))
-			return (curs);
-		curs = curs->next;
-	}
-	return (NULL);
-}
-
-// s_token MUST BE A CMD TOKEN
-// Search for further ARG tokens after the CMD one then
-// allocates tab accordingly
-// Fills up tab with the cmd string and possible arg strings
-// Ends the tab with (char *)0
-char **prepare_cmd_tab(t_token *s_token)
-{
-	t_token *curs;
-	t_token	*cmd_token;
-	char **tab;
-	int n_arg;
-
-	if (!s_token)
-		return (NULL);
-	cmd_token = search_next_cmd(s_token);
-	if (!cmd_token)
-		return (NULL);
-	curs = cmd_token;
-	n_arg = 0;
-	while (curs->next && is_type(curs->next, ARG))
-	{
-		n_arg++;
-		curs = curs->next;
-	}
+	char 	**tab;
+	t_token	*curs;
+	
 	tab = malloc((n_arg + 2) * sizeof(char *));
 	if (!tab)
 		return (NULL);
@@ -67,7 +32,36 @@ char **prepare_cmd_tab(t_token *s_token)
 	tab[n_arg] = NULL;
 	return (tab);
 }
+// s_token MUST BE A CMD TOKEN
+// Search for further ARG tokens after the CMD one then
+// allocates tab accordingly
+// Fills up tab with the cmd string and possible arg strings
+// Ends the tab with (char *)0
+char **prepare_cmd_tab(t_token *s_token)
+{
+	t_token *curs;
+	t_token	*cmd_token;
+	int n_arg;
 
+	if (!s_token)
+		return (NULL);
+	cmd_token = search_next_cmd(s_token);
+	if (!cmd_token)
+		return (NULL);
+	curs = cmd_token;
+	n_arg = 0;
+	while (curs->next && is_type(curs->next, ARG))
+	{
+		n_arg++;
+		curs = curs->next;
+	}
+	return (create_tab(n_arg, cmd_token));
+}
+
+// Creates a string of that form "cmdtab[i]/cmd"
+// If the file corresponding to the path created exists and can be executed
+// returns the path created
+// Returns NULL otherwise
 static char	*get_path(char *cmd, char **cmd_tab)
 {
 	int	i;
@@ -91,6 +85,10 @@ static char	*get_path(char *cmd, char **cmd_tab)
 	return (NULL);
 }
 
+// Looks via get_path function through all the path of PATH varible to see
+// if cmd corresponds to an existing and executable file 
+// Returns its absolute path if yes
+// Returns NULL if no
 char *get_cmd_path(t_env *s_env, char *cmd)
 {
 	char	*path;

@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 22:55:52 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/22 23:51:13 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/25 02:00:19 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ int	**new_hd_tab(t_token *s_token)
 			size++;
 		curs = curs->next;
 	}
+	// if (size < 1)
+	// 	return (NULL);
 	hd_pipes_tab = malloc((size + 1) * sizeof(int *));
 	curs = s_token;
 	size = 0;

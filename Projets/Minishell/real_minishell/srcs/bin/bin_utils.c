@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 19:02:56 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/22 00:55:33 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/25 02:58:58 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,15 @@ static char	*create_full_string(t_env *s_env)
 	return (result);
 }
 
-int	update_env_tab(t_env *s_env, char ***env_pt)
+int	update_env_tab(t_env *s_env, char ***env_pt, int do_free)
 {
 	t_env	*curs;
 	int		size;
 
 	if (!s_env)
 		return (1);
-	// if (*env_pt)				// Donne un bus error sur les macs de l'ecole, mais surement necessaire pour eviter leaks
-		// free(*env_pt);
+	if (do_free)
+		ft_free_tab((void **)*env_pt);
 	curs = s_env;
 	size = 0;
 	while (curs)
