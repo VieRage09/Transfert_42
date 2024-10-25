@@ -6,12 +6,15 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 08:05:37 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/24 22:47:38 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/25 22:40:54 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// Seachs the cmd_block until a PIPE or the end of it
+// If the found CMD token's name is a builtin returns 1
+// Returns 0 otherwise 
 int	is_builtin(t_token *cmd_block)
 {
 	t_token	*cmd_token;
@@ -35,7 +38,6 @@ int	is_builtin(t_token *cmd_block)
 		return (1);
 	else
 		return (0);
-
 }
 
 // Returns true is s_token type is equal to type

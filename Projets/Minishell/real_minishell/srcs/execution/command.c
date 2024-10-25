@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:03:53 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/24 23:52:28 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/25 22:41:24 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static char **create_tab(int n_arg, t_token *cmd_token)
 	tab[n_arg] = NULL;
 	return (tab);
 }
+
 // s_token MUST BE A CMD TOKEN
 // Search for further ARG tokens after the CMD one then
 // allocates tab accordingly

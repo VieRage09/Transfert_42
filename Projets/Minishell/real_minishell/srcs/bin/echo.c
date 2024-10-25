@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 08:29:04 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/24 18:20:48 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/25 23:41:35 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 // If the first char is not - and/or 1 of the following char is not an n
 // returns false
 // Otherwise returns true
-static int	valid_arg(char *str)
+static int valid_arg(char *str)
 {
-	int	i;
+	int i;
 
 	if (!str)
 		return (0);
@@ -34,35 +34,26 @@ static int	valid_arg(char *str)
 	return (1);
 }
 
-
 // TODO : Pouvoir differencier un arg entre quote d'un arg sans
-int	exec_echo(char **cmd_tab)
+int exec_echo(char **cmd_tab)
 {
-	int	i;
+	int i;
+	int with_option;
 
 	if (!cmd_tab)
 		return (1);
 	i = 1;
 	while (cmd_tab[i] && valid_arg(cmd_tab[i]))
 		++i;
-	if (i == 1)
+	with_option = i;
+	while (cmd_tab[i])
 	{
-		while (cmd_tab[i])
-		{
-			ft_putstr(cmd_tab[i]);
+		ft_putstr(cmd_tab[i]);
+		if (cmd_tab[i + 1])
 			write(1, " ", 1);
-			i++;
-		}
+		i++;
+	}
+	if (with_option == 1)
 		write(1, "\n", 1);
-	}
-	else
-	{
-		while (cmd_tab[i])
-		{
-			ft_putstr(cmd_tab[i]);
-			write(1, " ", 1);
-			i++;
-		}
-	}
 	return (0);
 }

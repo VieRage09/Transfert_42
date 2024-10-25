@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 19:02:56 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/25 02:58:58 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/25 21:59:49 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,66 @@ int	set_env_str(t_env **s_env, char *name, char *str)
 	if (curs->str)
 		free(curs->str);
 	curs->str = str;
+	return (0);
+}
+
+t_env	*find_variable(char *name, t_env *s_env)
+{
+	t_env	*curs;
+	int		longest;
+
+	curs = s_env;
+	while (curs)
+	{
+		if (ft_strlen(name) > ft_strlen(curs->name))
+			longest = ft_strlen(name);
+		else
+			longest = ft_strlen(curs->name);
+		if (ft_strncmp(curs->name, name, longest) == 0)
+			return (curs);
+		curs = curs->next;
+	}
+	return (NULL);
+}
+
+// Iterates through s_env and checks whether an env named name exists
+// Returns 1 if it exits
+// Returns 0 otherwise
+int already_exists(t_env *s_env, char *name)
+{
+	t_env *curs;
+	int longest;
+
+	curs = s_env;
+	while (curs)
+	{
+		if (ft_strlen(curs->name) > ft_strlen(name))
+			longest = ft_strlen(curs->name);
+		else
+			longest = ft_strlen(name);
+		if (ft_strncmp(curs->name, name, longest) == 0)
+			return (1);
+		curs = curs->next;
+	}
+	return (0);
+}
+
+// Appends a new node to env_lst if there is no "name" named node inside it
+// If there is a "name" named node, change its value (str) to value
+// Push the modifications of env_lst to env_tab with update_env_tab function
+int update_env(t_env **env_lst, char *name, char *value, char ***env_pt)
+{
+	t_env *var;
+
+	if (already_exists(*env_lst, name) == 0)
+		append_env_lst(env_lst, create_env(name, value)); // Attention a la gestion d'erreur ici
+	else
+	{
+		var = find_variable(name, *env_lst);
+		free(var->str);
+		var->str = ft_strdup(value);
+	}
+	if (update_env_tab(*env_lst, env_pt, 1) != 0)
+		return (1);
 	return (0);
 }

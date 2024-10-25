@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/09 19:17:15 by tlebon            #+#    #+#              #
-#    Updated: 2024/10/25 00:31:13 by tlebon           ###   ########.fr        #
+#    Updated: 2024/10/25 23:45:57 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,12 +41,13 @@ SRC =																		\
 		$(BIN_PATH)cd.c														\
 		$(BIN_PATH)echo.c													\
 		$(BIN_PATH)env.c													\
+		$(BIN_PATH)exec_bin.c												\
 		$(BIN_PATH)export.c													\
 		$(BIN_PATH)pwd.c													\
 		$(BIN_PATH)unset.c													\
 		$(EXEC_PATH)bool.c													\
 		$(EXEC_PATH)command.c												\
-		$(EXEC_PATH)execute.c												\
+		$(EXEC_PATH)exec_cmd.c												\
 		$(EXEC_PATH)here_doc.c												\
 		$(EXEC_PATH)in_out_files.c											\
 		$(EXEC_PATH)manager.c												\

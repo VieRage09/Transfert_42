@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/25 02:13:22 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/25 23:46:53 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,26 +77,30 @@ typedef struct s_manager
 int		exec_cd(char **cmd_tab, t_env **s_env, char ***env_pt);
 
 // ECHO.C			1	X
-int		exec_echo();
+int		exec_echo(char **cmd_tab);
 
 // ENV.C			1	X
 int		exec_env(char **env);
 
+// EXEC_BIN.C       3   X
+int		exec_builtin(t_manager *s_manager, t_env **s_env, char ***env_pt);
+
 // EXPORT.C			1	X
-int     update_env(t_env **env_lst, char *name, char *value, char ***env_pt);
 int		exec_export(char **args, t_env **s_env, char ***env_pt);
 
 // PWD.C			1	X
 int		exec_pwd(t_env *s_env);
 
 // UNSET.C			1	X
-t_env	*find_variable(char *name, t_env *s_env);   // a peu pres equivalent avec get_env_str
 int		exec_unset(char **cmd_tab, t_env **s_env, char ***env_pt);
 
-// BIN_UTILS.C		1	X
+// BIN_UTILS.C		5	X
 int		update_env_tab(t_env *s_env, char ***env_pt, int do_free);
 char    *get_env_str(t_env *s_env, char *name);     // ----------------------
 int     set_env_str(t_env **s_env, char *name, char *str);
+t_env	*find_variable(char *name, t_env *s_env);   // a peu pres equivalent avec get_env_str
+int     already_exists(t_env *s_env, char *name);
+int     update_env(t_env **env_lst, char *name, char *value, char ***env_pt);
 ///////////////////////////////////////////////////////////////////////////////
 
 // BOOL.C			1	X
@@ -108,8 +112,7 @@ char	**prepare_cmd_tab(t_token *s_token);
 char	*get_cmd_path(t_env *s_env, char *cmd);
 
 // EXECUTE.C		1	X
-int		exec_cmd(t_manager *s_manager, t_env *s_env);
-int		exec_builtin(t_manager *s_manager, t_env **s_env, char ***env_pt);
+int		exec_cmd(t_manager *s_manager, t_env *s_env, char ***env_pt);
 void	continue_exec(t_token **s_token, int *pipefd, int *rdpipe);
 
 // HERE_DOC.C       2   X

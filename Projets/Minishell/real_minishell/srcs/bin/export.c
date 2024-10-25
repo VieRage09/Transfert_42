@@ -6,12 +6,15 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:41:33 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/25 02:36:10 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/25 23:25:13 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// Check if name starts with an alphabetic char or an _ and if it contains 
+// only alphanumeric chars
+// Returns 1 if the conditions are fullfilled, 0 otherwise
 static int invalid_name(char *name)
 {
 	int i;
@@ -36,33 +39,11 @@ static int invalid_name(char *name)
 	return (0);
 }
 
-// Iterates through s_env and checks whether an env named name exists
-// Returns 1 if it exits
-// Returns 0 otherwise
-static int already_exists(t_env *s_env, char *name)
-{
-	t_env *curs;
-	int longest;
-
-	curs = s_env;
-	while (curs)
-	{
-		if (ft_strlen(curs->name) > ft_strlen(name))
-			longest = ft_strlen(curs->name);
-		else
-			longest = ft_strlen(name);
-		if (ft_strncmp(curs->name, name, longest) == 0)
-			return (1);
-		curs = curs->next;
-	}
-	return (0);
-}
-
 static int assign_check_arg(char *var, char **value, char **name, int *ret)
 {
 	*value = ft_strchr(var, '=');
 	if (!*value)
-		*name = var;
+		*name = ft_strdup(var);
 	else
 		*name = ft_substr(var, 0, ft_strlen(var) - ft_strlen(*value));
 	if (!name)
@@ -77,77 +58,9 @@ static int assign_check_arg(char *var, char **value, char **name, int *ret)
 	return (0);
 }
 
-// Appends a new node to env_lst if there is no "name" named node inside it
-// If there is a "name" named node, change its value (str) to value
-// Push the modifications of env_lst to env_tab with update_env_tab function
-int update_env(t_env **env_lst, char *name, char *value, char ***env_pt)
+static int lone_export(t_env *s_env) // Ne semble pas afficher tout env (ex: var _ absente)
 {
-	t_env *var;
-
-	if (already_exists(*env_lst, name) == 0)
-		append_env_lst(env_lst, create_env(name, value)); // Attention a la gestion d'erreur ici
-	else
-	{
-		var = find_variable(name, *env_lst);
-		free(var->str);
-		var->str = ft_strdup(value);
-	}
-	if (update_env_tab(*env_lst, env_pt, 1) != 0)
-		return (1);
-	return (0);
-}
-
-// static void delete_env_node(t_env **s_env, t_env *node)
-// {
-// 	if (!*s_env || !node)
-// 		return;
-// 	free(node->name);
-// 	free(node->str);
-// 	if (node->prev && node->next)
-// 	{
-// 		node->prev->next = node->next;
-// 		node->next->prev = node->prev;
-// 	}
-// 	else if (node->prev && !node->next)
-// 		node->prev->next = NULL;
-// 	else if (node->next && !node->prev)
-// 	{
-// 		node->next->prev = NULL;
-// 		*s_env = node->next;
-// 	}
-// 	free(node->prev);
-// 	free(node->next);
-// 	return;
-// }
-
-// Prints all the env variables in alphabetical order with export in front
-// of all the variables and the values of varibales quoted
-int lone_export(t_env *s_env) // Ne semble pas afficher tout env (ex: var _ absente)
-{
-	t_env	*curs;
-	t_env	*printed;
-	char	*prevprint;
-
-	if (!s_env)
-		return (-1);
-	curs = s_env;
-	printed = curs;
-	prevprint = "";
-	while (curs)
-	{
-		while (curs)
-		{
-			if (ft_strncmp(curs->name, prevprint, ft_strlen(curs->name) + ft_strlen(prevprint)) > 0
-				&& ft_strncmp(curs->name, printed->name, ft_strlen(curs->name) + ft_strlen(printed->name)) < 0)
-				printed = curs;
-			curs = curs->next;
-		}
-		if (ft_strncmp(prevprint, printed->name, ft_strlen(prevprint) + ft_strlen(printed->name)) == 0)
-			break;
-		printf("export %s=\"%s\"\n", printed->name, printed->str);
-		prevprint = printed->name;
-		curs = s_env;
-	}
+	printf("rends gfou \n");
 	return (0);
 }
 
@@ -190,15 +103,15 @@ int exec_export(char **cmd_tab, t_env **s_env, char ***env)
 		if (assign_check_arg(cmd_tab[i++], &value, &name, &ret) != 0)
 			continue;
 		if (ft_strlen(value) == 1)
-			trimed_value = "";
+			trimed_value = ft_strdup("");
 		else
 			trimed_value = ft_substr(value, 1, ft_strlen(value));
 		if (!trimed_value)
 			return (3);
 		if (update_env(s_env, name, trimed_value, env) != 0)
 			return (4);
-		// free(name);				// ATTENTION peut poser probleme si name et trimed_value ne sont pas malloc 
-		// free(trimed_value);
+		free(name);
+		free(trimed_value);
 	}
 	return (ret);
 }

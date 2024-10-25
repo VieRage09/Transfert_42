@@ -6,14 +6,14 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 22:55:52 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/25 02:00:19 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/25 23:14:41 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // Creates a pipe and write inside with get_next_line on STDIN
-// When the dilimiter is encountered, input is freed, the writing end of the pipe
+// When the delimiter is encountered, input is freed, the writing end of the pipe
 // is closed and a pointer to the pipe is returned
 // Returns NULL on error
 static int	*write_new_hd_pipe(char *delimiter)
@@ -70,9 +70,9 @@ int	**new_hd_tab(t_token *s_token)
 			size++;
 		curs = curs->next;
 	}
-	// if (size < 1)
-	// 	return (NULL);
 	hd_pipes_tab = malloc((size + 1) * sizeof(int *));
+	if (!hd_pipes_tab)
+		return (NULL);
 	curs = s_token;
 	size = 0;
 	while (curs)
@@ -81,7 +81,10 @@ int	**new_hd_tab(t_token *s_token)
 		{
 			hd_pipes_tab[size] = write_new_hd_pipe(curs->next->str);
 			if (!hd_pipes_tab[size])
-				return (NULL); // Plus free les autres deja crees
+			{
+				ft_free_tab((void **)hd_pipes_tab);
+				return (NULL);
+			}
 			++size;
 		}
 		curs = curs->next;

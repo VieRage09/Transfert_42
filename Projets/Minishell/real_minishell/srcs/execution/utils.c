@@ -6,27 +6,11 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 17:15:30 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/25 02:01:34 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/25 22:38:42 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char *lst_str_chr(t_list *s_list, char *str)
-{
-	t_list *cursor;
-
-	if (!s_list)
-		return (NULL);
-	cursor = s_list;
-	while (cursor)
-	{
-		if (ft_strncmp((char *)cursor->content, str, ft_strlen(str)) == 0)
-			return ((char *)cursor->content);
-		cursor = cursor->next;
-	}
-	return (NULL);
-}
 
 void print_cmd(t_token *s_token)
 {

@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:37:31 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/22 17:34:54 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/25 23:40:49 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int exec_cd(char **cmd_tab, t_env **s_env, char ***env_pt)
 	if (chdir(path) != 0)
 	{
 		perror("cd");
-		return (1);
+		return (errno);
 	}
 	path = getcwd(NULL, 0);
 	update_env(s_env, "PWD", path, env_pt);
