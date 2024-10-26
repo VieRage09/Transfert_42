@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:41:33 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/25 23:25:13 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/26 18:40:28 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int lone_export(t_env *s_env) // Ne semble pas afficher tout env (ex: var
 
 // cmd = export NAME=value
 // Comportement :
-// 0. Si export NAME (sans '=') --> rien ne se passe
+// 0. Si export NAME (sans '=') --> export mais pas dans s_env (afficher que en lone_export)
 // 1. Si NAME n'existe pas encore et est valide (quand est il valide ???)
 // --> Cree une nvelle envariable
 // 2. Si NAME existe deja dans env, remplace sa valeur par value (meme si value est vide 'NAME=')

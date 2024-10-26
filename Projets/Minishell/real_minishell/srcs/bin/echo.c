@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 08:29:04 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/25 23:41:35 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/26 18:22:44 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,10 @@ static int valid_arg(char *str)
 }
 
 // TODO : Pouvoir differencier un arg entre quote d'un arg sans
+// Iterates through cmd_tab: skip the valid arg like -n -nnn "-n"
+// Then print the rest of cmd_tab separated with spaces
+// If there was a -n arg(s) doesn't print a \n at the end
+// Returns 0 on success, 1 on error 
 int exec_echo(char **cmd_tab)
 {
 	int i;

@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 17:55:37 by lberne            #+#    #+#             */
-/*   Updated: 2024/10/24 00:22:06 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/26 18:58:35 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,10 @@ t_env   *create_env_lst(char **v_env)
 		str = ft_strdup(temp_env[1]);
         append_env_lst(&env_lst, create_env(name, str));
         i++;
+        free(temp_env);
+	    free(name);
+	    free(str);
     }
-    free(temp_env);
-	free(name);
-	free(str);
     return (env_lst);
 }
 

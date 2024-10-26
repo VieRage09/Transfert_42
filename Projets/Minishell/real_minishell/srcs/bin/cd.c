@@ -6,12 +6,16 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:37:31 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/25 23:40:49 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/26 18:14:06 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// Returns the path where we want to go with cd:
+// HOME if ~ or nothing
+// OLDPWD if -
+// path is path
 char *expand_path(t_env *s_env, char *path, int *print_pwd)
 {
 	char	*expanded_path;
@@ -60,5 +64,3 @@ int exec_cd(char **cmd_tab, t_env **s_env, char ***env_pt)
 	free(old_pwd);
 	return (0);
 }
-
-// Si cd -e --> retour a HOME

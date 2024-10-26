@@ -6,30 +6,39 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:41:55 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/25 21:52:27 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/26 18:37:01 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//
-void	free_env_node(t_env *s_env)
+// Supposed to redirect the prev and next pointers of neighbours and free 
+// everything inside the node and the node
+// As ret is stored in the first node of the list, if we want to free the first
+// node, we need to transfert the value of ret to the next node and make the 
+// s_env pointer points to the new first node
+void	free_env_node(t_env *node, t_env **s_env)
 {
-	if (!s_env)
+	if (!*s_env || !node)
 		return ;
-	if (s_env->prev)
-		s_env->prev->next = s_env->next;
-	if (s_env->next)
-		s_env->next->prev = s_env->prev;
-	if (!s_env->prev)
+	if (node->prev)
+		node->prev->next = node->next;
+	if (node->next)
+		node->next->prev = node->prev;
+	if (node == *s_env)
 	{
-		s_env->next->ret = s_env->ret;
+		node->next->ret = node->ret;
+		*s_env = node->next;
 	}
-	free(s_env->name);
-	free(s_env->str);
-	free(s_env);
+	free(node->name);
+	free(node->str);
+	free(node);
 }
 
+// Checks for each arg of cmd_tab if is variable exists
+// If it does, deletes it, if it doesn't does nothing
+// Updates env when the deletions have been made inside s_env
+// Returns 0 on success and 1 on error
 int	exec_unset(char **cmd_tab, t_env **s_env, char ***env)
 {
 	int		i;
@@ -42,7 +51,7 @@ int	exec_unset(char **cmd_tab, t_env **s_env, char ***env)
 	{
 		var = find_variable(cmd_tab[i], *s_env);
 		if (var != NULL)
-			free_env_node(var);
+			free_env_node(var, s_env);
 		i++;
 	}
 	update_env_tab(*s_env, env, 1);
