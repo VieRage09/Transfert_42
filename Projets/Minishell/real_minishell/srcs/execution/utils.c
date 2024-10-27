@@ -6,15 +6,17 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 17:15:30 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/25 22:38:42 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/27 17:50:35 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void print_cmd(t_token *s_token)
+// A RETIRER
+// Debug function
+void	print_cmd(t_token *s_token)
 {
-	t_token *curs;
+	t_token	*curs;
 
 	curs = s_token;
 	while (curs)
@@ -26,27 +28,11 @@ void print_cmd(t_token *s_token)
 	ft_print_str("\n");
 }
 
-t_token	*search_next_pipe(t_token *s_token)
-{
-	t_token	*curs;
-
-	if (!s_token)
-		return (NULL);
-	curs = s_token;
-	while (curs)
-	{
-		if (is_type(curs, PIPE))
-			return (curs);
-		curs = curs->next;
-	}
-	return (NULL);
-}
-
 // Iterates s_token from start (s_token) to a pipe token or end of list
 // Returns a pointer to the first cmd token found
-t_token *search_next_cmd(t_token *s_token)
+t_token	*search_next_cmd(t_token *s_token)
 {
-	t_token *curs;
+	t_token	*curs;
 
 	curs = s_token;
 	while (curs && !is_type(curs, PIPE))
@@ -63,7 +49,7 @@ t_token *search_next_cmd(t_token *s_token)
 // If the iteration went until the end of the list returns NULL
 t_token	*search_next_token(t_token *s_token, int type)
 {
-	t_token *curs;
+	t_token	*curs;
 
 	if (!s_token)
 		return (NULL);

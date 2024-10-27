@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 23:44:07 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/26 00:02:26 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/27 17:49:48 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 // Is executed by child process of exec_builtin
 // Compare the cmd of cmd_tab (cmd_tab[0]) and launch the correct builtin
 // Returns > 0 on error or builtin values
-static int execute_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt)
+static int	execute_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt)
 {
-	char 	**cmd_tab;
+	char	**cmd_tab;
 	int		ret;
 
 	if (!s_exec)
@@ -47,7 +47,8 @@ static int execute_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt)
 // Used when builtin belongs to a pipeline and therefore need to be forked
 // Forks then redirects in/output and launch bin function in the child process
 // Returns the ID of the child process or -1 on error
-static int	exec_builtin_pipeline(t_manager *s_manager, t_env **s_env, char ***env_pt)
+static int	exec_builtin_pipeline(t_manager *s_manager,
+									t_env **s_env, char ***env_pt)
 {
 	int	fdin;
 	int	fdout;
@@ -82,8 +83,8 @@ static int	exec_basic_bin(t_manager *s_manager, t_env **s_env, char ***env_pt)
 {
 	int	saved_stdin;
 	int	saved_stdout;
-	int fdin;
-	int fdout;
+	int	fdin;
+	int	fdout;
 	int	ret;
 
 	fdin = -2;
@@ -105,16 +106,17 @@ static int	exec_basic_bin(t_manager *s_manager, t_env **s_env, char ***env_pt)
 	}
 	return (ret);
 }
+
 // Checks if the builtin to be executed belongs to a pipeline
 // If it is, launch exec_builtin_pipeline function
 // Otherwise launch exec_basic_bin
-int exec_builtin(t_manager *s_manager, t_env **s_env, char ***env_pt)
+int	exec_builtin(t_manager *s_manager, t_env **s_env, char ***env_pt)
 {
-	int ret;
+	int	ret;
 
 	if (!s_manager || !*s_env || !*env_pt)
 		return (1);
-	if (search_next_pipe(s_manager->s_exec->cmd_block) != NULL)
+	if (search_next_token(s_manager->s_exec->cmd_block, PIPE) != NULL)
 	{	
 		printf("Builtin forked\n");
 		return (exec_builtin_pipeline(s_manager, s_env, env_pt));

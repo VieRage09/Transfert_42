@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 08:29:04 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/26 18:22:44 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/27 17:16:50 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 // If the first char is not - and/or 1 of the following char is not an n
 // returns false
 // Otherwise returns true
-static int valid_arg(char *str)
+static int	valid_arg(char *str)
 {
-	int i;
+	int	i;
 
 	if (!str)
 		return (0);
@@ -39,10 +39,10 @@ static int valid_arg(char *str)
 // Then print the rest of cmd_tab separated with spaces
 // If there was a -n arg(s) doesn't print a \n at the end
 // Returns 0 on success, 1 on error 
-int exec_echo(char **cmd_tab)
+int	exec_echo(char **cmd_tab)
 {
-	int i;
-	int with_option;
+	int	i;
+	int	with_option;
 
 	if (!cmd_tab)
 		return (1);

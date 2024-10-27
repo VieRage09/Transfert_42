@@ -6,17 +6,17 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:03:53 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/25 22:41:24 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/27 17:27:39 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char **create_tab(int n_arg, t_token *cmd_token)
+static char	**create_tab(int n_arg, t_token *cmd_token)
 {
-	char 	**tab;
+	char	**tab;
 	t_token	*curs;
-	
+
 	tab = malloc((n_arg + 2) * sizeof(char *));
 	if (!tab)
 		return (NULL);
@@ -38,11 +38,11 @@ static char **create_tab(int n_arg, t_token *cmd_token)
 // allocates tab accordingly
 // Fills up tab with the cmd string and possible arg strings
 // Ends the tab with (char *)0
-char **prepare_cmd_tab(t_token *s_token)
+char	**prepare_cmd_tab(t_token *s_token)
 {
-	t_token *curs;
+	t_token	*curs;
 	t_token	*cmd_token;
-	int n_arg;
+	int		n_arg;
 
 	if (!s_token)
 		return (NULL);
@@ -65,18 +65,19 @@ char **prepare_cmd_tab(t_token *s_token)
 // Returns NULL otherwise
 static char	*get_path(char *cmd, char **cmd_tab)
 {
-	int	i;
+	int		i;
 	char	*absolute_path;
 	char	*prepared_cmd;
 
 	if (!cmd || !cmd_tab)
 		return (NULL);
-	prepared_cmd = ft_strjoin("/", cmd);	
+	prepared_cmd = ft_strjoin("/", cmd);
 	i = 0;
 	while (cmd_tab[i])
 	{
 		absolute_path = ft_strjoin(cmd_tab[i], prepared_cmd);
-		if (access(absolute_path, F_OK) == 0 && access(absolute_path, X_OK) == 0)
+		if (access(absolute_path, F_OK) == 0
+			&& access(absolute_path, X_OK) == 0)
 		{
 			free(prepared_cmd);
 			return (absolute_path);
@@ -90,7 +91,7 @@ static char	*get_path(char *cmd, char **cmd_tab)
 // if cmd corresponds to an existing and executable file 
 // Returns its absolute path if yes
 // Returns NULL if no
-char *get_cmd_path(t_env *s_env, char *cmd)
+char	*get_cmd_path(t_env *s_env, char *cmd)
 {
 	char	*path;
 	char	**path_tab;

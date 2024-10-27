@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute.c                                          :+:      :+:    :+:   */
+/*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:22:46 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/25 23:45:06 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/27 17:50:04 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 // Close fdin and fdout if they are != of STDIN or STDOUT
 // Execute the cmd via execve
 // AJOUTER DES TRUCS SI EXECVE FAIL
-static int execute(t_exec *s_exec, int fdin, int fdout, t_env *s_env)
+static int	execute(t_exec *s_exec, int fdin, int fdout, t_env *s_env)
 {
-	char *path;
-	char **cmd_tab;
+	char	*path;
+	char	**cmd_tab;
 
 	if (!s_exec)
 		return (1);
@@ -43,11 +43,11 @@ static int execute(t_exec *s_exec, int fdin, int fdout, t_env *s_env)
 // Child process redirects STDIN and STDOUT to fdin and fdout then execute cmd
 // Parent process only returns id of child process
 // Returns -1 on error
-int exec_cmd(t_manager *s_manager, t_env *s_env, char ***env_pt)
+int	exec_cmd(t_manager *s_manager, t_env *s_env, char ***env_pt)
 {
-	int id;
-	int fdin;
-	int fdout;
+	int	id;
+	int	fdin;
+	int	fdout;
 
 	fdin = -2;
 	fdout = -2;
@@ -61,7 +61,7 @@ int exec_cmd(t_manager *s_manager, t_env *s_env, char ***env_pt)
 	}
 	if (id == 0)
 	{
-		if (set_fd_in_out(&fdin, &fdout, s_manager) != 0) // hd_tab est bien modifie mais dans l'enfant uniquement
+		if (set_fd_in_out(&fdin, &fdout, s_manager) != 0)
 			exit(1);
 		printf("fdin = %i, fdout = %i\n", fdin, fdout);
 		if (redirect_input(fdin, fdout) != 0)
@@ -80,9 +80,9 @@ int exec_cmd(t_manager *s_manager, t_env *s_env, char ***env_pt)
 // Closes writing end of the current pipe and update rd_pipe to the reading end
 // of the current pipe
 // If no pipe is found, s_token will be set to NULL and the exec loop will stop
-void continue_exec(t_token **s_token, int *pipefd, int *rdpipe)
+void	continue_exec(t_token **s_token, int *pipefd, int *rdpipe)
 {
-	*s_token = search_next_pipe(*s_token);
+	*s_token = search_next_token(*s_token, PIPE);
 	if (pipefd)
 		if (close(pipefd[1]) != 0)
 			perror("Close failed");

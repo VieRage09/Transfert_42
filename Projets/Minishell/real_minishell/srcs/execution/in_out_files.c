@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:14:16 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/25 00:21:13 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/27 17:32:33 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 // Checks for existence and readability of the infile in argument
 // If it exists and is readable, opens it and returns the fd
 // Returns -1 on failure
-int open_infile(char *file_path)
+int	open_infile(char *file_path)
 {
-	int fd;
+	int	fd;
 
 	if (!file_path)
 		return (-1);
@@ -43,9 +43,9 @@ int open_infile(char *file_path)
 // Opens it and returns the fd
 // Uses O_APPEND Flag when append bool is set up to 1
 // Return -1 on failure
-int open_outfile(char *file_path, int append)
+int	open_outfile(char *file_path, int append)
 {
-	int fd;
+	int	fd;
 
 	if (!file_path)
 		return (-1);
@@ -77,16 +77,16 @@ int open_outfile(char *file_path, int append)
 // If no redirection operator is encountered but there is a PIPE token before or after 
 // cmd block, assign the correct READ/WRITE entry of pipefd to fdin/fdout
 // Otherwise, assigns STDIN/OUT to fdin/out
-int set_fd_in_out(int *fdin, int *fdout, t_manager *s_manager)
+int	set_fd_in_out(int *fdin, int *fdout, t_manager *s_manager)
 {
-	t_token *curs;
+	t_token	*curs;
 
 	if (!s_manager)
 		return (1);
 	curs = s_manager->s_exec->cmd_block;
 	while (curs && !is_type(curs, PIPE))
 	{
-		if (is_type(curs, R_IN) && curs->next && is_type(curs->next,ARG))
+		if (is_type(curs, R_IN) && curs->next && is_type(curs->next, ARG))
 		{
 			if (*fdin > 2)
 				if (close(*fdin) != 0)
@@ -100,14 +100,16 @@ int set_fd_in_out(int *fdin, int *fdout, t_manager *s_manager)
 					perror("Close failed");
 			*fdout = open_outfile(curs->next->str, 0);
 		}
-		else if (is_type(curs, HEREDOC) && curs->next && is_type(curs->next, ARG))
+		else if (is_type(curs, HEREDOC) && curs->next
+			&& is_type(curs->next, ARG))
 		{
 			if (*fdin > 2)
 				if (close(*fdin) != 0)
 					perror("Close failed");
 			*fdin = chose_hd_fd(s_manager->hd_tab);
 		}
-		else if (is_type(curs, R_OUT_APPEND) && curs->next && is_type(curs->next, ARG))
+		else if (is_type(curs, R_OUT_APPEND) && curs->next
+			&& is_type(curs->next, ARG))
 		{
 			if (*fdout > 2)
 				if (close(*fdout) != 0)
@@ -141,7 +143,7 @@ int set_fd_in_out(int *fdin, int *fdout, t_manager *s_manager)
 // Redirect STDIN and STDOUT to fdin and fdout
 // Close fdin and fdout after redirection
 // If stin/out is STDIN/OUT the redirection does nothing more but fdin(STDIN) for ex is not closed
-int redirect_input(int fdin, int fdout)
+int	redirect_input(int fdin, int fdout)
 {
 	if (dup2(fdin, STDIN_FILENO) == -1)
 	{

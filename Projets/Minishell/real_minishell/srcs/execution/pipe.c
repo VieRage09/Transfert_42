@@ -6,15 +6,20 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:06:40 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/22 17:53:09 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/27 17:53:10 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int create_pipe(t_token *s_token, int **pipefd)
+// Creates a pipe if a PIPE token is encountered and assigns it to pipefd
+// Assigns NULL to pipefd if no PIPE token is found
+// Returns 0 if a pipe is created, -1 if no PIPE token is found and pipefd
+// is assigned NULL
+// Returns > 0 on error
+int	create_pipe(t_token *s_token, int **pipefd)
 {
-	t_token *curs;
+	t_token	*curs;
 
 	if (!s_token)
 		return (1);

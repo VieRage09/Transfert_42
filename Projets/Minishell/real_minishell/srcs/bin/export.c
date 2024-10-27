@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:41:33 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/26 18:40:28 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/27 20:30:19 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 // Check if name starts with an alphabetic char or an _ and if it contains 
 // only alphanumeric chars
 // Returns 1 if the conditions are fullfilled, 0 otherwise
-static int invalid_name(char *name)
+static int	invalid_name(char *name)
 {
-	int i;
+	int	i;
 
 	if (!name)
 		return (1);
 	if (!ft_isalpha(name[0]) && name[0] != '_')
 	{
-		printf("minishell : export : '%s': not a valid identifier\n", name);
+		printf("minishell: export: '%s': not a valid identifier\n", name);
 		return (1);
 	}
 	i = 1;
@@ -31,7 +31,7 @@ static int invalid_name(char *name)
 	{
 		if (!ft_isalnum(name[i]) && name[i] != '_')
 		{
-			printf("minishell : export : '%s': not a valid identifier\n", name);
+			printf("minishell: export: '%s': not a valid identifier\n", name);
 			return (1);
 		}
 		i++;
@@ -39,7 +39,14 @@ static int invalid_name(char *name)
 	return (0);
 }
 
-static int assign_check_arg(char *var, char **value, char **name, int *ret)
+// Checks if the string exported is valid and assigns name and value
+// If var has an = char, assigns the chars after it to value and 
+// the chars before to name
+// If var doesn't have an = char, var is treated as a name only export
+// Name is checked via invalid_name function: if invalid 1 is assigned to ret
+// For the moment, if var doesn't have an = char, error is returned
+// Returns 0 on succes, 1 on error
+static int	assign_check_arg(char *var, char **value, char **name, int *ret)
 {
 	*value = ft_strchr(var, '=');
 	if (!*value)
@@ -58,9 +65,34 @@ static int assign_check_arg(char *var, char **value, char **name, int *ret)
 	return (0);
 }
 
-static int lone_export(t_env *s_env) // Ne semble pas afficher tout env (ex: var _ absente)
+// Used when export is called w/o args
+// Supposed to print all the exported variables in alphabetical order
+static int	lone_export(char **env)
 {
-	printf("rends gfou \n");
+	t_env	*s_env_cpy;
+	t_env	*curs;
+	t_env	*printed;
+
+	s_env_cpy = create_env_lst(env);
+	if (!s_env_cpy)
+		return (1);
+	curs = s_env_cpy;
+	printed = curs;
+	while (curs)
+	{
+		while (curs)
+		{
+			if (ft_strncmp(curs->name, printed->name,
+					ft_strlen(curs->name) + ft_strlen(printed->name)) < 0)
+				printed = curs;
+			curs = curs->next;
+		}
+		printf("export %s=\"%s\"\n", printed->name, printed->str);
+		free_env_node(printed, &s_env_cpy);
+		curs = s_env_cpy;
+		printed = curs;
+	}
+	free_env_lst(s_env_cpy);
 	return (0);
 }
 
@@ -84,28 +116,25 @@ static int lone_export(t_env *s_env) // Ne semble pas afficher tout env (ex: var
 // Valeur de retour :
 // = 1 Des qu'il y a un unvalid name
 // A PRECISER
-int exec_export(char **cmd_tab, t_env **s_env, char ***env)
+int	exec_export(char **cmd_tab, t_env **s_env, char ***env)
 {
-	int i;
-	int ret;
-	char *value;
-	char *trimed_value;
-	char *name;
+	int		i;
+	int		ret;
+	char	*value;
+	char	*trimed_value;
+	char	*name;
 
 	if (!cmd_tab || !*s_env || !*env)
 		return (1);
 	if (!cmd_tab[1])
-		return (lone_export(*s_env));
+		return (lone_export(*env));
 	i = 1;
 	ret = 0;
 	while (cmd_tab[i])
 	{
 		if (assign_check_arg(cmd_tab[i++], &value, &name, &ret) != 0)
-			continue;
-		if (ft_strlen(value) == 1)
-			trimed_value = ft_strdup("");
-		else
-			trimed_value = ft_substr(value, 1, ft_strlen(value));
+			continue ;
+		trimed_value = ft_substr(value, 1, ft_strlen(value));
 		if (!trimed_value)
 			return (3);
 		if (update_env(s_env, name, trimed_value, env) != 0)

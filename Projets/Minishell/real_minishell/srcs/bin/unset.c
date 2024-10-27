@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:41:55 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/26 18:37:01 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/27 20:14:25 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,22 @@ void	free_env_node(t_env *node, t_env **s_env)
 		node->prev->next = node->next;
 	if (node->next)
 		node->next->prev = node->prev;
-	if (node == *s_env)
+	if (node == *s_env && node->next)
 	{
 		node->next->ret = node->ret;
 		*s_env = node->next;
+		free(node->name);
+		free(node->str);
+		free(node);
+		return ;
+	}
+	if (node == *s_env && !node->next)
+	{
+		*s_env = NULL;
+		free(node->name);
+		free(node->str);
+		free(node);
+		return ;
 	}
 	free(node->name);
 	free(node->str);

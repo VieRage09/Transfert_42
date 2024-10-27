@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:37:31 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/26 18:14:06 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/27 17:15:59 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 // HOME if ~ or nothing
 // OLDPWD if -
 // path is path
-char *expand_path(t_env *s_env, char *path, int *print_pwd)
+char	*expand_path(t_env *s_env, char *path, int *print_pwd)
 {
 	char	*expanded_path;
 
@@ -41,11 +41,11 @@ char *expand_path(t_env *s_env, char *path, int *print_pwd)
 // Attention SEGFAULT dans cas suivant : mkdir a --> cd a --> mkdir b --> cd b
 // Si en etant dans b on supprime a : cd .. lance une erreur mais le 2eme appel a cd ..
 // doit revenir effectivement en arriere soit au repertoire de base
-int exec_cd(char **cmd_tab, t_env **s_env, char ***env_pt)
+int	exec_cd(char **cmd_tab, t_env **s_env, char ***env_pt)
 {
-	char *path;
-	char *old_pwd;
-	int print_pwd;
+	char	*path;
+	char	*old_pwd;
+	int		print_pwd;
 
 	print_pwd = 0;
 	path = expand_path(*s_env, cmd_tab[1], &print_pwd);
