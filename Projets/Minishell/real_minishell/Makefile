@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/09 19:17:15 by tlebon            #+#    #+#              #
-#    Updated: 2024/10/27 17:10:57 by tlebon           ###   ########.fr        #
+#    Updated: 2024/10/28 18:36:11 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,7 @@ SRC =																		\
 		$(EXEC_PATH)bool.c													\
 		$(EXEC_PATH)command.c												\
 		$(EXEC_PATH)exec_cmd.c												\
+		$(EXEC_PATH)free.c												\
 		$(EXEC_PATH)here_doc.c												\
 		$(EXEC_PATH)in_out_files.c											\
 		$(EXEC_PATH)manager.c												\

@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/27 20:30:57 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/28 19:56:27 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,9 @@ typedef struct  s_env
 	char			*name;
     char            *str;
 	int				ret;
+    int             exported;
     struct s_env    *next;   
-    struct s_env    *prev; 
+    struct s_env    *prev;
 }               t_env;
 
 typedef struct s_exec
@@ -116,6 +117,10 @@ char	*get_cmd_path(t_env *s_env, char *cmd);
 int		exec_cmd(t_manager *s_manager, t_env *s_env, char ***env_pt);
 void	continue_exec(t_token **s_token, int *pipefd, int *rdpipe);
 
+// FREE.C           2   X
+void	free_s_manager(t_manager *s_manager);
+void	free_s_exec(t_exec *s_exec);
+
 // HERE_DOC.C       2   X
 int     **new_hd_tab(t_token *s_token);
 int     chose_hd_fd(int **hd_pipes_tab);
@@ -127,9 +132,7 @@ int     open_outfile(char *file_path, int append);
 int     set_fd_in_out(int *fdin, int *fdout, t_manager *s_manager);
 int		redirect_input(int fdin, int fdout);
 
-// MANAGER.C		6	X
-void	free_s_manager(t_manager *s_manager);
-void	free_s_exec(t_exec *s_exec);
+// MANAGER.C		4	X
 int		launch_exec(t_token *s_token, char ***env_pt, t_env **s_env);
 
 // PIPE.C			1	X

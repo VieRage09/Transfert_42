@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 22:55:52 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/25 23:14:41 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/28 19:55:45 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static int	*write_new_hd_pipe(char *delimiter)
 			free(input);
 			if (close(new_pipe[1]) != 0)
 				perror("Close failed");
+			// free(new_pipe);
 			return (new_pipe);
 		}
 		write(new_pipe[1], input, ft_strlen(input));
@@ -89,12 +90,14 @@ int	**new_hd_tab(t_token *s_token)
 		}
 		curs = curs->next;
 	}
+	hd_pipes_tab[size] = NULL;
 	return (hd_pipes_tab);
 }
 
 int	chose_hd_fd(int **hd_pipes_tab)
 {
 	int	i;
+	int	fdin;
 
 	if (!hd_pipes_tab)
 		return (-1);
@@ -104,7 +107,10 @@ int	chose_hd_fd(int **hd_pipes_tab)
 		if (hd_pipes_tab[i][1] == -2)
 			i++;
 		else
+		{
+			hd_pipes_tab[i][1] = -2;
 			return (hd_pipes_tab[i][0]);
+		}
 	}
 	return (-1);
 }
@@ -113,14 +119,12 @@ int	update_hd_tab(t_token *s_token, int ***hd_tab)
 {
 	t_token	*curs;
 	int		i;
-
+	
 	if (!s_token || !(*hd_tab))
 		return (1);
 	curs = s_token;
-	while (curs)
+	while (curs && !is_type(curs, PIPE))
 	{
-		if (is_type(curs, PIPE))
-			return (0);
 		if (is_type(curs, HEREDOC) && curs->next && is_type(curs->next, ARG))
 		{
 			i = 0;
@@ -131,7 +135,7 @@ int	update_hd_tab(t_token *s_token, int ***hd_tab)
 				else
 				{
 					(*hd_tab)[i][1] = -2;
-					return (0);
+					break ;
 				}
 			}
 		}

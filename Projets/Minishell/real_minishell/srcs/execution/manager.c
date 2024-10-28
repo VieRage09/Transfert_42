@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 23:02:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/25 22:30:16 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/28 19:56:09 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,27 +89,6 @@ static t_manager	*init_s_manager(t_token *s_token)
 	else
 		s_manager->hd_tab = NULL;
 	return (s_manager);
-}
-
-void	free_s_manager(t_manager *s_manager)
-{
-	if (!s_manager)
-		return ;
-	free(s_manager->rdpipe);
-	if (s_manager->hd_tab)
-		ft_free_tab((void **)s_manager->hd_tab);
-	// if (s_manager->s_exec)
-	// 	free_s_exec(s_manager->s_exec);
-	free(s_manager);
-}
-
-void	free_s_exec(t_exec *s_exec)
-{
-	if (!s_exec)
-		return ;
-	// if (s_exec->pipefd)
-	// 	free(s_exec->pipefd);
-	free(s_exec);
 }
 
 // Entry function used to prepare everyting and execute the prompt
