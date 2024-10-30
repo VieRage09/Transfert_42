@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 16:36:10 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/27 17:14:34 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/30 23:01:13 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,36 @@ t_env	*find_variable(char *name, t_env *s_env)
 	return (NULL);
 }
 
+// Creates and return a copy of s_env
+// Returns NULL on error
+t_env	*copy_s_env(t_env *s_env)
+{
+	t_env	*cpy;
+	t_env	*curs;
+	t_env	*new_s_env;
+
+	if (!s_env)
+		return (NULL);
+	cpy = create_env(s_env->name, s_env->str, s_env->printed);
+	if (!cpy)
+		return (NULL);
+	curs = s_env->next;
+	while (curs)
+	{
+		new_s_env = create_env(curs->name, curs->str, curs->printed);
+		if (!new_s_env)
+		{
+			free_env_lst(cpy);
+			return (NULL);
+		}
+		append_env_lst(&cpy, new_s_env);
+		curs = curs->next;
+	}
+	return (cpy);
+}
+
 // Iterates through s_env and checks whether an env named name exists
-// Returns 1 if it exits
+// Returns 1 if it exists
 // Returns 0 otherwise
 int	already_exists(t_env *s_env, char *name)
 {

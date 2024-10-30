@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 23:44:07 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/27 17:49:48 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/30 20:42:18 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	execute_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt)
 	else if (ft_strncmp(cmd_tab[0], "unset", ft_strlen(cmd_tab[0])) == 0)
 		ret = exec_unset(cmd_tab, s_env, env_pt);
 	else if (ft_strncmp(cmd_tab[0], "env", ft_strlen(cmd_tab[0])) == 0)
-		ret = exec_env(*env_pt);
+		ret = exec_env(*s_env);
 	else if (ft_strncmp(cmd_tab[0], "exit", ft_strlen(cmd_tab[0])) == 0)
 		ret = 0;
 	// ft_free_tab((void **)cmd_tab); // Fait un double free quand buitin pas fork

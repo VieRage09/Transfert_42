@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lberne <lberne@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 17:55:37 by lberne            #+#    #+#             */
-/*   Updated: 2024/10/30 16:31:18 by lberne           ###   ########.fr       */
+/*   Updated: 2024/10/30 21:56:00 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*get_env(char *token, int start, t_env *env_lst)
 	return (res);
 }
 
-t_env   *create_env(char *name, char *str)
+t_env   *create_env(char *name, char *str, bool printed)
 {
     t_env   *new_env = (t_env *)malloc(sizeof(t_env));
     if (!new_env)
@@ -64,7 +64,7 @@ t_env   *create_env(char *name, char *str)
     }
     new_env->name = ft_strdup(name);
 	new_env->str = ft_strdup(str);
-	new_env->exported = true;
+	new_env->printed = printed;
 	new_env->ret = 0;
     new_env->prev = NULL;
     new_env->next = NULL;
@@ -105,7 +105,7 @@ t_env   *create_env_lst(char **v_env)
 		str = ft_strdup(temp_env[1]);
 		if (!name || !str)
 			return (NULL);
-        append_env_lst(&env_lst, create_env(name, str));
+        append_env_lst(&env_lst, create_env(name, str, true));
     	ft_free_tab((void**)temp_env);
 		free(name);
 		free(str);

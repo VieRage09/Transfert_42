@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 19:02:56 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/27 17:19:26 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/30 23:04:00 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ static char	*create_full_string(t_env *s_env)
 	name_prep = ft_strjoin(s_env->name, "=");
 	if (!name_prep)
 		return (NULL);
-	result = ft_strjoin(name_prep, s_env->str);
+	if (s_env->str)
+		result = ft_strjoin(name_prep, s_env->str);
 	if (!result)
 	{
 		free(name_prep);
@@ -92,20 +93,44 @@ int	update_env_tab(t_env *s_env, char ***env_pt, int do_free)
 	return (0);
 }
 
+static int	append_non_existant(t_env **env_lst, char *name, char *value,
+								char *val)
+{
+	t_env	*var;
+
+	if (ft_strncmp(value, "=", 1) != 0)
+		var = create_env(name, "", false);
+	else
+		var = create_env(name, val, true);
+	free(val);
+	if (!var)
+		return (1);
+	append_env_lst(env_lst, var);
+	return (0);
+}
+
 // Appends a new node to env_lst if there is no "name" named node inside it
 // If there is a "name" named node, change its value (str) to value
 // Push the modifications of env_lst to env_tab with update_env_tab function
 int	update_env(t_env **env_lst, char *name, char *value, char ***env_pt)
 {
 	t_env	*var;
+	char	*val;
 
-	if (already_exists(*env_lst, name) == 0)
-		append_env_lst(env_lst, create_env(name, value)); // Attention a la gestion d'erreur ici
-	else
+	val = ft_substr(value, 1, ft_strlen(value));
+	if (!val)
+		return (1);
+	if (already_exists(*env_lst, name) && ft_strncmp(value, "=", 1) == 0)
 	{
 		var = find_variable(name, *env_lst);
 		free(var->str);
-		var->str = ft_strdup(value);
+		var->str = val;
+		var->printed = true;
+	}
+	else if (!already_exists(*env_lst, name))
+	{
+		if (append_non_existant(env_lst, name, value, val) != 0)
+			return (1);
 	}
 	if (update_env_tab(*env_lst, env_pt, 1) != 0)
 		return (1);

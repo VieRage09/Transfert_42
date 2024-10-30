@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/30 18:07:39 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/30 23:09:40 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ typedef struct  s_env
 	char			*name;
     char            *str;
 	int				ret;
-	bool			exported;
+	bool			printed;
     struct s_env    *next;   
     struct s_env    *prev; 
 }               t_env;
@@ -85,6 +85,7 @@ typedef struct s_manager
 
 // BIN_UTILS.C      4   V
 t_env	*find_variable(char *name, t_env *s_env);
+t_env	*copy_s_env(t_env *s_env);
 int     already_exists(t_env *s_env, char *name);
 char    *get_env_str(t_env *s_env, char *name);
 int     set_env_str(t_env **s_env, char *name, char *str);
@@ -96,12 +97,12 @@ int		exec_cd(char **cmd_tab, t_env **s_env, char ***env_pt);
 int		exec_echo(char **cmd_tab);
 
 // ENV.C			1	V
-int		exec_env(char **env);
+int		exec_env(t_env *s_env);
 
 // EXEC_BIN.C       4   VC
 int		exec_builtin(t_manager *s_manager, t_env **s_env, char ***env_pt);
 
-// EXPORT.C			4	VC
+// EXPORT.C			5	VC
 int		exec_export(char **args, t_env **s_env, char ***env_pt);
 
 // PWD.C			1	V
@@ -111,7 +112,7 @@ int		exec_pwd(t_env *s_env);
 int		exec_unset(char **cmd_tab, t_env **s_env, char ***env_pt);
 void	free_env_node(t_env *node, t_env **s_env);
 
-// UPDATE_ENV.C     4   VC
+// UPDATE_ENV.C     5   V
 int		update_env_tab(t_env *s_env, char ***env_pt, int do_free);
 int     update_env(t_env **env_lst, char *name, char *value, char ***env_pt);
 
@@ -171,7 +172,7 @@ void	append_token(t_token **head, t_token *new_token);
 // ENV.C
 char	*env_extractor(char *name, t_env *env_lst);
 char	*get_env(char *token, int start, t_env *env_lst);
-t_env   *create_env(char *name, char *str);
+t_env   *create_env(char *name, char *str, bool printed);
 void    append_env_lst(t_env **head, t_env *new_env);
 t_env   *create_env_lst(char **v_env);
 
