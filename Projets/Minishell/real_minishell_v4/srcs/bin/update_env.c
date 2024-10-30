@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 19:02:56 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/30 23:04:00 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/30 23:37:12 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ static int	append_non_existant(t_env **env_lst, char *name, char *value,
 		var = create_env(name, "", false);
 	else
 		var = create_env(name, val, true);
-	free(val);
 	if (!var)
 		return (1);
 	append_env_lst(env_lst, var);
@@ -124,14 +123,18 @@ int	update_env(t_env **env_lst, char *name, char *value, char ***env_pt)
 	{
 		var = find_variable(name, *env_lst);
 		free(var->str);
-		var->str = val;
+		var->str = ft_strdup(val);
 		var->printed = true;
 	}
 	else if (!already_exists(*env_lst, name))
 	{
 		if (append_non_existant(env_lst, name, value, val) != 0)
+		{
+			free(val);
 			return (1);
+		}
 	}
+	free(val);
 	if (update_env_tab(*env_lst, env_pt, 1) != 0)
 		return (1);
 	return (0);

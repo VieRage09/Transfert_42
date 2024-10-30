@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:37:31 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/30 18:08:07 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/30 23:51:21 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,17 @@ static char	*expand_path(t_env *s_env, char *path, int *print_pwd)
 	return (expanded_path);
 }
 
+static int	cd_env_update(t_env **s_env, char *name, char *value, char ***env_pt)
+{
+	char	*tmp;
+	
+	tmp = ft_strjoin("=", value);	
+	if (!tmp)
+		return (2);
+	update_env(s_env, name, tmp, env_pt);
+	free(tmp);
+	return (0);
+}
 // Check si il y a des subtilitees dans le comportement de cd dans bash
 // Uses chdir to change the working directory to the path pointed to by path
 // ttention SEGFAULT si OLDPWD est unset ???
@@ -56,8 +67,12 @@ int	exec_cd(char **cmd_tab, t_env **s_env, char ***env_pt)
 		return (errno);
 	}
 	path = getcwd(NULL, 0);
-	update_env(s_env, "PWD", path, env_pt);
-	update_env(s_env, "OLDPWD", old_pwd, env_pt);
+	if (!path || !old_pwd)
+		return (1);
+	if (cd_env_update(s_env, "PWD", path, env_pt) != 0)
+		return (2);
+	if (cd_env_update(s_env, "OLDPWD", old_pwd, env_pt) != 0)
+		return (2);
 	if (print_pwd)
 		exec_pwd(*s_env);
 	free(path);
