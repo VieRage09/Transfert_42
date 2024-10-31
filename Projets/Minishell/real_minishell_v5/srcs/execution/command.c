@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:03:53 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/27 17:27:39 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/10/31 19:49:40 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ static char	**create_tab(int n_arg, t_token *cmd_token)
 	tab = malloc((n_arg + 2) * sizeof(char *));
 	if (!tab)
 		return (NULL);
-	tab[0] = cmd_token->str;
+	tab[0] = ft_strdup(cmd_token->str);
 	curs = cmd_token->next;
 	n_arg = 1;
 	while (curs && is_type(curs, ARG))
 	{
-		tab[n_arg] = curs->str;
+		tab[n_arg] = ft_strdup(curs->str);
 		n_arg++;
 		curs = curs->next;
 	}
