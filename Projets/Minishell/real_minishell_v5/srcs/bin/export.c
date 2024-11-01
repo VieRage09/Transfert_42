@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:41:33 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/30 23:07:32 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/01 20:23:53 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int	assign_check_arg(char *var, char **value, char **name, int *ret)
 		return (1);
 	}
 	if (!*value)
-		*value = ft_strdup("");
+		*value = "";
 	if (!*value)
 		return (1);
 	return (0);
@@ -150,7 +150,6 @@ int	exec_export(char **cmd_tab, t_env **s_env, char ***env)
 		if (update_env(s_env, name, value, env) != 0)
 			return (4);
 		free(name);
-		free(value);
 	}
 	return (ret);
 }

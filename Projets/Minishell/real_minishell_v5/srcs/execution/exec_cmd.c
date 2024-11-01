@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:22:46 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/27 17:50:04 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/01 21:41:47 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,16 @@ static int	execute(t_exec *s_exec, int fdin, int fdout, t_env *s_env)
 		return (2);
 	path = get_cmd_path(s_env, cmd_tab[0]);
 	if (!path)
-		path = cmd_tab[0];
+		path = ft_strdup(cmd_tab[0]); // Check valeur de retour ???
 	if (execve(path, cmd_tab, s_exec->env_tab) != 0)
-	{
 		perror("Execve failed");
-	}
+	ft_free_tab((void **)cmd_tab);
 	if (access(path, F_OK) == 0 && access(path, X_OK) != 0)
+	{
+		free(path);
 		return (126);
+	}
+	free(path);
 	return (127);
 }
 

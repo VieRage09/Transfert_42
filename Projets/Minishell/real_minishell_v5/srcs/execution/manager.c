@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 23:02:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/28 19:56:09 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/01 20:45:24 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ int launch_exec(t_token *s_token, char ***env_pt, t_env **s_env)
 		if (!s_manager->s_exec)
 			return (4);
 		if (is_builtin(s_manager->s_exec->cmd_block) > 0)
-			id = exec_builtin(s_manager, s_env, env_pt); // Les builtins semble etre execute dans un process enfant uniquement lors qu'ils appartiennent a une pipeline
+			id = exec_builtin(s_manager, s_env, env_pt);
 		else
 			id = exec_cmd(s_manager, *s_env, env_pt);
 		if (s_manager->hd_tab)
