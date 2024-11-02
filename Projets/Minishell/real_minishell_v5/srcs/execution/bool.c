@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 08:05:37 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/25 22:40:54 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/02 01:50:48 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ int	is_builtin(t_token *cmd_block)
 // Returns false otherwise
 int	is_type(t_token *s_token, int type)
 {
+	if (!s_token) // Ajout pour securite mais pas sur que ca fasse pas bug
+		return (0);
 	if (s_token->type == type)
 		return (1);
 	else

@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:22:46 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/01 21:41:47 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/02 02:08:21 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 // Close fdin and fdout if they are != of STDIN or STDOUT
 // Execute the cmd via execve
 // AJOUTER DES TRUCS SI EXECVE FAIL
-static int	execute(t_exec *s_exec, int fdin, int fdout, t_env *s_env)
+static int	execute(t_exec *s_exec, t_env *s_env)
 {
 	char	*path;
 	char	**cmd_tab;
@@ -54,7 +54,7 @@ int	exec_cmd(t_manager *s_manager, t_env *s_env, char ***env_pt)
 
 	fdin = -2;
 	fdout = -2;
-	if (!s_manager || !s_env)
+	if (!s_manager || !s_env || !*env_pt) // RAJOUTE *env_pt pour la secu
 		return (-1);
 	id = fork();
 	if (id == -1)
@@ -70,9 +70,9 @@ int	exec_cmd(t_manager *s_manager, t_env *s_env, char ***env_pt)
 		if (redirect_input(fdin, fdout) != 0)
 		{
 			ft_putstr_fd("Redirect input error :\n", 2);
-			return (2);
+			exit (2);
 		}
-		exit(execute(s_manager->s_exec, fdin, fdout, s_env));
+		exit(execute(s_manager->s_exec, s_env));
 	}
 	return (id);
 }
@@ -88,10 +88,10 @@ void	continue_exec(t_token **s_token, int *pipefd, int *rdpipe)
 	*s_token = search_next_token(*s_token, PIPE);
 	if (pipefd)
 		if (close(pipefd[1]) != 0)
-			perror("Close failed");
+			perror("Close failed(Continue exec pipefd[1])");
 	if (*rdpipe > 0)
 		if (close(*rdpipe) != 0)
-			perror("Close failed");
+			perror("Close failed(Continue exec rdpipe)");
 	if (*s_token)
 	{
 		*s_token = (*s_token)->next;

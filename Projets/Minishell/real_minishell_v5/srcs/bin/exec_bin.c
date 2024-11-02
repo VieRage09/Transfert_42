@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 23:44:07 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/30 23:21:23 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/02 02:08:21 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@ static int	execute_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt)
 static int	exec_builtin_pipeline(t_manager *s_manager,
 									t_env **s_env, char ***env_pt)
 {
+	int	id;
 	int	fdin;
 	int	fdout;
-	int	id;
 
 	fdin = -2;
 	fdout = -2;
-	if (set_fd_in_out(&fdin, &fdout, s_manager) != 0)
+	if (!s_manager || !s_env || !*env_pt) // RAJOUTE *env_pt pour la secu
 		return (-1);
 	id = fork();
 	if (id == -1)
@@ -66,10 +66,13 @@ static int	exec_builtin_pipeline(t_manager *s_manager,
 	}
 	if (id == 0)
 	{
+		if (set_fd_in_out(&fdin, &fdout, s_manager) != 0)
+			exit (1);
+		printf("fdin = %i, fdout = %i\n", fdin, fdout);
 		if (redirect_input(fdin, fdout) != 0)
 		{
 			ft_putstr_fd("Redirect input error :\n", 2);
-			return (1);
+			exit (2);
 		}
 		exit(execute_builtin(s_manager->s_exec, s_env, env_pt));
 	}
@@ -116,7 +119,8 @@ int	exec_builtin(t_manager *s_manager, t_env **s_env, char ***env_pt)
 
 	if (!s_manager || !*s_env || !*env_pt)
 		return (1);
-	if (search_next_token(s_manager->s_exec->cmd_block, PIPE) != NULL)
+	if (search_next_token(s_manager->s_exec->cmd_block, PIPE) != NULL
+		|| is_type(s_manager->s_exec->cmd_block->prev, PIPE))
 	{	
 		printf("Builtin forked\n");
 		return (exec_builtin_pipeline(s_manager, s_env, env_pt));
