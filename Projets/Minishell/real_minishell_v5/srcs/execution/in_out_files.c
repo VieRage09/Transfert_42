@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:14:16 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/28 19:56:17 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/07 03:47:59 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int	set_fd_in_out(int *fdin, int *fdout, t_manager *s_manager)
 		if (s_manager->s_exec->cmd_block->prev && is_type(s_manager->s_exec->cmd_block->prev, PIPE))
 		{
 			printf("rdpipe returned as fdin\n");
-			*fdin = s_manager->s_exec->readpipe;
+			*fdin = *(s_manager->rdpipe);
 		}
 		else
 			*fdin = STDIN_FILENO;

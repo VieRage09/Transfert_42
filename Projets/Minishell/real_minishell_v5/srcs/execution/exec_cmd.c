@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:22:46 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/02 02:08:21 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/07 04:10:11 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,10 @@ void	continue_exec(t_token **s_token, int *pipefd, int *rdpipe)
 		if (close(pipefd[1]) != 0)
 			perror("Close failed(Continue exec pipefd[1])");
 	if (*rdpipe > 0)
+	{
 		if (close(*rdpipe) != 0)
 			perror("Close failed(Continue exec rdpipe)");
+	}
 	if (*s_token)
 	{
 		*s_token = (*s_token)->next;

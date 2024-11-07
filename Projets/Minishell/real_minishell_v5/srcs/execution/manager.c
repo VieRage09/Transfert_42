@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 23:02:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/01 20:45:24 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/07 03:50:42 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ static int	get_status_code(pid_t lastid)
 // Mallocs a cmd tab containing only the cmd and its args 
 // Returns the structure created
 // Returns NULL on error
-static t_exec *init_s_exec(t_token *s_token, int *pipefd, int *rdpipe, char **env)
+static t_exec *init_s_exec(t_token *s_token, int *pipefd, char **env)
 {
 	t_exec *s_exec;
 
-	if (!s_token || !env || !rdpipe) // pipefd et rdpipe ??
+	if (!s_token || !env)
 		return (NULL);
 	s_exec = malloc(sizeof(t_exec));
 	if (!s_exec)
@@ -51,7 +51,6 @@ static t_exec *init_s_exec(t_token *s_token, int *pipefd, int *rdpipe, char **en
 		s_exec->pipefd = pipefd;
 	else
 		s_exec->pipefd = NULL;
-	s_exec->readpipe = *rdpipe;
 	s_exec->env_tab = env;
 	return (s_exec);
 }
@@ -122,7 +121,7 @@ int launch_exec(t_token *s_token, char ***env_pt, t_env **s_env)
 	{
 		if (create_pipe(s_token, &pipefd) > 0)
 			return (3);
-		s_manager->s_exec = init_s_exec(s_token, pipefd, s_manager->rdpipe, *env_pt);
+		s_manager->s_exec = init_s_exec(s_token, pipefd, *env_pt);
 		if (!s_manager->s_exec)
 			return (4);
 		if (is_builtin(s_manager->s_exec->cmd_block) > 0)

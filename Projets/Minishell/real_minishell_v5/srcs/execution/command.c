@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:03:53 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/01 20:38:11 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/07 03:27:19 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,10 @@ char	*get_cmd_path(t_env *s_env, char *cmd)
 	char	**path_tab;
 
 	if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
+	{
+		printf("Absolute path is yonkers\n");
 		return (cmd);
+	}
 	path = get_env_str(s_env, "PATH");
 	if (!path)
 		return (NULL);

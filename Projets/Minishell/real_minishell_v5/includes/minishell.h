@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/30 23:09:40 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/07 03:48:03 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef	struct s_data
 {
 	t_token	*tokens;
 	t_env	*env_lst;
+	char	**env_tab;
 	int		ret;
 }				t_data;
 
@@ -70,7 +71,6 @@ typedef struct s_exec
 {
     t_token *cmd_block;
     int     *pipefd;
-    int     readpipe;
     char    **env_tab;
 }               t_exec;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lberne <lberne@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 17:39:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/30 16:53:07 by lberne           ###   ########.fr       */
+/*   Updated: 2024/11/07 03:20:40 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,15 @@ int	main(int ac, char **av, char **env)
 {
 	t_data	data;
 	char	*line;
-	char	**env_cpy;
 	int		ret;
 
 	init_minishell(&data);
-	if (!(data.env_lst = create_env_lst(env)))
+	if (!(data.env_lst = create_env_lst(env))) // MAJ SHELL, SHLVL, et _=absolute path de minishell
 	{
 		free_all(&data);
 		return (1);
 	}
-	if (update_env_tab(data.env_lst, &env_cpy, 0) != 0)
+	if (update_env_tab(data.env_lst, &data.env_tab, 0) != 0)
 		return (1);
 	while(1)
 	{
@@ -63,14 +62,14 @@ int	main(int ac, char **av, char **env)
 		if (!(data.tokens = let_me_cook(line, data.env_lst)))
 			break ;
 		print_tokens(data.tokens);
-		data.env_lst->ret = launch_exec(data.tokens, &env_cpy, &data.env_lst);
+		data.env_lst->ret = launch_exec(data.tokens, &data.env_tab, &data.env_lst);
 		free_tokens(data.tokens);
 		data.tokens = NULL;
 		free(line);
 	}
 	ret = data.env_lst->ret;
 	free_all(&data);
-	ft_free_tab((void **)env_cpy);
+	ft_free_tab((void **)data.env_tab); // rajouter dans free_all
 	rl_clear_history();
 	printf("exit\n");
 	return (ret);
