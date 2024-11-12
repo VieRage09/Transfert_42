@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:37:31 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/30 23:51:21 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/12 23:26:27 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,18 +64,21 @@ int	exec_cd(char **cmd_tab, t_env **s_env, char ***env_pt)
 	if (chdir(path) != 0)
 	{
 		perror("cd");
-		return (errno);
+		return (1);
 	}
 	path = getcwd(NULL, 0);
 	if (!path || !old_pwd)
 		return (1);
 	if (cd_env_update(s_env, "PWD", path, env_pt) != 0)
-		return (2);
+	{
+		free(path);
+		return (1);
+	}
+	free(path);
 	if (cd_env_update(s_env, "OLDPWD", old_pwd, env_pt) != 0)
-		return (2);
+		return (1);
 	if (print_pwd)
 		exec_pwd(*s_env);
-	free(path);
 	free(old_pwd);
 	return (0);
 }

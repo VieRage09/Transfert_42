@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:41:55 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/27 20:14:25 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/12 23:51:02 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,18 +54,22 @@ void	free_env_node(t_env *node, t_env **s_env)
 int	exec_unset(char **cmd_tab, t_env **s_env, char ***env)
 {
 	int		i;
+	int		ret;
 	t_env	*var;
 
 	if (!cmd_tab || !*s_env)
 		return (1);
 	i = 1;
+	ret = 0;
 	while (cmd_tab[i])
 	{
 		var = find_variable(cmd_tab[i], *s_env);
 		if (var != NULL)
 			free_env_node(var, s_env);
+		else
+			ret = 1;
 		i++;
 	}
 	update_env_tab(*s_env, env, 1);
-	return (0);
+	return (ret);
 }

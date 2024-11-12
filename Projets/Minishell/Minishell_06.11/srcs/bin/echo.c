@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 08:29:04 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/27 17:16:50 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/12 23:37:17 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,15 @@ int	exec_echo(char **cmd_tab)
 	with_option = i;
 	while (cmd_tab[i])
 	{
-		ft_putstr(cmd_tab[i]);
+		if (write(1, cmd_tab[i], ft_strlen(cmd_tab[i])) < 0)
+			return (1);
 		if (cmd_tab[i + 1])
-			write(1, " ", 1);
+			if (write(1, " ", 1) < 0)
+				return (1);
 		i++;
 	}
 	if (with_option == 1)
-		write(1, "\n", 1);
+		if (write(1, "\n", 1) < 0)
+			return (1);
 	return (0);
 }
