@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:22:46 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/07 04:10:11 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/16 06:16:50 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,18 +85,22 @@ int	exec_cmd(t_manager *s_manager, t_env *s_env, char ***env_pt)
 // If no pipe is found, s_token will be set to NULL and the exec loop will stop
 void	continue_exec(t_token **s_token, int *pipefd, int *rdpipe)
 {
-	*s_token = search_next_token(*s_token, PIPE);
-	if (pipefd)
-		if (close(pipefd[1]) != 0)
-			perror("Close failed(Continue exec pipefd[1])");
-	if (*rdpipe > 0)
+	if (*rdpipe > 2)
 	{
+		printf("Closing rdpipe = %i\n", *rdpipe);
 		if (close(*rdpipe) != 0)
 			perror("Close failed(Continue exec rdpipe)");
 	}
+	*s_token = search_next_token(*s_token, PIPE);
 	if (*s_token)
 	{
 		*s_token = (*s_token)->next;
 		*rdpipe = pipefd[0];
+	}
+	if (pipefd)
+	{
+		if (close(pipefd[1]) != 0)
+			perror("Close failed(Continue exec pipefd[1])");
+		free(pipefd);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 23:02:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/12 23:18:35 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/16 06:03:35 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,9 +138,10 @@ int launch_exec(t_token *s_token, char ***env_pt, t_env **s_env)
 		if (id < 0)
 			return (6);
 		free_s_exec(s_manager->s_exec);
-		if (pipefd)
-			free(pipefd);
+		// if (pipefd)
+		// 	free(pipefd);
 	}
+	printf("End\n");
 	free_s_manager(s_manager);
 	return (get_status_code(id));
 }
