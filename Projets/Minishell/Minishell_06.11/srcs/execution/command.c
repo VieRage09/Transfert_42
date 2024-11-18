@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:03:53 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/13 00:10:40 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/18 16:30:23 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ static char	*get_path(char *cmd, char **cmd_tab)
 	while (cmd_tab[i])
 	{
 		absolute_path = ft_strjoin(cmd_tab[i], prepared_cmd);
-		if (access(absolute_path, F_OK) == 0
-			&& access(absolute_path, X_OK) == 0)
+		if (access(absolute_path, F_OK) == 0)
+			// && access(absolute_path, X_OK) == 0)
 		{
 			free(prepared_cmd);
 			return (absolute_path);

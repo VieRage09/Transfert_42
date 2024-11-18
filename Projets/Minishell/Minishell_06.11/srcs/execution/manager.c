@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 23:02:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/16 06:03:35 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/18 16:48:09 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,14 @@ int launch_exec(t_token *s_token, char ***env_pt, t_env **s_env)
 		// if (pipefd)
 		// 	free(pipefd);
 	}
-	printf("End\n");
 	free_s_manager(s_manager);
 	return (get_status_code(id));
 }
+
+// si OLDPWD unset	--> Jamais set de nouveau (env / export ne les affiche pas)
+//					--> cd - fonctionne normalement
+// si PWD unset		--> Jamais set de nouveau (env / export ne les affiche pas)
+//					--> pwd fonctionne correctement
+//					--> Au premier changement de cwd apres unset, PWD="". Un nouveau changement retabli sa valeur correct
+
+// Un simple "export PWD" ou "export OLDPWD" suffit a les reset a la bonne valeur comme si ils etaient juste masque

@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:22:46 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/16 06:16:50 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/18 16:36:10 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,25 @@ static int	execute(t_exec *s_exec, t_env *s_env)
 		return (2);
 	path = get_cmd_path(s_env, cmd_tab[0]);
 	if (!path)
-		path = ft_strdup(cmd_tab[0]); // Check valeur de retour ???
-	if (execve(path, cmd_tab, s_exec->env_tab) != 0)
-		perror("Execve failed");
-	ft_free_tab((void **)cmd_tab);
-	if (access(path, F_OK) == 0 && access(path, X_OK) != 0)
 	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd_tab[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
+		ft_free_tab((void **)cmd_tab);
+		return (127);
+	}
+	if (access(path, X_OK) != 0)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(path, 2);
+		ft_putstr_fd(": Permission denied\n", 2);
+		ft_free_tab((void **)cmd_tab);
 		free(path);
 		return (126);
 	}
+	if (execve(path, cmd_tab, s_exec->env_tab) != 0)
+		perror("Execve failed");
+	ft_free_tab((void **)cmd_tab);
 	free(path);
 	return (127);
 }
