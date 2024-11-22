@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 23:02:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/20 17:48:09 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/22 17:43:41 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	get_status_code(pid_t lastid)
 // Mallocs a cmd tab containing only the cmd and its args 
 // Returns the structure created
 // Returns NULL on error
-static t_exec *init_s_exec(t_token *s_token, int *pipefd, char **env)
+static t_exec *init_s_exec(t_token *s_token, char **env)
 {
 	t_exec *s_exec;
 
@@ -47,10 +47,6 @@ static t_exec *init_s_exec(t_token *s_token, int *pipefd, char **env)
 	if (!s_exec)
 		return (NULL);
 	s_exec->cmd_block = s_token;
-	if (pipefd)
-		s_exec->pipefd = pipefd;
-	else
-		s_exec->pipefd = NULL;
 	s_exec->env_tab = env;
 	return (s_exec);
 }
@@ -68,19 +64,13 @@ static t_manager	*init_s_manager(t_token *s_token)
 	if (!s_manager)
 		return (NULL);
 	s_manager->s_exec = NULL;
-	s_manager->rdpipe = malloc(sizeof(int));
-	if (!s_manager->rdpipe)
-	{
-		free(s_manager);
-		return (NULL);
-	}
-	*(s_manager->rdpipe) = -1;
+	s_manager->prev_pipe = NULL;
+	s_manager->pipefd = NULL;
 	if (search_next_token(s_token, HEREDOC) != NULL)
 	{
 		s_manager->hd_tab = new_hd_tab(s_token);
 		if (!s_manager->hd_tab)
 		{
-			free(s_manager->rdpipe);
 			free(s_manager);
 			return (NULL);
 		}
@@ -106,8 +96,6 @@ int launch_exec(t_token *s_token, char ***env_pt, t_env **s_env)
 {
 	t_manager	*s_manager;
 	int id;
-	int *pipefd;
-
 
 	if (!s_token || !*env_pt || !*s_env)
 	{
@@ -122,9 +110,12 @@ int launch_exec(t_token *s_token, char ***env_pt, t_env **s_env)
 	}
 	while (s_token)
 	{
-		if (create_pipe(s_token, &pipefd) > 0)
+		if (create_pipe(s_manager, s_token) > 0)
+		{
+			free_s_manager(s_manager);
 			return (3);
-		s_manager->s_exec = init_s_exec(s_token, pipefd, *env_pt);
+		}
+		s_manager->s_exec = init_s_exec(s_token, *env_pt);
 		if (!s_manager->s_exec)
 			return (4);
 		if (is_builtin(s_manager->s_exec->cmd_block) > 0)
@@ -134,12 +125,11 @@ int launch_exec(t_token *s_token, char ***env_pt, t_env **s_env)
 		if (s_manager->hd_tab)
 			if (update_hd_tab(s_token, &(s_manager->hd_tab)) != 0)
 				return (5);
-		continue_exec(&s_token, pipefd, s_manager->rdpipe);
+		continue_exec(&s_token, s_manager);
 		if (id < 0)
 			return (6);
-		free_s_exec(s_manager->s_exec);
-		// if (pipefd)
-		// 	free(pipefd);
+		free(s_manager->s_exec);
+		s_manager->s_exec = NULL;
 	}
 	free_s_manager(s_manager);
 	return (get_status_code(id));

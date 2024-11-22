@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 13:14:16 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/07 03:47:59 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/22 17:59:47 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,14 +118,18 @@ int	set_fd_in_out(int *fdin, int *fdout, t_manager *s_manager)
 		}
 		curs = curs->next;
 		if (*fdin == -1 || *fdout == -1)
+		{
+			clean_close(*fdin);
+			clean_close(*fdout);
 			return (1);
+		}
 	}
 	if (*fdin == -2) // donc aucun operateur de redirection n'a ete trouve ou il y en a un mais il est seul cette grosse merde
 	{
 		if (s_manager->s_exec->cmd_block->prev && is_type(s_manager->s_exec->cmd_block->prev, PIPE))
 		{
 			printf("rdpipe returned as fdin\n");
-			*fdin = *(s_manager->rdpipe);
+			*fdin = s_manager->prev_pipe[0];
 		}
 		else
 			*fdin = STDIN_FILENO;
@@ -133,7 +137,7 @@ int	set_fd_in_out(int *fdin, int *fdout, t_manager *s_manager)
 	if (*fdout == -2)
 	{
 		if (curs && is_type(curs, PIPE))
-			*fdout = s_manager->s_exec->pipefd[1];
+			*fdout = s_manager->pipefd[1];
 		else
 			*fdout = STDOUT_FILENO;
 	}

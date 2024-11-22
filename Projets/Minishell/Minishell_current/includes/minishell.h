@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lberne <lberne@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/20 17:12:20 by lberne           ###   ########.fr       */
+/*   Updated: 2024/11/22 17:43:17 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ typedef	struct s_data
 typedef struct s_exec
 {
     t_token *cmd_block;
-    int     *pipefd;
     int     readpipe;
     char    **env_tab;
 }               t_exec;
@@ -79,7 +78,8 @@ typedef struct s_exec
 typedef struct s_manager
 {
 	t_exec	*s_exec;
-	int		*rdpipe;
+    int     *pipefd;
+	int		*prev_pipe;
 	int		**hd_tab;
 }				t_manager;
 
@@ -130,11 +130,11 @@ char	*get_cmd_path(t_env *s_env, char *cmd);
 
 // EXEC_CMD.C		3	X
 int		exec_cmd(t_manager *s_manager, t_env *s_env, char ***env_pt);
-void	continue_exec(t_token **s_token, int *pipefd, int *rdpipe);
+void	continue_exec(t_token **s_token, t_manager *s_manager);
 
 // FREE.C           2   X
+int     clean_close(int fd);
 void	free_s_manager(t_manager *s_manager);
-void	free_s_exec(t_exec *s_exec);
 
 // HERE_DOC.C       2   X
 int     **new_hd_tab(t_token *s_token);
@@ -151,7 +151,7 @@ int		redirect_input(int fdin, int fdout);
 int		launch_exec(t_token *s_token, char ***env_pt, t_env **s_env);
 
 // PIPE.C			1	X
-int		create_pipe(t_token *s_token, int **pipefd);
+int		create_pipe(t_manager *s_manager, t_token *s_token);
 
 // UTILS.C			2	V
 void	print_cmd(t_token *s_token);

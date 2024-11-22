@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:22:46 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/18 16:36:10 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/22 17:54:25 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,24 +93,22 @@ int	exec_cmd(t_manager *s_manager, t_env *s_env, char ***env_pt)
 // Closes writing end of the current pipe and update rd_pipe to the reading end
 // of the current pipe
 // If no pipe is found, s_token will be set to NULL and the exec loop will stop
-void	continue_exec(t_token **s_token, int *pipefd, int *rdpipe)
+void	continue_exec(t_token **s_token, t_manager *s_manager)
 {
-	if (*rdpipe > 2)
+	if (s_manager->prev_pipe)
 	{
-		printf("Closing rdpipe = %i\n", *rdpipe);
-		if (close(*rdpipe) != 0)
-			perror("Close failed(Continue exec rdpipe)");
+		if (close(s_manager->prev_pipe[0]) != 0)
+			perror("Close failed(Continue exec prev_pipe[0])");
+		free(s_manager->prev_pipe);
+	}
+	if (s_manager->pipefd)
+	{
+		s_manager->prev_pipe = s_manager->pipefd;
+		if (close(s_manager->pipefd[1]) != 0)
+			perror("Close failed");
+		s_manager->pipefd = NULL;
 	}
 	*s_token = search_next_token(*s_token, PIPE);
 	if (*s_token)
-	{
 		*s_token = (*s_token)->next;
-		*rdpipe = pipefd[0];
-	}
-	if (pipefd)
-	{
-		if (close(pipefd[1]) != 0)
-			perror("Close failed(Continue exec pipefd[1])");
-		free(pipefd);
-	}
 }

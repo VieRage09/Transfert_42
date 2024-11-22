@@ -6,13 +6,13 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 18:23:57 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/02 02:16:09 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/22 17:14:14 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	close_hd_tab_fd(int	**tab)
+static int	close_hd_tab_fd(int	**tab)
 {
 	int	i;
 
@@ -29,27 +29,28 @@ int	close_hd_tab_fd(int	**tab)
 	return (0);
 }
 
+int	clean_close(int fd) // Tres bancal
+{
+	struct stat	info;
+	if (fstat(fd, &info) == 0)
+		if (close(fd) != 0)
+			perror("Close failed");
+	return (0);
+}
+
 void	free_s_manager(t_manager *s_manager)
 {
 	if (!s_manager)
 		return ;
-	free(s_manager->rdpipe);
 	if (s_manager->hd_tab)
 	{
 		if (close_hd_tab_fd(s_manager->hd_tab) != 0)
 			ft_putstr_fd("Close error in close_hd_tab_fd function", 2);
 		ft_free_tab((void **)s_manager->hd_tab);
 	}
-	// if (s_manager->s_exec)
-	// 	free_s_exec(s_manager->s_exec);
+	if (s_manager->pipefd)
+		free(s_manager->pipefd);
+	if (s_manager->s_exec)
+		free(s_manager->s_exec);
 	free(s_manager);
-}
-
-void	free_s_exec(t_exec *s_exec)
-{
-	if (!s_exec)
-		return ;
-	// if (s_exec->pipefd)
-	// 	free(s_exec->pipefd);
-	free(s_exec);
 }

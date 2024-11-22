@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 08:29:04 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/12 23:37:17 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/22 18:04:30 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static int	valid_arg(char *str)
 int	exec_echo(char **cmd_tab)
 {
 	int	i;
+	int	length;
 	int	with_option;
 
 	if (!cmd_tab)
@@ -52,9 +53,10 @@ int	exec_echo(char **cmd_tab)
 	with_option = i;
 	while (cmd_tab[i])
 	{
-		if (write(1, cmd_tab[i], ft_strlen(cmd_tab[i])) < 0)
+		length = write(1, cmd_tab[i], ft_strlen(cmd_tab[i]));
+		if (length < 0)
 			return (1);
-		if (cmd_tab[i + 1])
+		if (cmd_tab[i + 1] && length > 0)
 			if (write(1, " ", 1) < 0)
 				return (1);
 		i++;

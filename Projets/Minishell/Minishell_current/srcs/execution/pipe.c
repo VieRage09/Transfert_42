@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:06:40 by tlebon            #+#    #+#             */
-/*   Updated: 2024/10/27 17:53:10 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/22 17:15:36 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,33 +17,32 @@
 // Returns 0 if a pipe is created, -1 if no PIPE token is found and pipefd
 // is assigned NULL
 // Returns > 0 on error
-int	create_pipe(t_token *s_token, int **pipefd)
+int	create_pipe(t_manager *s_manager, t_token *s_token)
 {
 	t_token	*curs;
 
-	if (!s_token)
+	if (!s_manager || !s_token)
 		return (1);
 	curs = s_token;
 	while (curs)
 	{
 		if (is_type(curs, PIPE))
 		{
-			*pipefd = malloc(2 * sizeof(int));
-			if (!*pipefd)
+			s_manager->pipefd = malloc(2 * sizeof(int));
+			if (!s_manager->pipefd)
 				return (2);
-			if (pipe(*pipefd) != 0)
+			if (pipe(s_manager->pipefd) != 0)
 			{
 				perror("Pipe failed");
-				free(*pipefd);
 				return (3);
 			}
 			printf("Pipe created\n");
-			printf("Pipefd[0] = %i / Pipefd[1] = %i\n", (*pipefd)[0], (*pipefd)[1]);
+			printf("Pipefd[0] = %i / Pipefd[1] = %i\n", (s_manager->pipefd)[0], (s_manager->pipefd)[1]);
 			return (0);
 		}
 		curs = curs->next;
 	}
 	printf("No pipe created\n");
-	*pipefd = NULL;
+	s_manager->pipefd = NULL;
 	return (-1);
 }
