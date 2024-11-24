@@ -1,0 +1,10 @@
+{
+	"files.associations": {
+		"minishell.h": "c",
+		"pipex_bonus.h": "c",
+		"get_next_line.h": "c",
+		"libft.h": "c",
+		"stdbool.h": "c"
+	},
+	"C_Cpp.errorSquiggles": "enabled"
+}
