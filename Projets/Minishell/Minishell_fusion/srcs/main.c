@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lberne <lberne@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 17:39:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/20 15:27:46 by lberne           ###   ########.fr       */
+/*   Updated: 2024/11/24 18:34:48 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	main(int ac, char **av, char **env)
 			continue ;
 		if (!(data.tokens = let_me_cook(line, &data)))
 			break ;
-		print_tokens(data.tokens);
+		// print_tokens(data.tokens);
 		data.ret = launch_exec(data.tokens, &env_cpy, &data.env_lst);
 		free_tokens(data.tokens);
 		data.tokens = NULL;

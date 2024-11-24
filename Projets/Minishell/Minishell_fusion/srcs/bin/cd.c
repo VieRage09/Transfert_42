@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:37:31 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/12 23:26:27 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/24 19:07:27 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ static int	cd_env_update(t_env **s_env, char *name, char *value, char ***env_pt)
 {
 	char	*tmp;
 	
+	if (!env_extractor(name, *s_env))
+		return (0);
 	tmp = ft_strjoin("=", value);	
 	if (!tmp)
 		return (2);
@@ -61,24 +63,70 @@ int	exec_cd(char **cmd_tab, t_env **s_env, char ***env_pt)
 	print_pwd = 0;
 	path = expand_path(*s_env, cmd_tab[1], &print_pwd);
 	old_pwd = getcwd(NULL, 0);
+	if (!old_pwd)
+		perror("getcwd");
 	if (chdir(path) != 0)
 	{
 		perror("cd");
 		return (1);
 	}
 	path = getcwd(NULL, 0);
-	if (!path || !old_pwd)
-		return (1);
+	// if (!path || !old_pwd) // A revoir pour renvoyer les bonnes erreurs
+	if (!path) // A revoir pour renvoyer les bonnes erreurs
+		return (2);
 	if (cd_env_update(s_env, "PWD", path, env_pt) != 0)
 	{
 		free(path);
-		return (1);
+		return (3);
 	}
 	free(path);
 	if (cd_env_update(s_env, "OLDPWD", old_pwd, env_pt) != 0)
-		return (1);
+		return (3);
 	if (print_pwd)
 		exec_pwd(*s_env);
 	free(old_pwd);
 	return (0);
 }
+
+// Solution propose par chat gpt : Utiliser stat pour verifier si le dossier cible existe bien
+// Voir ci dessous
+
+
+
+// #include <stdio.h>
+// #include <unistd.h>
+// #include <errno.h>
+// #include <string.h>
+// #include <sys/stat.h>
+
+// // Fonction qui vérifie si le répertoire existe réellement
+// int directory_exists(const char *path) {
+//     struct stat sb;
+//     return (stat(path, &sb) == 0 && S_ISDIR(sb.st_mode));
+// }
+
+// int main() {
+//     // Tente de changer de répertoire vers ".."
+//     if (!directory_exists("..")) {
+//         // Si le répertoire parent n'existe pas
+//         fprintf(stderr, "bash: cd: ..: No such file or directory\n");
+//         return 1;  // Retourne une erreur
+//     }
+
+//     // Si le répertoire existe, on effectue le changement de répertoire
+//     if (chdir("..") == -1) {
+//         // Si chdir échoue pour une autre raison
+//         fprintf(stderr, "bash: cd: ..: %s\n", strerror(errno));
+//         return 1;  // Retourne une erreur
+//     }
+
+//     // Si chdir réussit, on peut afficher le répertoire courant
+//     char cwd[1024];
+//     if (getcwd(cwd, sizeof(cwd)) != NULL) {
+//         printf("Répertoire courant: %s\n", cwd);
+//     } else {
+//         perror("Erreur lors de l'obtention du répertoire courant");
+//     }
+
+//     return 0;
+// }

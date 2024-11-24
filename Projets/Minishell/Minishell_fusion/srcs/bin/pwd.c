@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:34:52 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/12 23:41:41 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/24 17:40:01 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	exec_pwd(t_env *s_env)
 	path = getcwd(NULL, 0);
 	if (!path)
 	{
-		perror("getcwd failed");
+		perror("getcwd failed"); // Pas le bon msg d'erreur
 		return (1);
 	}
 	printf("%s\n", path);
