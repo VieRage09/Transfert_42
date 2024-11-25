@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lberne <lberne@student.42.fr>              +#+  +:+       +#+         #
+#    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/09 19:17:15 by tlebon            #+#    #+#              #
-#    Updated: 2024/11/25 17:43:06 by lberne           ###   ########.fr        #
+#    Updated: 2024/11/25 22:52:34 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -124,6 +124,7 @@ SRC =																		\
 		$(EXEC_PATH)command.c												\
 		$(EXEC_PATH)exec_cmd.c												\
 		$(EXEC_PATH)free.c													\
+		$(EXEC_PATH)gnl_special.c											\
 		$(EXEC_PATH)here_doc.c												\
 		$(EXEC_PATH)in_out_files.c											\
 		$(EXEC_PATH)manager.c												\

@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 18:23:57 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/22 17:14:14 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/25 23:12:44 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	close_hd_tab_fd(int	**tab)
 	if (!tab || !*tab)
 		return (1);
 	i = 0;
-	while (tab[i]) 
+	while (tab[i])
 	{
 		// Use fstat to check if each fd is still open
 		if (close(tab[i][0]) != 0)
@@ -32,6 +32,7 @@ static int	close_hd_tab_fd(int	**tab)
 int	clean_close(int fd) // Tres bancal
 {
 	struct stat	info;
+
 	if (fstat(fd, &info) == 0)
 		if (close(fd) != 0)
 			perror("Close failed");

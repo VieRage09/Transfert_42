@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lberne <lberne@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 15:18:45 by lberne            #+#    #+#             */
-/*   Updated: 2024/11/25 18:09:30 by lberne           ###   ########.fr       */
+/*   Updated: 2024/11/25 23:07:59 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	handle_sigint(int sig)
 	if (g_heredoc)
 	{
 		g_heredoc = false;
+		// if (close(STDIN_FILENO) != 0)
+		// 	perror("Close");
 	}
 	rl_replace_line("", 0);
 	rl_on_new_line();

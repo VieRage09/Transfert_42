@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/25 20:27:05 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/25 22:55:03 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,9 @@ void	continue_exec(t_token **s_token,t_manager *s_manager);
 // FREE.C           2   X
 int     clean_close(int fd);
 void	free_s_manager(t_manager *s_manager);
+
+// GNL_SPECIAL		6	X
+char	*get_next_line_hd(int fd);
 
 // HERE_DOC.C       2   X
 int     **new_hd_tab(t_token *s_token);
