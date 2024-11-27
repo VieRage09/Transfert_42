@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lberne <lberne@student.42.fr>              +#+  +:+       +#+         #
+#    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/09 19:17:15 by tlebon            #+#    #+#              #
-#    Updated: 2024/11/27 17:37:52 by lberne           ###   ########.fr        #
+#    Updated: 2024/11/27 20:04:27 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -116,6 +116,7 @@ SRC =																		\
 		$(BIN_PATH)echo.c													\
 		$(BIN_PATH)env.c													\
 		$(BIN_PATH)exec_bin.c												\
+		$(BIN_PATH)exit.c													\
 		$(BIN_PATH)export.c													\
 		$(BIN_PATH)pwd.c													\
 		$(BIN_PATH)unset.c													\
@@ -140,7 +141,6 @@ SRC =																		\
 		$(PARS_PATH)free.c													\
 		$(PARS_PATH)utils.c													\
 		$(PARS_PATH)type_readers.c											\
-		$(PARS_PATH)exit.c													\
 		$(PARS_PATH)init.c													\
 		$(PARS_PATH)utils_2.c												\
 		main.c																\

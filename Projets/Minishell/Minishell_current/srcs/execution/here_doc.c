@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lberne <lberne@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 22:55:52 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/27 17:35:43 by lberne           ###   ########.fr       */
+/*   Updated: 2024/11/27 20:01:33 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ static int	*write_new_hd_pipe(char *delimiter)
 		ft_putstr(">");
 		input = get_next_line(STDIN_FILENO); // erreur la ?
 	}
-	ft_putstr_fd("gnl finished\n", 2);
 	free(input);
 	if (close(new_pipe[1]) != 0)
 		perror("Close failed");

@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 23:02:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/26 19:38:45 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/27 20:12:22 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,13 +137,10 @@ int	launch_exec(t_token *s_token, char ***env_pt, t_env **s_env)
 	}
 	s_manager = init_s_manager(s_token);
 	if (!s_manager)
-	{
-		printf("S_manager not initialized properly\nNothing was executed\n");
-		return (2);
-	}
+		return (130);
 	id = execute_prompt(s_token, env_pt, s_env, s_manager);
 	free_s_manager(s_manager);
 	if (id < 0)
-		return (3);
+		return (2);
 	return (get_status_code(id));
 }

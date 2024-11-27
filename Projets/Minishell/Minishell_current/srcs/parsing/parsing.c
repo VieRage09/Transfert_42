@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lberne <lberne@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 17:11:12 by lberne            #+#    #+#             */
-/*   Updated: 2024/11/25 18:39:48 by lberne           ###   ########.fr       */
+/*   Updated: 2024/11/27 20:34:21 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	let_me_cook(t_data *data)
 	}
 	physio(data->tokens);
 	finishes(data->tokens, *data);
-	if (ft_exit(data->tokens, data))
-		return (0);
+	// if (ft_exit(data->tokens, data))
+	// 	return (0);
 	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lberne <lberne@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/26 16:38:22 by lberne           ###   ########.fr       */
+/*   Updated: 2024/11/27 23:22:56 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,9 @@ int		exec_env(t_env *s_env);
 // EXEC_BIN.C       4   VC
 int		exec_builtin(t_manager *s_manager, t_env **s_env, char ***env_pt);
 
+// EXIT.C
+int		exec_exit(char **cmd_tab);
+
 // EXPORT.C			5	VC
 int		exec_export(char **args, t_env **s_env, char ***env_pt);
 
@@ -174,8 +177,6 @@ void	init_minishell(t_data *data, int ac);
 void	heredoc_sigint_handler(int sig);
 void	handle_sigint(int sig);
 
-// EXIT.C
-bool	ft_exit(t_token *res, t_data *data);
 
 // PARSING.C
 int		handle_special_token(char *ingr, int start, char *temp);

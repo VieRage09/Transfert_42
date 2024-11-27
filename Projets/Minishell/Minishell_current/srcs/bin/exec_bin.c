@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 23:44:07 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/25 20:54:20 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/27 23:15:03 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	execute_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt)
 	ret = 1;
 	if (ft_strncmp(cmd_tab[0], "echo", ft_strlen(cmd_tab[0])) == 0)
 		ret = exec_echo(cmd_tab);
-	else if (ft_strncmp(cmd_tab[0], "cd", ft_strlen(cmd_tab[0])) == 0) // Ca va les comparaisons ?
+	else if (ft_strncmp(cmd_tab[0], "cd", ft_strlen(cmd_tab[0])) == 0)
 		ret = exec_cd(cmd_tab, s_env, env_pt);
 	else if (ft_strncmp(cmd_tab[0], "pwd", ft_strlen(cmd_tab[0])) == 0)
 		ret = exec_pwd(*s_env);
@@ -39,8 +39,8 @@ static int	execute_builtin(t_exec *s_exec, t_env **s_env, char ***env_pt)
 	else if (ft_strncmp(cmd_tab[0], "env", ft_strlen(cmd_tab[0])) == 0)
 		ret = exec_env(*s_env);
 	else if (ft_strncmp(cmd_tab[0], "exit", ft_strlen(cmd_tab[0])) == 0)
-		ret = 0;
-	ft_free_tab((void **)cmd_tab); // Fait un double free quand buitin pas fork
+		ret = exec_exit(cmd_tab);
+	ft_free_tab((void **)cmd_tab);
 	return (ret);
 }
 
