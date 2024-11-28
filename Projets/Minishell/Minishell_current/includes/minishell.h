@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/27 23:22:56 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/28 22:41:11 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ typedef	struct s_data
 	char			*line;
 	char			**env_cpy;
 	long long int		ret;
+	bool			loop;
 }				t_data;
 
 typedef struct s_exec
@@ -160,7 +161,7 @@ int     set_fd_in_out(int *fdin, int *fdout, t_manager *s_manager);
 int		redirect_input(int fdin, int fdout);
 
 // MANAGER.C		4	X
-int		launch_exec(t_token *s_token, char ***env_pt, t_env **s_env);
+int		launch_exec(t_data *s_data);
 
 // PIPE.C			1	X
 int		create_pipe(t_manager *s_manager, t_token *s_token);

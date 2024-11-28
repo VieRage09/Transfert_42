@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 23:02:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/27 20:12:22 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/28 22:51:34 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,11 @@ static t_manager	*init_s_manager(t_token *s_token)
 // If needed, the hd_tab is updated and the loop goes on until the end of
 // the prompt
 // Returns id on success or -1 on failure
-static int	execute_prompt(t_token *s_token, char ***env_pt, t_env **s_env,
-							t_manager *s_manager)
+static int	execute_prompt(t_data *s_data, t_manager *s_manager)
 {
 	int	id;
 
-	while (s_token)
+	while (s_data->s_token)
 	{
 		if (create_pipe(s_manager, s_token) > 0)
 			return (-1);
@@ -125,20 +124,22 @@ static int	execute_prompt(t_token *s_token, char ***env_pt, t_env **s_env,
 // function needs
 // FREE ENCORE A REVOIR 
 // Returns the correct status code or 1, 2 or 3 on error
-int	launch_exec(t_token *s_token, char ***env_pt, t_env **s_env)
+// int	launch_exec(t_token *s_token, char ***env_pt, t_env **s_env)
+int	launch_exec(t_data *s_data)
 {
 	t_manager	*s_manager;
 	int			id;
 
-	if (!s_token || !*env_pt || !*s_env)
+	if (!s_data->tokens || !s_data->env_cpy || !s_data->env_lst)
 	{
 		printf("s_token or env_list of env is NULL\n");
 		return (1);
 	}
-	s_manager = init_s_manager(s_token);
+	s_manager = init_s_manager(s_data->tokens);
 	if (!s_manager)
 		return (130);
-	id = execute_prompt(s_token, env_pt, s_env, s_manager);
+	// id = execute_prompt(s_token, env_pt, s_env, s_manager);
+	id = execute_prompt(s_data, s_manager);
 	free_s_manager(s_manager);
 	if (id < 0)
 		return (2);

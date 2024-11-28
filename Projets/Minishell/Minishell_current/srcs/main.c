@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lberne <lberne@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 17:39:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/27 17:25:26 by lberne           ###   ########.fr       */
+/*   Updated: 2024/11/28 22:41:22 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,12 @@ int	main(int ac, char **av, char **env)
 	t_data	data;
 
 	init_minishell(&data, ac);
+	data.loop = true;
 	if (!create_env_lst(env, &data))
 		return (free_all(&data), -1);
 	if (update_env_tab(data.env_lst, &data.env_cpy, 0) != 0)
 		return (data.ret = 1, 1);
-	while (1)
+	while (data.loop)
 	{
 		data.line = readline("\033[1;94mminishell>\033[0m ");
 		if (!data.line)
@@ -44,7 +45,7 @@ int	main(int ac, char **av, char **env)
 		if (!let_me_cook(&data))
 			break ;
 		print_tokens(data.tokens);
-		data.ret = launch_exec(data.tokens, &data.env_cpy, &data.env_lst);
+		data.ret = launch_exec(&data);
 		ft_reset(&data);
 	}
 	free_all(&data);
