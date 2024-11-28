@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 23:02:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/29 00:01:55 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/29 00:55:48 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static t_manager	*init_s_manager(t_token *s_token)
 // Returns id on success or -1 on failure
 static int	execute_prompt(t_data *s_data, t_manager *s_manager)
 {
-	int	id;
+	int		id;
 	t_token	*tokens;
 
 	tokens = s_data->tokens;
@@ -106,7 +106,6 @@ static int	execute_prompt(t_data *s_data, t_manager *s_manager)
 			return (-1);
 		if (is_builtin(s_manager->s_exec->cmd_block) > 0)
 			id = exec_builtin(s_manager, s_data);
-			// id = exec_builtin(s_manager, &s_data->env_lst, &s_data->env_cpy);
 		else
 			id = exec_cmd(s_manager, s_data->env_lst, &s_data->env_cpy);
 		free(s_manager->s_exec);
@@ -141,7 +140,6 @@ int	launch_exec(t_data *s_data)
 	s_manager = init_s_manager(s_data->tokens);
 	if (!s_manager)
 		return (130);
-	// id = execute_prompt(s_token, env_pt, s_env, s_manager);
 	id = execute_prompt(s_data, s_manager);
 	free_s_manager(s_manager);
 	if (id < 0)

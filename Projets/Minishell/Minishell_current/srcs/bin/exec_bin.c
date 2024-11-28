@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 23:44:07 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/29 00:24:30 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/29 00:50:06 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,11 @@ static int	exec_builtin_pipeline(t_manager *s_manager, t_data *s_data)
 	}
 	if (id == 0)
 	{
-		if (close(s_manager->pipefd[0]) != 0)
-			perror("Close failed");
+		if (s_manager->pipefd)
+			if (close(s_manager->pipefd[0]) != 0)
+				perror("Close failed");
 		if (set_fd_in_out(&fdin, &fdout, s_manager) != 0)
 			exit (1);
-		// printf("fdin = %i, fdout = %i\n", fdin, fdout);
 		if (redirect_input(fdin, fdout) != 0)
 		{
 			ft_putstr_fd("Redirect input error :\n", 2);

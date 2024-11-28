@@ -6,18 +6,18 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 15:07:56 by lberne            #+#    #+#             */
-/*   Updated: 2024/11/29 00:17:19 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/29 00:51:30 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /*atoi for long long int*/
-long long int ft_atolli(const char *nptr)
+long long int	ft_atolli(const char *nptr)
 {
-	int i;
-	long long int nbr;
-	int sign;
+	int				i;
+	long long int	nbr;
+	int				sign;
 
 	i = 0;
 	nbr = 0;
@@ -37,7 +37,7 @@ long long int ft_atolli(const char *nptr)
 }
 
 /*norm...*/
-unsigned long long set_limit(char c)
+unsigned long long	set_limit(char c)
 {
 	if (c == '-')
 		return (-(long long)LLONG_MIN);
@@ -46,11 +46,11 @@ unsigned long long set_limit(char c)
 }
 
 /*check if the error code is in range (long long int)*/
-bool is_long_long_int(const char *str)
+bool	is_long_long_int(const char *str)
 {
-	unsigned long long limit;
-	unsigned long long result;
-	int digit;
+	unsigned long long	limit;
+	unsigned long long	result;
+	int					digit;
 
 	result = 0;
 	if (!str || *str == '\0')
@@ -75,7 +75,7 @@ bool is_long_long_int(const char *str)
 	return (true);
 }
 
-static int non_num_err(char *code)
+static int	non_num_err(char *code)
 {
 	printf("exit: %s: ", code);
 	printf("numeric argument required\n");
@@ -122,11 +122,10 @@ static int non_num_err(char *code)
 // 		}
 // 	}
 // }
-int exec_exit(char **cmd_tab, t_data *s_data)
+int	exec_exit(char **cmd_tab, t_data *s_data)
 {
 	int	n_arg;
 
-	// printf("exit\n");
 	n_arg = 0;
 	while (cmd_tab[n_arg])
 		n_arg++;

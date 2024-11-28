@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:41:33 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/20 18:06:58 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/29 00:38:50 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static int	assign_check_arg(char *var, char **value, char **name, int *ret)
 static void	print_export(t_env *to_print)
 {
 	if (to_print->printed)
-		printf("export %s=\"%s\"\n", to_print->name, to_print->str);
+		printf("export %s=\"%s\"\n", to_print->name, to_print->str); // Peut creer des problemes si to_print->str n'existe pas non ?
 	else
 		printf("export %s\n", to_print->name);
 }

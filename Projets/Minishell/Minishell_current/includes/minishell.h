@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/29 00:13:42 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/29 00:57:56 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,35 +92,35 @@ typedef struct s_manager
 
 ///// BUILTIN /////////////////////////////////////////////////////////////////
 
-// BIN_UTILS.C      4   V
+// BIN_UTILS.C      5   VC
 t_env	*find_variable(char *name, t_env *s_env);
 t_env	*copy_s_env(t_env *s_env);
 int     already_exists(t_env *s_env, char *name);
 char    *get_env_str(t_env *s_env, char *name);
 int     set_env_str(t_env **s_env, char *name, char *str);
 
-// CD.C				2	VC
+// CD.C				4	V
 int		exec_cd(char **cmd_tab, t_env **s_env, char ***env_pt);
 
 // ECHO.C			2	V
 int		exec_echo(char **cmd_tab);
 
-// ENV.C			1	V
+// ENV.C			1	VC
 int		exec_env(t_env *s_env);
 
-// EXEC_BIN.C       4   VC
+// EXEC_BIN.C       4   XC
 int		exec_builtin(t_manager *s_manager, t_data *s_data);
 
-// EXIT.C
+// EXIT.C			5	V
 int		exec_exit(char **cmd_tab, t_data *s_data);
 
-// EXPORT.C			5	VC
+// EXPORT.C			5	X
 int		exec_export(char **args, t_env **s_env, char ***env_pt);
 
-// PWD.C			1	V
+// PWD.C			1	VC
 int		exec_pwd(t_env *s_env);
 
-// UNSET.C			2	X
+// UNSET.C			2	VC
 int		exec_unset(char **cmd_tab, t_env **s_env, char ***env_pt);
 void	free_env_node(t_env *node, t_env **s_env);
 
@@ -146,30 +146,27 @@ void	continue_exec(t_token **s_token,t_manager *s_manager);
 int     clean_close(int fd);
 void	free_s_manager(t_manager *s_manager);
 
-// GNL_SPECIAL		6	X
-char	*get_next_line_hd(int fd);
-
 // HERE_DOC.C       2   X
 int     **new_hd_tab(t_token *s_token);
 int     chose_hd_fd(int **hd_pipes_tab);
 int		update_hd_tab(t_token *s_token, int ***hd_tab);
 
-// IN_OUT_FILES.C	4   X
-int     open_infile(char *file_path);
-int     open_outfile(char *file_path, int append);
+// IN_OUT_FILES.C	5   VC
 int     set_fd_in_out(int *fdin, int *fdout, t_manager *s_manager);
 int		redirect_input(int fdin, int fdout);
 
-// MANAGER.C		4	X
+// MANAGER.C		5	VC
 int		launch_exec(t_data *s_data);
 
-// PIPE.C			1	X
+// PIPE.C			1	VC
 int		create_pipe(t_manager *s_manager, t_token *s_token);
 
-// UTILS.C			2	V
-void	print_cmd(t_token *s_token);
+// UTILS.C			5	VC
+void	print_cmd(t_token *s_token); // A retirer
 t_token	*search_next_cmd(t_token *s_token);
 t_token	*search_next_token(t_token *s_token, int type);
+int     open_infile(char *file_path);
+int     open_outfile(char *file_path, int append);
 
 ////////////////////////////////////////////////////////////////////////////////
 

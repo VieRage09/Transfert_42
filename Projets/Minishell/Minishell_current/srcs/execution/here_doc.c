@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 22:55:52 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/27 20:01:33 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/29 00:48:01 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	*write_new_hd_pipe(char *delimiter)
 	while (input)
 	{
 		if (g_heredoc_stop)
-			break ;
+			break;
 		if (ft_strlen(input) == ft_strlen(delimiter) + 1
 			&& ft_strncmp(delimiter, input, ft_strlen(delimiter)) == 0)
 		{
@@ -64,7 +64,7 @@ static int	*write_new_hd_pipe(char *delimiter)
 		input = get_next_line(STDIN_FILENO); // erreur la ?
 	}
 	free(input);
-	if (close(new_pipe[1]) != 0)
+	if (close(new_pipe[1]) != 0 || close(new_pipe[0]) != 0)
 		perror("Close failed");
 	free(new_pipe);
 	return (NULL);
