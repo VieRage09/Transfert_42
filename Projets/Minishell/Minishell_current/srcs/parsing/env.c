@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lberne <lberne@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 17:55:37 by lberne            #+#    #+#             */
-/*   Updated: 2024/11/25 18:23:54 by lberne           ###   ########.fr       */
+/*   Updated: 2024/11/28 23:34:19 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,15 @@ int	create_env_lst(char **v_env, t_data *data)
 		if (!temp_env)
 			return (0);
 		name = ft_strdup(temp_env[0]);
-		if (match(name, "SHLVL"))
-			str = iterate_shlvl(temp_env[1]);
+		if (temp_env[1])
+		{
+			if (match(name, "SHLVL"))
+				str = iterate_shlvl(temp_env[1]);
+			else
+				str = ft_strdup(temp_env[1]);
+		}
 		else
-			str = ft_strdup(temp_env[1]);
+			str = ft_strdup("");
 		if (!name || !str)
 			return (0);
 		append_env_lst(&data->env_lst, create_env(name, str, true));
