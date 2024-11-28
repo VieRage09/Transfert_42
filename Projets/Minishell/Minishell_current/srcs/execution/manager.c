@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 23:02:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/28 22:51:34 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/29 00:01:55 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,24 +94,27 @@ static t_manager	*init_s_manager(t_token *s_token)
 static int	execute_prompt(t_data *s_data, t_manager *s_manager)
 {
 	int	id;
+	t_token	*tokens;
 
-	while (s_data->s_token)
+	tokens = s_data->tokens;
+	while (tokens)
 	{
-		if (create_pipe(s_manager, s_token) > 0)
+		if (create_pipe(s_manager, tokens) > 0)
 			return (-1);
-		s_manager->s_exec = init_s_exec(s_token, *env_pt);
+		s_manager->s_exec = init_s_exec(tokens, s_data->env_cpy);
 		if (!s_manager->s_exec)
 			return (-1);
 		if (is_builtin(s_manager->s_exec->cmd_block) > 0)
-			id = exec_builtin(s_manager, s_env, env_pt);
+			id = exec_builtin(s_manager, s_data);
+			// id = exec_builtin(s_manager, &s_data->env_lst, &s_data->env_cpy);
 		else
-			id = exec_cmd(s_manager, *s_env, env_pt);
+			id = exec_cmd(s_manager, s_data->env_lst, &s_data->env_cpy);
 		free(s_manager->s_exec);
 		s_manager->s_exec = NULL;
 		if (s_manager->hd_tab)
-			if (update_hd_tab(s_token, &(s_manager->hd_tab)) != 0)
+			if (update_hd_tab(tokens, &(s_manager->hd_tab)) != 0)
 				return (-1);
-		continue_exec(&s_token, s_manager);
+		continue_exec(&tokens, s_manager);
 		if (id < 0)
 			return (-1);
 	}

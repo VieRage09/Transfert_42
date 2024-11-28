@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 15:07:56 by lberne            #+#    #+#             */
-/*   Updated: 2024/11/27 23:49:25 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/29 00:17:19 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,11 +122,11 @@ static int non_num_err(char *code)
 // 		}
 // 	}
 // }
-int exec_exit(char **cmd_tab)
+int exec_exit(char **cmd_tab, t_data *s_data)
 {
 	int	n_arg;
 
-	printf("exit\n");
+	// printf("exit\n");
 	n_arg = 0;
 	while (cmd_tab[n_arg])
 		n_arg++;
@@ -136,8 +136,9 @@ int exec_exit(char **cmd_tab)
 	{
 		if (!is_long_long_int(cmd_tab[1]))
 			return (non_num_err(cmd_tab[1]));
+		s_data->loop = false;
 		return (ft_atolli(cmd_tab[1]) % 256);
 	}
-	else
-		return (0);
+	s_data->loop = false;
+	return (0);
 }

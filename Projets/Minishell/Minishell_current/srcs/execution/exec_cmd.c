@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:22:46 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/27 21:43:47 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/29 00:26:53 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,9 @@ int	exec_cmd(t_manager *s_manager, t_env *s_env, char ***env_pt)
 	}
 	if (id == 0)
 	{
+		if (s_manager->pipefd)
+			if (close(s_manager->pipefd[0]) != 0)
+				perror("Close failed");
 		if (set_fd_in_out(&fdin, &fdout, s_manager) != 0)
 			exit(1);
 		printf("fdin = %i, fdout = %i\n", fdin, fdout);

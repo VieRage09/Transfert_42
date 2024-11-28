@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 19:24:13 by tlebon            #+#    #+#             */
-/*   Updated: 2024/11/28 22:41:11 by tlebon           ###   ########.fr       */
+/*   Updated: 2024/11/29 00:13:42 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,10 @@ int		exec_echo(char **cmd_tab);
 int		exec_env(t_env *s_env);
 
 // EXEC_BIN.C       4   VC
-int		exec_builtin(t_manager *s_manager, t_env **s_env, char ***env_pt);
+int		exec_builtin(t_manager *s_manager, t_data *s_data);
 
 // EXIT.C
-int		exec_exit(char **cmd_tab);
+int		exec_exit(char **cmd_tab, t_data *s_data);
 
 // EXPORT.C			5	VC
 int		exec_export(char **args, t_env **s_env, char ***env_pt);
