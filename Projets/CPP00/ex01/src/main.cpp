@@ -6,11 +6,12 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 12:53:53 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/22 17:57:37 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/01/22 18:45:11 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/crappy_ph_book.hpp"
+#include "../include/Contact.hpp"			// A VOIR
 
 enum e_input	assign_choice(std::string input)
 {
@@ -41,6 +42,8 @@ void	display_help(bool welcome)
 int main(int ac, char **av)
 {
 	//Phonebook declaration
+	Contact	testnull;
+	Contact	test("Tom", "Lebon", "Tomi", "0000000000", "Macaque");
 	enum e_input	choice;
 	std::string		input;
 
@@ -53,8 +56,11 @@ int main(int ac, char **av)
 		switch (choice)
 		{
 			case ADD:
+				test.set_fname("Jacob");
 				break;
 			case SEARCH:
+				testnull.display_contact_infos(false);
+				test.display_contact_infos(true);
 				break;
 			case EXIT:
 				std::cout << "You successfuly erased everything dummy\n";
