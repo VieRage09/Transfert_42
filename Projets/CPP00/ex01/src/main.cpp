@@ -6,12 +6,11 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 12:53:53 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/22 18:45:11 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/01/23 18:50:56 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/crappy_ph_book.hpp"
-#include "../include/Contact.hpp"			// A VOIR
+#include "../include/crappy.hpp"
 
 enum e_input	assign_choice(std::string input)
 {
@@ -23,6 +22,7 @@ enum e_input	assign_choice(std::string input)
 		return (EXIT);
 	return (NONE);
 }
+
 void	display_help(bool welcome)
 {
 	if (welcome)
@@ -39,14 +39,14 @@ void	display_help(bool welcome)
 			<< "ADD\nSEARCH\nEXIT\n";
 	}
 }
+
 int main(int ac, char **av)
 {
-	//Phonebook declaration
-	Contact	testnull;
-	Contact	test("Tom", "Lebon", "Tomi", "0000000000", "Macaque");
+	PhoneBook		ph_book;
 	enum e_input	choice;
 	std::string		input;
 
+	system("clear");
 	display_help(true);
 	while (true)
 	{
@@ -56,11 +56,12 @@ int main(int ac, char **av)
 		switch (choice)
 		{
 			case ADD:
-				test.set_fname("Jacob");
+				system("clear");
+				ph_book.add_crappy();
 				break;
 			case SEARCH:
-				testnull.display_contact_infos(false);
-				test.display_contact_infos(true);
+				system("clear");
+				ph_book.search_crappy();
 				break;
 			case EXIT:
 				std::cout << "You successfuly erased everything dummy\n";
@@ -70,10 +71,6 @@ int main(int ac, char **av)
 				break;
 		}
 	}
-	
-
-
-
 
 	return (0);
 }

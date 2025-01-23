@@ -6,15 +6,15 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 18:15:18 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/22 18:47:52 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/01/23 18:07:44 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/Contact.hpp"
+#include "../include/crappy.hpp"
 
 // CONSTRUCTEURS & DESTRUCTEUR /////////////////////////////////////////////////
 
-Contact::Contact(){}
+Contact::Contact(): fname("John"), lname("Smith"), nname("Smitty"), number("008"), secret("MI6"){}
 
 Contact::Contact(std::string fname, std::string lname, std::string nname,
 					std::string number, std::string secret)
@@ -101,4 +101,14 @@ void	Contact::display_contact_infos(bool acred)
 	std::cout << "Phone number: " << this->number << std::endl;
 	if (acred)
 		std::cout << "Darkest secret: " << this->secret<< std::endl;
+}
+
+void	Contact::update_infos(std::string firstn, std::string lastn,
+			std::string nickn, std::string phone, std::string secrt)
+{
+	set_fname(firstn);
+	set_lname(lastn);
+	set_nname(nickn);
+	set_number(phone);
+	set_secret(secrt);
 }

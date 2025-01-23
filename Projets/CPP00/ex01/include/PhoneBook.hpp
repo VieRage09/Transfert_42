@@ -1,29 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   crappy_ph_book.hpp                                 :+:      :+:    :+:   */
+/*   PhoneBook.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/22 16:14:30 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/22 18:17:26 by tlebon           ###   ########.fr       */
+/*   Created: 2025/01/23 16:32:23 by tlebon            #+#    #+#             */
+/*   Updated: 2025/01/23 17:45:04 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHONEBOOK_HPP
 # define PHONEBOOK_HPP
 
-#include <iostream>
-#include "Contact.hpp"		// A VOIR
-#include "Phonebook.hpp"	// A VOIR
+#include "crappy.hpp"
 
-enum	e_input{
-	ADD,
-	SEARCH,
-	EXIT,
-	NONE
+class PhoneBook
+{
+	private:
+			Contact		book[8];
+			int			max_contact;
+			int			saved_index;
+			int			current_saved;
+	public:
+			PhoneBook();
+			~PhoneBook();
+			
+			void	set_saved_index(int value);
+			void	set_current_saved(int value);
+
+			int		get_saved_index();
+			int		get_current_saved();
+
+			void	display_saved_contacts();
+			void	add_crappy();
+			void	search_crappy();
+			
 };
-
-
 
 #endif
