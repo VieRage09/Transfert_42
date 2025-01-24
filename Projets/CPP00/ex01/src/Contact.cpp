@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 18:15:18 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/23 18:07:44 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/01/24 13:13:21 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,12 +95,12 @@ void	Contact::set_secret(std::string str)
 
 void	Contact::display_contact_infos(bool acred)
 {
-	std::cout << "First name: " << this->fname << std::endl;
-	std::cout << "Last name: " << this->lname << std::endl;
-	std::cout << "Nickname: " << this->nname << std::endl;
-	std::cout << "Phone number: " << this->number << std::endl;
+	std::cout << "First name: " << fname << std::endl;
+	std::cout << "Last name: " << lname << std::endl;
+	std::cout << "Nickname: " << nname << std::endl;
+	std::cout << "Phone number: " << number << std::endl;
 	if (acred)
-		std::cout << "Darkest secret: " << this->secret<< std::endl;
+		std::cout << "Darkest secret: " << secret<< std::endl;
 }
 
 void	Contact::update_infos(std::string firstn, std::string lastn,

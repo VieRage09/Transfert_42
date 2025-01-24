@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 16:42:15 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/23 19:12:08 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/01/24 13:19:44 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	PhoneBook::add_crappy()
 	}
 }
 
-static void	format_str(std::string& str)
+static void	justify_str(std::string& str)
 {
 	if (str.size() > 10)
 	{
@@ -91,7 +91,7 @@ static void	format_str(std::string& str)
 	else
 	{
 		while (str.size() < 10)
-			str += ' ';
+			str = ' ' + str;
 	}
 }
 
@@ -100,11 +100,11 @@ static void	prepare_strings(int i, Contact contact, std::string& index, std::str
 	index = "          ";
 	index[9] = i + 48;
 	first = contact.get_fname();
-	format_str(first);
+	justify_str(first);
 	last = contact.get_lname();
-	format_str(last);
+	justify_str(last);
 	nick = contact.get_nname();
-	format_str(nick);
+	justify_str(nick);
 }
 void	PhoneBook::search_crappy()
 {
@@ -112,10 +112,23 @@ void	PhoneBook::search_crappy()
 	std::string	prep_fname;
 	std::string	prep_lname;
 	std::string	prep_nname;
+	std::string	input;
 
+	if (current_saved < 1)
+	{
+		std::cout << "No saved contacts\n";
+		return ;
+	}
 	for(int i = 0; i < current_saved; i++)
 	{
 		prepare_strings(i, book[i], prep_index, prep_fname, prep_lname, prep_nname);
 		std::cout << prep_index << "|" << prep_fname << "|" << prep_lname << "|" << prep_nname << std::endl;
 	}
+	do
+	{
+		std::cout << "Type in contact index: ";
+		getline(std::cin, input);
+		crop_string(input);
+	} while (input.size() > 1 || input[0] >= current_saved + '0' || input[0] < '0');
+	book[input[0] - '0'].display_contact_infos(true);
 }
