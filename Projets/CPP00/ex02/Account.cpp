@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:24:04 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/24 19:50:22 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/01/28 02:05:07 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 void	_displayTimestamp( void );
 
 // Static var definition //////////////////////////////////////////////////////
-	int	Account::_nbAccounts = 0;
-	int	Account::_totalAmount = 0;
-	int	Account::_totalNbDeposits = 0;
-	int	Account::_totalNbWithdrawals = 0;
+int	Account::_nbAccounts = 0;
+int	Account::_totalAmount = 0;
+int	Account::_totalNbDeposits = 0;
+int	Account::_totalNbWithdrawals = 0;
 
 // CONSTRUCTOR & DESTRUCTOR ///////////////////////////////////////////////////
 Account::Account (int initial_deposit) : _nbDeposits(0), _nbWithdrawals(0)
@@ -102,8 +102,12 @@ void	Account::displayStatus( void ) const
 				<< ";withdrawal:" << _nbWithdrawals << std::endl;
 }
 
-void	_displayTimestamp( void )
+void	Account::_displayTimestamp( void )
 {
 	time_t	timestamp = time(NULL);
-	std:: cout << "[" << ctime(&timestamp) << "]";
+	struct tm	data = *localtime(&timestamp);
+	std:: cout	<< "[" << data.tm_year 
+				<< data.tm_mon << data.tm_mday 
+				<< "_" << data.tm_hour << data.tm_min
+				<< data.tm_sec << "]";
 }
