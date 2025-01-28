@@ -6,14 +6,15 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 16:32:23 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/23 17:45:04 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/01/28 19:19:04 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHONEBOOK_HPP
 # define PHONEBOOK_HPP
 
-#include "crappy.hpp"
+#include "../include/Contact.hpp"
+#include <iostream>
 
 class PhoneBook
 {

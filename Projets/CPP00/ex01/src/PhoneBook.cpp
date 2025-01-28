@@ -6,11 +6,11 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 16:42:15 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/24 13:19:44 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/01/28 19:27:07 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"../include/crappy.hpp"
+#include"../include/PhoneBook.hpp"
 
 // CONSTRUCTEUR & DESCTRUCTEUR ////////////////////////////////////////////////
 PhoneBook::PhoneBook(): max_contact(8), saved_index(0), current_saved(0){}
@@ -75,7 +75,8 @@ void	PhoneBook::add_crappy()
 	}
 	else
 	{
-		saved_index = 0;
+		if (saved_index > 7)
+			saved_index = 0;
 		book[saved_index].update_infos(firstname, lastname, nickname, phone, darks);
 		saved_index++;
 	}

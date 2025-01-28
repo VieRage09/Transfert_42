@@ -6,14 +6,14 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 17:24:34 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/23 18:06:05 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/01/28 19:18:00 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONTACT_HPP
 # define CONTACT_HPP
 
-#include"crappy.hpp"
+#include <iostream>
 
 class Contact{
 	
