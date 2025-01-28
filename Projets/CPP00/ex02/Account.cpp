@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:24:04 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/28 02:05:07 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/01/28 18:33:34 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,22 @@ void	Account::_displayTimestamp( void )
 {
 	time_t	timestamp = time(NULL);
 	struct tm	data = *localtime(&timestamp);
-	std:: cout	<< "[" << data.tm_year 
-				<< data.tm_mon << data.tm_mday 
-				<< "_" << data.tm_hour << data.tm_min
-				<< data.tm_sec << "]";
+	std::cout	<< "[" << data.tm_year + 1900;
+	if (data.tm_mon + 1 < 10)
+		std::cout	<< "0";
+	std::cout	<< data.tm_mon + 1;
+	if (data.tm_mday < 10)	
+		std::cout	<< "0";
+	if (data.tm_mday < 10)
+		std::cout	<< "0";
+	std::cout	<< data.tm_mday << "_";
+	if (data.tm_hour < 10)	
+		std::cout	<< "0";
+	std::cout	<< data.tm_hour;
+	if (data.tm_min < 10)	
+		std::cout	<< "0";
+	std::cout	<< data.tm_min;
+	if (data.tm_sec < 10)
+		std::cout	<< "0";
+	std::cout	<< data.tm_sec << "]";
 }
