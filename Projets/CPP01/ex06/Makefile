@@ -6,11 +6,11 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/24 13:26:44 by tlebon            #+#    #+#              #
-#    Updated: 2025/01/29 21:41:26 by tlebon           ###   ########.fr        #
+#    Updated: 2025/01/29 21:41:36 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	= harl_nous_fais_tous_chier_mais_il_se_bat
+NAME	= harlFilter
 
 CC		= c++ -Wall -Werror -Wextra -std=c++98
 

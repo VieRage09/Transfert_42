@@ -64,8 +64,22 @@ void	Harl::complain(std::string level)
 	int	lvl = get_level(level);
 	if (lvl < 0)
 	{
-		std::cerr << "Level doesn't exists\n";
+		std::cerr << "Harl is complaining about his life again --'\n";
 		return ;
 	}
-	(this->*func_ptr[lvl])();
+	switch (lvl)
+	{
+		case 0:
+			(this->*func_ptr[0])();
+		case 1:
+			(this->*func_ptr[1])();
+		case 2:
+			(this->*func_ptr[2])();
+		case 3:
+			(this->*func_ptr[3])();
+			break ;
+		default:
+			std::cout << "Switch error\n";
+			break ;
+	}
 }
