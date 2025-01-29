@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 12:53:53 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/23 18:50:56 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/01/29 17:50:08 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,9 @@ int main(int ac, char **av)
 
 	system("clear");
 	display_help(true);
-	while (true)
+	std::cout << "Go ahead my friend: ";
+	while (getline(std::cin, input))
 	{
-		std::cout << "Go ahead my friend: ";
-		getline(std::cin, input);
 		choice = assign_choice(input);	
 		switch (choice)
 		{
@@ -70,6 +69,7 @@ int main(int ac, char **av)
 				display_help(false);
 				break;
 		}
+		std::cout << "Go ahead my friend: ";
 	}
 
 	return (0);

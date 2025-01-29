@@ -1,21 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sed.hpp                                            :+:      :+:    :+:   */
+/*   Harl.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/28 22:15:23 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/29 16:25:37 by tlebon           ###   ########.fr       */
+/*   Created: 2025/01/29 16:49:01 by tlebon            #+#    #+#             */
+/*   Updated: 2025/01/29 16:50:51 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SED_H
-#define	SED_H
+#ifndef HARL_HPP
+# define HARL_HPP
 
 #include <iostream>
-#include <fstream>
 
-void	sedlike(std::string infile, std::string to_replace, std::string replacement);
+class Harl
+{
+	private:
+		void	debug( void );
+		void	info( void );
+		void	warning( void );
+		void	error( void );
+	public:
+		void	complain( std::string level );
+};
 
 #endif
