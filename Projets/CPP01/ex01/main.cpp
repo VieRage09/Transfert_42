@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:51:19 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/28 20:43:56 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/01/29 13:15:30 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main( void )
 {
-	int	N = 10;
+	int	N = 5;
 	Zombie	*horde = zombieHorde(N, "Johnny");
 	if (!horde)
 		return (1);

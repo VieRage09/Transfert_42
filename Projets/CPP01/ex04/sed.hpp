@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 22:15:23 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/28 22:16:18 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/01/29 12:59:17 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 #define	SED_H
 
 #include <iostream>
-#include <string> // Autorisee ??
+#include <fstream>
 
-
+void	sedlike(char *infile, char *to_replace, char *replacement);
 
 #endif

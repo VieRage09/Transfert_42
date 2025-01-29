@@ -6,16 +6,17 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/24 13:26:44 by tlebon            #+#    #+#              #
-#    Updated: 2025/01/28 22:14:20 by tlebon           ###   ########.fr        #
+#    Updated: 2025/01/29 13:11:45 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	= zzz
+NAME	= sedlike
 
 CC		= c++ -Wall -Werror -Wextra -std=c++98
 
 SRC		= 					\
 			main.cpp		\
+			sed.cpp			\
 
 HDR		=	sed.hpp	
 
@@ -25,6 +26,9 @@ all:	$(NAME)
 
 $(NAME): $(OBJ) $(HDR)
 	$(CC) $(OBJ) -o $(NAME)
+
+%.o: %.cpp $(HDR)
+	$(CC) -c $< -o $@
 
 clean:
 	rm -rf $(OBJ)
