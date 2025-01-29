@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/24 13:26:44 by tlebon            #+#    #+#              #
-#    Updated: 2025/01/29 15:49:39 by tlebon           ###   ########.fr        #
+#    Updated: 2025/01/29 21:19:27 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,9 +16,9 @@ CC		= c++ -Wall -Werror -Wextra -std=c++98
 
 SRC		= 					\
 			main.cpp		\
-			sed.cpp			\
+			Harl.cpp		\
 
-HDR		=	sed.hpp	
+HDR		=	Harl.hpp	
 
 OBJ		= $(SRC:.cpp=.o)
 
