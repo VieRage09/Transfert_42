@@ -5,40 +5,38 @@
 #                                                     +:+ +:+         +:+      #
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/01/31 19:43:54 by tlebon           ###   ########.fr        #
+#    Created: 2025/01/24 13:26:44 by tlebon            #+#    #+#              #
+#    Updated: 2025/01/31 21:02:40 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	= megaphone
+NAME	= fixed_upgrade
 
-#---------------------COMPILATION-----------------------#
-CC		= c++
-CFLAGS	= -Wall -Werror -Wextra -std=c++98
-#-------------------------------------------------------#
+CC		= c++ -Wall -Werror -Wextra -std=c++98
 
-#---------------------SOURCES---------------------------#
-SRC = megaphone.cpp
-#-------------------------------------------------------#
+SRC		= 					\
+			main.cpp		\
+			Fixed.cpp		\
 
-#---------------------OBJETS----------------------------#
-OBJ = $(SRC:.cpp=.o)
-#-------------------------------------------------------#
+HDR		=	Fixed.hpp
 
-all: $(NAME)
+OBJ		= $(SRC:.cpp=.o)
 
-$(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $? -o $@
+all:	$(NAME)
 
-$(OBJ): $(SRC)
-	$(CC) $(CFLAGS) -c $? -o $@
+$(NAME): $(OBJ) $(HDR)
+	$(CC) $(OBJ) -o $(NAME)
+
+%.o: %.cpp $(HDR)
+	$(CC) -c $< -o $@
 
 clean:
 	rm -rf $(OBJ)
 
 fclean: clean
 	rm -rf $(NAME)
+	rm -rf *.replace
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: clean fclean re

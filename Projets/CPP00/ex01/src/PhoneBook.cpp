@@ -6,16 +6,16 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 16:42:15 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/28 19:27:07 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/01/31 19:36:59 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"../include/PhoneBook.hpp"
 
 // CONSTRUCTEUR & DESCTRUCTEUR ////////////////////////////////////////////////
-PhoneBook::PhoneBook(): max_contact(8), saved_index(0), current_saved(0){}
+PhoneBook::PhoneBook(): max_contact(8), saved_index(0), current_saved(0) {}
 
-PhoneBook::~PhoneBook(){}
+PhoneBook::~PhoneBook() {}
 
 // SETTERS ////////////////////////////////////////////////////////////////////
 void	PhoneBook::set_saved_index(int value) {saved_index = value;}
