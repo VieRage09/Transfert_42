@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:44:34 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/31 23:45:30 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/03 18:22:11 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@ int main(void)
 {
 	Fixed a;
 	Fixed const b(10);
-	std::cout << b.toInt() << std::endl;
 	Fixed const c(42.42f);
 	Fixed const d(b);
+	
 	a = Fixed(1234.4321f);
+
 	std::cout << "a is " << a << std::endl;
 	std::cout << "b is " << b << std::endl;
 	std::cout << "c is " << c << std::endl;
