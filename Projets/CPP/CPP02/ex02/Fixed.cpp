@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:08:51 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/04 16:02:57 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/04 18:08:37 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ Fixed::Fixed(const int value) // Overflow management ??
     std::cout << "Int constructor called\n";
 }
 
-Fixed::Fixed(const float value)
+Fixed::Fixed(const float value)// Overflow ?
 {
     std::cout << "Float constructor called:\n";
     this->value = (int)roundf(value * (1 << Fixed::n_fract_bit));
@@ -53,7 +53,7 @@ void    Fixed::setRawBits(const int raw) { value = raw; }
 
 int     Fixed::toInt( void ) const { return (value / (1 << Fixed::n_fract_bit)); }
 
-float   Fixed::toFloat( void ) const { return ((float)value / (1 << Fixed::n_fract_bit)); }
+float   Fixed::toFloat( void ) const { return ((float) value / (1 << Fixed::n_fract_bit)); }
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -112,56 +112,58 @@ bool	Fixed::operator!=(const Fixed& other) const
 	return (false);
 }
 
-const Fixed	Fixed::operator+(const Fixed& other) const
+const Fixed	Fixed::operator+(const Fixed& other) const // Overflow ?
 {
 	Fixed	res(this->toFloat() + other.toFloat());
 	return (res);
 }
 
-const Fixed	Fixed::operator-(const Fixed& other) const
+const Fixed	Fixed::operator-(const Fixed& other) const // Overflow ?
 {
 	Fixed	res(this->toFloat() - other.toFloat());
 	return (res);
 }
 
-const Fixed	Fixed::operator*(const Fixed& other) const // Par correct il me semble
+const Fixed	Fixed::operator*(const Fixed& other) const // Overflow ?
 {
-	// Fixed	res(this->toFloat() * other.toFloat());
-	Fixed	res((value * other.value) / (1 >> Fixed::n_fract_bit));
+	Fixed	res((float) (value * other.value) / (1 << 2 * Fixed::n_fract_bit));
 	return (res);
 }
 
-const Fixed	Fixed::operator/(const Fixed& other) const // Ajouter un safe pour division par 0
+const Fixed	Fixed::operator/(const Fixed& other) const // Overflow ?
 {
-	Fixed	res(this->toFloat() / other.toFloat());
+	if (other == 0)
+	{
+		std::cerr << "WARNING: Division by 0\n";
+		return (Fixed());
+	}
+	Fixed	res((float) value / other.value);
 	return (res);
 }
 
-Fixed&		Fixed::operator ++ ()
+Fixed&		Fixed::operator ++ () // Overflow ?
 {
 	setRawBits(value + 1);
 	return (*this);
 }
 
-Fixed		Fixed::operator ++ (int postinc)
+Fixed		Fixed::operator ++ (int) // Overflow ?
 {
 	Fixed	tmp = *this;
 	setRawBits(value + 1);
-	postinc++;
 	return (tmp);
 }
 
-Fixed&		Fixed::operator -- ()
+Fixed&		Fixed::operator -- () // Overflow ?
 {
 	setRawBits(value - 1);
 	return (*this);
 }
 
-Fixed		Fixed::operator -- (int postinc)
+Fixed		Fixed::operator -- (int) // Overflow ?
 {
 	Fixed	tmp = *this;
 	setRawBits(value - 1);
-	postinc++;
 	return (tmp);
 }
 

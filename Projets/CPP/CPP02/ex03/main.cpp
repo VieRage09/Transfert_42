@@ -6,24 +6,23 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:44:39 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/03 20:43:04 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/04 19:01:50 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Fixed.hpp"
+#include "Point.hpp"
 
 int main(void)
 {
-	Fixed a;
-	Fixed const b(Fixed(5.05f) * Fixed(2));
-	std::cout << a << std::endl;
-	std::cout << ++a << std::endl;
-	std::cout << a << std::endl;
-	std::cout << a++ << std::endl;
-	std::cout << a << std::endl;
-	std::cout << b << std::endl;
-	std::cout << Fixed::max(a, b) << std::endl;
-	return 0;
+	Point	a;
+	Point	b(2, 1);
+	Point	c(3, 1);
+
+	std::cout << a.get_x() << " " << a.get_y() << std::endl;
+	std::cout << b.get_x() << " " << b.get_y() << std::endl;
+	std::cout << c.get_x() << " " << c.get_y() << std::endl;
+	c = b;
+	std::cout << c.get_x() << " " << c.get_y() << std::endl;
 }
 
 // int	main()
