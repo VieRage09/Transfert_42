@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 20:53:44 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/05 21:04:52 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/05 21:09:28 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static bool	pointBelongsToLine(const Point& a, const Point& b, const Point& p)
 
 	if (xDelta == 0)
 	{	
-		if (a.get_x() == p.get_x() && p.get_y() <= Fixed::max(a.get_y(), b.get_y())
+		if (a.get_x() == p.get_x() && p.get_y() <= Fixed::max(a.get_y(), b.get_y()) // Erreur est peut etre la 
 				&& p.get_y() >= Fixed::min(a.get_y(), b.get_y()))
 			return (true);
 		std::cout << "p" << p << " belongs to line (ab)\n";
