@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:08:51 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/04 16:44:47 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/05 18:45:03 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,27 +18,24 @@ const int Fixed::n_fract_bit = 8;
 ////////////////////////////////////////////////////////////////////////////////
 
 // Constructors and destructors ////////////////////////////////////////////////
-Fixed::Fixed(): value(0) { std::cout << "Default constructor called\n"; }
+Fixed::Fixed(): value(0) {}
 
 Fixed::Fixed(const int value) // Overflow management ??
 {
     this->value = value * (1 << Fixed::n_fract_bit);
-    std::cout << "Int constructor called\n";
 }
 
 Fixed::Fixed(const float value)// Overflow ?
 {
-    std::cout << "Float constructor called:\n";
     this->value = (int)roundf(value * (1 << Fixed::n_fract_bit));
 }
 
 Fixed::Fixed(const Fixed& copy)
 {
-    std::cout << "Copy constructor called\n";
     value = copy.value;
 }
 
-Fixed::~Fixed() { std::cout << "Destructor called\n"; }
+Fixed::~Fixed() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 

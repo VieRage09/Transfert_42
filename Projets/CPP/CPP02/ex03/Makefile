@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/24 13:26:44 by tlebon            #+#    #+#              #
-#    Updated: 2025/02/04 18:24:06 by tlebon           ###   ########.fr        #
+#    Updated: 2025/02/05 18:46:28 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ SRC		= 					\
 			main.cpp		\
 			Point.cpp		\
 			Fixed.cpp		\
+			bsp.cpp			\
 
 HDR		=					\
 			Fixed.hpp		\

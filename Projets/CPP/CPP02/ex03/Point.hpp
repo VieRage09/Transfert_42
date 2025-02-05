@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 20:46:56 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/04 19:09:46 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/05 18:55:04 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,7 @@ class Point {
 	   Point&	operator = (const Point& copy);
 	   bool		operator == (const Point& copy) const;
 };
+
+std::ostream&	operator << (std::ostream& os, const Point& p);
 
 #endif // POINT_HPP
