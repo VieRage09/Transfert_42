@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 16:42:15 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/31 19:36:59 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/06 14:49:54 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ static void	collect(std::string& info, std::string prompt, bool num)
 	do
 	{
 		std::cout << prompt;
-		getline(std::cin, info);
+		if (!getline(std::cin, info))
+			return ;
 		crop_string(info);
 	} while (info.empty() || (num && info.find_first_not_of("0123456789") != std::string::npos));
 }
