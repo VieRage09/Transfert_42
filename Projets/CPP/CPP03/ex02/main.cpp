@@ -1,30 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ScavTrap.hpp                                       :+:      :+:    :+:   */
+/*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/18 01:06:44 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/18 19:56:20 by tlebon           ###   ########.fr       */
+/*   Created: 2025/02/18 00:42:40 by tlebon            #+#    #+#             */
+/*   Updated: 2025/02/18 20:09:22 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SCAVTRAP_HPP
-#define SCAVTRAP_HPP
+#include "FragTrap.hpp"
 
-#include "ClapTrap.hpp"
-
-class ScavTrap: public ClapTrap
+int	main()
 {
-	public:
-		ScavTrap();
-		ScavTrap(const std::string name);
-		ScavTrap(const ScavTrap& copy);   
-		~ScavTrap();
+	FragTrap	a;
+	FragTrap	mmm("Zach");
 
-		void	guardGate();
-		void	attack(const std::string& target);
-};
+	std::cout << "\nTEST 1: gatekeeper mode and attack msg\n";
+	a.highFivesGuys();
+	a.attack("Pat");
+	mmm.attack("Jadou");
 
-#endif // SCAVTRAP_HPP
+
+	return (0);
+}
