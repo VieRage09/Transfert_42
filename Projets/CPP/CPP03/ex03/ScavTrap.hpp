@@ -1,33 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   ScavTrap.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/18 00:42:40 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/19 17:17:51 by tlebon           ###   ########.fr       */
+/*   Created: 2025/02/18 01:06:44 by tlebon            #+#    #+#             */
+/*   Updated: 2025/02/18 19:56:20 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "FragTrap.hpp"
+#ifndef SCAVTRAP_HPP
+#define SCAVTRAP_HPP
 
-int	main()
+#include "ClapTrap.hpp"
+
+class ScavTrap: public ClapTrap
 {
-	FragTrap	a;
-	FragTrap	b("Zach");
-	FragTrap	cp(a);
-	FragTrap	d;
+	public:
+		ScavTrap();
+		ScavTrap(const std::string name);
+		ScavTrap(const ScavTrap& copy);   
+		~ScavTrap();
 
-	d = b;
+		void	guardGate();
+		void	attack(const std::string& target);
+};
 
-	std::cout << "\nTEST: High five and damages\n";
-	a.highFivesGuys();
-	a.attack("Pat");
-	b.attack("John");
-	cp.attack("Jacob");
-	d.attack("Eriksen");
-
-
-	return (0);
-}
+#endif // SCAVTRAP_HPP

@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 00:42:40 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/18 19:54:59 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/19 17:15:01 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ int	main()
 
 	mmm = b;
 
-	std::cout << "\nTEST 1: gatekeeper mode and attack msg\n";
+	std::cout << "\nTEST: gatekeeper mode and attack msg\n";
 	a.guardGate();
 	a.attack("Pat");
+	b.attack("Jack");
+	cp.attack("Eddie");
 	mmm.attack("Jadou");
-
-	std::cout << "\nTEST 2: gatekeeper mode and attack msg\n";
 
 	return (0);
 }

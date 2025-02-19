@@ -1,33 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   FragTrap.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/18 00:42:40 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/19 17:17:51 by tlebon           ###   ########.fr       */
+/*   Created: 2025/02/18 19:57:55 by tlebon            #+#    #+#             */
+/*   Updated: 2025/02/18 20:01:08 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "FragTrap.hpp"
+#ifndef FRAGTRAP_HPP
+#define FRAGTRAP_HPP
 
-int	main()
+#include "ClapTrap.hpp" 
+
+class FragTrap: public ClapTrap
 {
-	FragTrap	a;
-	FragTrap	b("Zach");
-	FragTrap	cp(a);
-	FragTrap	d;
+	public:
+	FragTrap();
+	FragTrap(const std::string name);
+	FragTrap(const FragTrap& copy);
+	~FragTrap();
 
-	d = b;
+	void	highFivesGuys( void );
+};
 
-	std::cout << "\nTEST: High five and damages\n";
-	a.highFivesGuys();
-	a.attack("Pat");
-	b.attack("John");
-	cp.attack("Jacob");
-	d.attack("Eriksen");
-
-
-	return (0);
-}
+#endif // FRAGTRAP_HPP
