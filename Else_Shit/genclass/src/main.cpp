@@ -1,4 +1,4 @@
-#include "genclass.hpp"
+#include "../genclass.hpp"
 
 t_options	detect_options(char **tab)
 {
@@ -38,13 +38,13 @@ int	main(int ac, char **av)
 	switch (opt)
 	{
 	case ALL:
-		std::cout << "All options choosed\n";
+		std::cout << "All options\n";
 		break;
 	case ASSIGN_ATTRIBUTES:
-		std::cout << "Assignement of attributes choosed\n";
+		std::cout << "Assignement of attributes\n";
 		break;
 	default:
-		std::cout << "No option choosed\n";
+		std::cout << "No option\n";
 		break;
 	}
 

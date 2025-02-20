@@ -5,40 +5,54 @@
 #                                                     +:+ +:+         +:+      #
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/01/24 13:26:44 by tlebon            #+#    #+#              #
-#    Updated: 2025/02/19 20:54:13 by tlebon           ###   ########.fr        #
+#    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
+#    Updated: 2025/02/20 15:59:36 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= genclass
 
-CC		= c++ -Wall -Werror -Wextra -std=c++98
+#---------------------COMPILATION-----------------------#
+CC		= c++
+CFLAGS	= -Wall -Werror -Wextra
+#-------------------------------------------------------#
 
-SRC		= 						\
-			utils.cpp			\
-			write_cpp.cpp		\
-			write_header.cpp	\
-			main.cpp			\
+#---------------------SOURCES---------------------------#
+SRC_PATH	= src/
+SRC			= 						\
+				main.cpp			\
+				utils.cpp			\
+				write_cpp.cpp		\
+				write_header.cpp	\
 
-HDR		=					\
-			genclass.hpp	\
+SRCS		= $(addprefix $(SRC_PATH), $(SRC))
+#-------------------------------------------------------#
 
-OBJ		= $(SRC:.cpp=.o)
+#---------------------HEADERS---------------------------#
+HDR			=						\
+				genclass.hpp		\
+#-------------------------------------------------------#
 
-all:	$(NAME)
+#---------------------OBJETS----------------------------#
+OBJ_PATH	= obj/
+OBJ			= $(SRC:.cpp=.o)
+OBJS		= $(addprefix $(OBJ_PATH), $(OBJ))
+#-------------------------------------------------------#
 
-$(NAME): $(OBJ) $(HDR)
-	$(CC) $(OBJ) -o $(NAME)
+all: $(NAME)
 
-%.o: %.cpp $(HDR)
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $@
+
+$(OBJ_PATH)%.o: $(SRC_PATH)%.cpp $(HDR)
+	@mkdir -p $(dir $@)
 	$(CC) -c $< -o $@
-
 clean:
-	rm -rf $(OBJ)
+	rm -rf $(OBJ_PATH)
 
 fclean: clean
 	rm -rf $(NAME)
 
 re: fclean all
 
-.PHONY: clean fclean re
+.PHONY: all clean fclean re
