@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 01:06:52 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/18 19:56:14 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/24 01:57:31 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ ScavTrap::ScavTrap(): ClapTrap()
 	std::cout << "ScavTrap " << name << " has been created\n";
 }
 
-ScavTrap::ScavTrap(const std::string name): ClapTrap(name)
+ScavTrap::ScavTrap(const std::string str): ClapTrap(str)
 {
 	hitPoints = 100;
 	energyPoints = 50;

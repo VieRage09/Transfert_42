@@ -14,7 +14,7 @@ ClapTrap::ClapTrap(): name("Sebulba"), hitPoints(10), energyPoints(10), attackDa
 	std::cout << "Default constructor called: ClapTrap Sebulba is created\n";
 }
 
-ClapTrap::ClapTrap(std::string name): name(name), hitPoints(10), energyPoints(10), attackDamage(0)
+ClapTrap::ClapTrap(std::string str): name(str), hitPoints(10), energyPoints(10), attackDamage(0)
 {
 	std::cout << "Constructor called: ClapTrap " << name << " is created\n";
 }
