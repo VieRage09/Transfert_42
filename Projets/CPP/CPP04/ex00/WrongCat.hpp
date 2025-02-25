@@ -1,32 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Weapon.hpp                                         :+:      :+:    :+:   */
+/*   WrongCat.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/28 21:05:15 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/25 12:03:40 by tlebon           ###   ########.fr       */
+/*   Created: 2025/02/25 15:43:57 by tlebon            #+#    #+#             */
+/*   Updated: 2025/02/25 15:43:58 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef WEAPON_HPP
-# define WEAPON_HPP
+#ifndef	WRONGCAT_HPP
+#define	WRONGCAT_HPP
 
-# include <iostream>
+// includes //
+#include "WrongAnimal.hpp"
 
-class Weapon
+class WrongCat : public WrongAnimal
 {
 	private:
-		std::string type;
+
+		// attributes //
 
 	public:
-		Weapon();
-		Weapon(std::string type);
-		~Weapon();
-		
-		const std::string getType() const;
-		void		setType(std::string name);
+		// Default constructor
+		WrongCat();
+		// Copy constructor
+		WrongCat(const WrongCat& copy);
+		// Destructor
+		~WrongCat();
+
+		// Methods //
+		void	makeSound() const;
+
+		// Operators //
+		WrongCat&		operator = (const WrongCat& copy);
+
 };
 
-#endif
+#endif // WRONGCAT_HPP

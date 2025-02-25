@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 21:17:19 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/28 22:11:23 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/25 12:04:58 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ class HumanB
         HumanB(std::string name);
         ~HumanB();
         
-        std::string getName() const;
-        Weapon      getWeapon() const;
+        const std::string getName() const;
+        const Weapon      getWeapon() const;
         void        setName(std::string& value);
         void        setWeapon(Weapon& value);
 

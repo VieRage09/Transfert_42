@@ -1,30 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   zombieHorde.cpp                                    :+:      :+:    :+:   */
+/*   Brain.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/28 20:12:07 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/25 12:02:27 by tlebon           ###   ########.fr       */
+/*   Created: 2025/02/25 15:42:51 by tlebon            #+#    #+#             */
+/*   Updated: 2025/02/25 15:45:08 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"Zombie.hpp"
+#ifndef	BRAIN_HPP
+#define	BRAIN_HPP
 
-Zombie* zombieHorde( int N, std::string name )
+// includes //
+#include <iostream>
+
+class Brain
 {
-	Zombie	*horde = new(std::nothrow) Zombie [N];
-	if (!horde)
-		return (NULL);
-	for (int i = 0; i < N; i++)
-	{
-		new (horde + i) Zombie(name);
-		if (!&horde[i])
-		{
-			delete[] horde;
-			return (NULL);
-		}
-	}
-	return (horde);
-}
+	private:
+		// attributes //
+		std::string	ideas[100];	
+	public:
+		// Default constructor
+		Brain();
+		// Copy constructor
+		Brain(const Brain& copy);
+		// Destructor
+		~Brain();
+
+		// Methods //
+
+
+		// Operators //
+		Brain&			operator = (const Brain& copy);
+
+};
+
+#endif // BRAIN_HPP

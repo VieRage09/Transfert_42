@@ -36,9 +36,11 @@ DiamondTrap::~DiamondTrap() {std::cout << "The universe ended the life of " << t
 
 // METHODS //
 
+void	DiamondTrap::attack(const std::string& target) {ScavTrap::attack(target);}
+
 void	DiamondTrap::whoAmI()
 {
-	std::cout << "Who am I ? I feel like " << this->name << " but the data says " << this->ClapTrap::name << "--'\n";
+	std::cout << "Who am I ? I feel like " << this->name << " but the data says " << this->ClapTrap::name << " --'\n";
 }
 
 // OPERATORS //

@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 21:05:35 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/28 21:26:12 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/25 12:03:50 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,5 @@ Weapon::Weapon(std::string type): type(type) {}
 Weapon::~Weapon() {}
 
 // Getters / Setters
-std::string Weapon::getType() const { return (type); }
+const std::string Weapon::getType() const { return (type); }
 void		Weapon::setType(std::string name) { type = name; }

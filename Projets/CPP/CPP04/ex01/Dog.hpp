@@ -1,30 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   zombieHorde.cpp                                    :+:      :+:    :+:   */
+/*   Dog.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/28 20:12:07 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/25 12:02:27 by tlebon           ###   ########.fr       */
+/*   Created: 2025/02/25 15:43:08 by tlebon            #+#    #+#             */
+/*   Updated: 2025/02/25 15:43:09 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"Zombie.hpp"
+#ifndef	DOG_HPP
+#define	DOG_HPP
 
-Zombie* zombieHorde( int N, std::string name )
+// includes //
+#include "Animal.hpp"
+
+class Dog : public Animal
 {
-	Zombie	*horde = new(std::nothrow) Zombie [N];
-	if (!horde)
-		return (NULL);
-	for (int i = 0; i < N; i++)
-	{
-		new (horde + i) Zombie(name);
-		if (!&horde[i])
-		{
-			delete[] horde;
-			return (NULL);
-		}
-	}
-	return (horde);
-}
+	public:
+		// Default constructor
+		Dog();
+		// Copy constructor
+		Dog(const Dog& copy);
+		// Destructor
+		~Dog();
+
+		// Methods //
+		void	makeSound() const;
+
+		// Operators //
+		Dog&				operator = (const Dog& copy);
+};
+
+#endif // DOG_HPP

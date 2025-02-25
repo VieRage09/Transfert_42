@@ -1,30 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   zombieHorde.cpp                                    :+:      :+:    :+:   */
+/*   Cat.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/28 20:12:07 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/25 12:02:27 by tlebon           ###   ########.fr       */
+/*   Created: 2025/02/25 14:20:40 by tlebon            #+#    #+#             */
+/*   Updated: 2025/02/25 15:08:53 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"Zombie.hpp"
+#ifndef	CAT_HPP
+#define	CAT_HPP
 
-Zombie* zombieHorde( int N, std::string name )
+// includes //
+#include "Animal.hpp"
+
+class Cat : public Animal
 {
-	Zombie	*horde = new(std::nothrow) Zombie [N];
-	if (!horde)
-		return (NULL);
-	for (int i = 0; i < N; i++)
-	{
-		new (horde + i) Zombie(name);
-		if (!&horde[i])
-		{
-			delete[] horde;
-			return (NULL);
-		}
-	}
-	return (horde);
-}
+	public:
+		// Default constructor
+		Cat();
+		// Copy constructor
+		Cat(const Cat& copy);
+		// Destructor
+		~Cat();
+
+		// Methods //
+		void	makeSound() const;
+
+		// Operators //
+		Cat&				operator = (const Cat& copy);
+
+};
+
+#endif // CAT_HPP

@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 21:12:03 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/28 22:01:32 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/25 12:05:30 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ HumanA::HumanA(std::string name, Weapon &weapon): name(name), weapon(weapon) {}
 
 HumanA::~HumanA() {}
 
-std::string HumanA::getName() const { return (name); }
-Weapon      HumanA::getWeapon() const { return (weapon); }
+const std::string HumanA::getName() const { return (name); }
+const Weapon      HumanA::getWeapon() const { return (weapon); }
 void        HumanA::setName(std::string& value) { name = value; }
 void        HumanA::setWeapon(Weapon& value) { weapon = value; }
 
