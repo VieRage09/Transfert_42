@@ -1,50 +1,50 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Cat.cpp                                            :+:      :+:    :+:   */
+/*   Dog.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/25 15:26:13 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/26 12:55:15 by tlebon           ###   ########.fr       */
+/*   Created: 2025/02/25 15:43:05 by tlebon            #+#    #+#             */
+/*   Updated: 2025/02/26 15:41:43 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Cat.hpp"
+#include "Dog.hpp"
 
 // CONSTRUCTORS & DESTRUCTORS //
 
-Cat::Cat(): Animal("Cat")
+Dog::Dog(): A_Animal("Dog")
 {
 	brain = new Brain();
-	std::cout << "(Cat basic ctr) A basic Cat is born\n";
+	std::cout << "(Dog basic ctr) A good dog joined the party\n";
 }
 
-Cat::Cat(Brain *ptr): Animal("Cat")
+Dog::Dog(Brain *ptr): A_Animal("Dog")
 {
 	brain = new Brain(*ptr);
-	std::cout << "(Cat param ctr) A Cat has been encoded\n";
+	std::cout << "(Dog param ctr) A good dog has been encoded\n";
 }
 
-Cat::Cat(const Cat& copy): Animal(copy.type)
+Dog::Dog(const Dog& copy): A_Animal(copy.type)
 {
 	brain = new Brain(*(copy.brain));
-	std::cout << "(Cat cpy ctr) One more lookalike cat in this world\n";
+	std::cout << "(Dog cpy ctr) A good dog has been copied (More dog, more joy)\n";
 }
 
-Cat::~Cat()
+Dog::~Dog()
 {
 	delete brain;
-	std::cout << "(Cat dest) A cat died fighting his own kind (probably)\n";
+	std::cout << "(Dog dest) A good dog tragically died\n";
 }
 
 // METHODS //
 
-void	Cat::makeSound() const {std::cout << "MiaaaaaOUUUUUUUUUU\n";}
+void	Dog::makeSound() const {std::cout << "OuaaaaaF Ouuuuuuuuaf\n";}
 
 // OPERATORS //
 
-Cat& Cat::operator = (const Cat& copy)
+Dog& Dog::operator = (const Dog& copy)
 {
 	if (this != &copy)
 	{

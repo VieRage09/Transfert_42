@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 14:15:29 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/26 15:27:52 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/26 15:38:04 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,29 @@
 #include "Cat.hpp"
 #include "Brain.hpp"
 
-// int main()
-// {
-// 	int size = 4;
-// 	Animal *animarray[size];
-
-// 	for (int i = 0; i < size / 2; i++)
-// 		animarray[i] = new Cat();
-// 	for (int i = size / 2; i < size; i++)
-// 		animarray[i] = new Dog();
-
-// 	for (int i = 0; i < size; i++)
-// 		animarray[i]->makeSound();
-
-// 	for (int i = 0; i < size; i++)
-// 		delete animarray[i];
-// 	return (0);
-// }
-
 int main()
 {
-	const Animal *j = new Dog();
-	const Animal *i = new Cat();
-	delete j; // should not create a leak
-	delete i;
-	return 0;
+	int size = 4;
+	A_Animal *animarray[size];
+
+	for (int i = 0; i < size / 2; i++)
+		animarray[i] = new Cat();
+	for (int i = size / 2; i < size; i++)
+		animarray[i] = new Dog();
+
+	for (int i = 0; i < size; i++)
+		animarray[i]->makeSound();
+
+	for (int i = 0; i < size; i++)
+		delete animarray[i];
+	return (0);
 }
+
+// int main()
+// {
+// 	A_Animal a;
+// 	return 0;
+// }
 
 // int	main()
 // {

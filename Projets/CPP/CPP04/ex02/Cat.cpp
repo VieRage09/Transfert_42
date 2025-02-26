@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 15:26:13 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/26 12:55:15 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/26 15:41:31 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 // CONSTRUCTORS & DESTRUCTORS //
 
-Cat::Cat(): Animal("Cat")
+Cat::Cat(): A_Animal("Cat")
 {
 	brain = new Brain();
 	std::cout << "(Cat basic ctr) A basic Cat is born\n";
 }
 
-Cat::Cat(Brain *ptr): Animal("Cat")
+Cat::Cat(Brain *ptr): A_Animal("Cat")
 {
 	brain = new Brain(*ptr);
 	std::cout << "(Cat param ctr) A Cat has been encoded\n";
 }
 
-Cat::Cat(const Cat& copy): Animal(copy.type)
+Cat::Cat(const Cat& copy): A_Animal(copy.type)
 {
 	brain = new Brain(*(copy.brain));
 	std::cout << "(Cat cpy ctr) One more lookalike cat in this world\n";

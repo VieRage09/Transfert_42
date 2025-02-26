@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 14:20:40 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/26 12:28:55 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/26 15:39:07 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 #define	CAT_HPP
 
 // includes //
-#include "Animal.hpp"
+#include "A_Animal.hpp"
 #include "Brain.hpp"
 
-class Cat : public Animal
+class Cat : public A_Animal
 {
 	private:
 		Brain	*brain;

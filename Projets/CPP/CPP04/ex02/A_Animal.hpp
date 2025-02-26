@@ -1,43 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Cat.hpp                                            :+:      :+:    :+:   */
+/*   Animal.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/25 14:20:40 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/26 12:28:55 by tlebon           ###   ########.fr       */
+/*   Created: 2025/02/25 14:20:47 by tlebon            #+#    #+#             */
+/*   Updated: 2025/02/26 15:37:04 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	CAT_HPP
-#define	CAT_HPP
+#ifndef	ANIMAL_HPP
+#define	ANIMAL_HPP
 
 // includes //
-#include "Animal.hpp"
-#include "Brain.hpp"
+#include <iostream>
 
-class Cat : public Animal
+class A_Animal
 {
-	private:
-		Brain	*brain;
-		
+	protected:
+
+		// attributes //
+		std::string			type;
+
 	public:
 		// Default constructor
-		Cat();
-		// Parametrical constructor
-		Cat (Brain *ptr);
+		A_Animal();
+		// Personnalized constructor
+		A_Animal(const std::string& str);
 		// Copy constructor
-		Cat(const Cat& copy);
+		A_Animal(const A_Animal& copy);
 		// Destructor
-		~Cat();
+		virtual ~A_Animal();
 
 		// Methods //
-		void	makeSound() const;
+
+		virtual void	makeSound() const = 0;
 
 		// Operators //
-		Cat&				operator = (const Cat& copy);
+		A_Animal&			operator = (const A_Animal& copy);
+
+		// Getters //
+		const std::string&		getType() const;
 
 };
 
-#endif // CAT_HPP
+#endif // ANIMAL_HPP

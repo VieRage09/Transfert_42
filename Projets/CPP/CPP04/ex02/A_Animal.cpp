@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Animal.cpp                                         :+:      :+:    :+:   */
+/*   A_Animal.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 15:20:50 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/26 12:54:23 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/26 15:41:04 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Animal.hpp"
+#include "A_Animal.hpp"
 
 // CONSTRUCTORS & DESTRUCTORS //
 
-Animal::Animal() {std::cout << "(Animal basic ctr) An unknowned animal just spawned\n";}
+A_Animal::A_Animal() {std::cout << "(Animal basic ctr) An unknowned animal just spawned\n";}
 
-Animal::Animal(const std::string& str): type(str) {std::cout << "(Animal param ctr) A " << type << " just spawned\n";}
+A_Animal::A_Animal(const std::string& str): type(str) {std::cout << "(Animal param ctr) A " << type << " just spawned\n";}
 
-Animal::Animal(const Animal& copy): type(copy.type) {std::cout << "(Animal cpy ctr) A " << type << " got duplicated\n";}
+A_Animal::A_Animal(const A_Animal& copy): type(copy.type) {std::cout << "(Animal cpy ctr) A " << type << " got duplicated\n";}
 
-Animal::~Animal()
+A_Animal::~A_Animal()
 {
 	if (!type.empty())
 		std::cout << "(Animal des) A " << type << " has been shot by Eddard, it's now dead\n";
@@ -30,11 +30,11 @@ Animal::~Animal()
 
 // METHODS //
 
-void	Animal::makeSound() const {std::cout << "Unknowned creepy sound\n";}
+void	A_Animal::makeSound() const {std::cout << "Unknowned creepy sound\n";}
 
 // OPERATORS //
 
-Animal& Animal::operator = (const Animal& copy)
+A_Animal& A_Animal::operator = (const A_Animal& copy)
 {
 	if (this != &copy)
 	{
@@ -45,4 +45,4 @@ Animal& Animal::operator = (const Animal& copy)
 
 // GETTERS //
 
-const std::string&	Animal::getType() const {return (type);}
+const std::string&	A_Animal::getType() const {return (type);}

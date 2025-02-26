@@ -1,43 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Cat.hpp                                            :+:      :+:    :+:   */
+/*   Dog.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/25 14:20:40 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/26 12:28:55 by tlebon           ###   ########.fr       */
+/*   Created: 2025/02/25 15:43:08 by tlebon            #+#    #+#             */
+/*   Updated: 2025/02/26 15:38:32 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	CAT_HPP
-#define	CAT_HPP
+#ifndef	DOG_HPP
+#define	DOG_HPP
 
 // includes //
-#include "Animal.hpp"
+#include "A_Animal.hpp"
 #include "Brain.hpp"
 
-class Cat : public Animal
+class Dog : public A_Animal
 {
 	private:
 		Brain	*brain;
-		
+	
 	public:
 		// Default constructor
-		Cat();
+		Dog();
 		// Parametrical constructor
-		Cat (Brain *ptr);
+		Dog(Brain *ptr);
 		// Copy constructor
-		Cat(const Cat& copy);
+		Dog(const Dog& copy);
 		// Destructor
-		~Cat();
+		~Dog();
 
 		// Methods //
 		void	makeSound() const;
 
 		// Operators //
-		Cat&				operator = (const Cat& copy);
-
+		Dog&				operator = (const Dog& copy);
 };
 
-#endif // CAT_HPP
+#endif // DOG_HPP

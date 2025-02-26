@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/24 13:26:44 by tlebon            #+#    #+#              #
-#    Updated: 2025/02/25 15:31:46 by tlebon           ###   ########.fr        #
+#    Updated: 2025/02/26 11:41:11 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,18 +16,16 @@ CC		= c++ -Wall -Werror -Wextra -std=c++98
 
 SRC		= 					\
 			Animal.cpp		\
+			Brain.cpp		\
 			Cat.cpp			\
 			Dog.cpp			\
-			WrongAnimal.cpp	\
-			WrongCat.cpp	\
 			main.cpp		\
 
 HDR		=					\
 			Animal.hpp		\
+			Brain.hpp		\
 			Cat.hpp			\
 			Dog.hpp			\
-			WrongAnimal.hpp	\
-			WrongCat.hpp	\
 
 OBJ		= $(SRC:.cpp=.o)
 
