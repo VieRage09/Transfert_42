@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 18:08:51 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/05 18:45:03 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/26 18:24:44 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,7 @@ Fixed::~Fixed() {}
 ////////////////////////////////////////////////////////////////////////////////
 
 // Methods ////////////////////////////////////////////////////////////////////
-int Fixed::getRawBits( void ) const
-{
-    std::cout << "getRawBits member function called\n";
-    return (value);
-}
+int Fixed::getRawBits( void ) const {return (value);}
 
 void    Fixed::setRawBits(const int raw) { value = raw; } 
 
@@ -57,7 +53,6 @@ float   Fixed::toFloat( void ) const { return ((float) value / (1 << Fixed::n_fr
 // Overloads //////////////////////////////////////////////////////////////////
 Fixed&  Fixed::operator=(const Fixed& copy)
 {
-    std::cout << "Copy assignment operator called\n";
     if (this != &copy)
         value = copy.value;
     return (*this);

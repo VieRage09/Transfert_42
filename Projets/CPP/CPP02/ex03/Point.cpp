@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 20:46:40 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/05 18:54:58 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/26 18:26:30 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 // Constructeurs & Destructeur /////////////////////////////////////////////////
 
-Point::Point(): x(Fixed(0)), y(Fixed(0)) {std::cout << "Point: default constructor called\n";}
+Point::Point(): x(Fixed(0)), y(Fixed(0)) {}
 
-Point::Point(float const x, float const y): x(x), y(y) {std::cout << "Point: constructor called\n";}
+Point::Point(float const x, float const y): x(x), y(y) {}
 
-Point::Point(const Point& copy): x(copy.x), y(copy.y) {std::cout << "Point: copy constructor called\n";}
+Point::Point(const Point& copy): x(copy.x), y(copy.y) {}
 
-Point::~Point() {std::cout << "Point: destuctor called\n";}
+Point::~Point() {}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -39,7 +39,6 @@ Point&	Point::operator = (const Point& copy)
 		(Fixed) this->x = copy.x;
 		(Fixed) this->y = copy.y;
 	}
-	std::cout << "Point: assignement operator called\n";
 	return (*this);
 }
 
