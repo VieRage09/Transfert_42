@@ -6,13 +6,12 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 22:15:12 by tlebon            #+#    #+#             */
-/*   Updated: 2025/01/29 16:41:05 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/27 17:12:20 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sed.hpp"
 
-// void	sedlike(char *infile, char *to_replace, char *replacement)
 void	sedlike(std::string file, std::string to_replace, std::string replacement)
 {
 	std::string		ofile = file + ".replace";
@@ -20,6 +19,11 @@ void	sedlike(std::string file, std::string to_replace, std::string replacement)
 	std::string		s2 = replacement;
 	std::string		line;
 
+	if (s1.empty())
+	{
+		std::cout << "The string you want to replace is empty\n";
+		return ;
+	}
 	std::ifstream	input_stream(file.c_str());
 	if (!input_stream.is_open())
 	{
@@ -39,7 +43,7 @@ void	sedlike(std::string file, std::string to_replace, std::string replacement)
 		{
 			line.erase(i, s1.size());
 			line.insert(i, s2);
-			i = line.find(s1);
+			i = line.find(s1, i + s2.size());
 		}
 		output_stream << line << std::endl;
 	}
