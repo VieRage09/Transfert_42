@@ -19,7 +19,7 @@ ClapTrap::ClapTrap(std::string name): name(name), hitPoints(10), energyPoints(10
 	std::cout << "Constructor called: ClapTrap " << name << " is created\n";
 }
 
-ClapTrap::ClapTrap(ClapTrap& copy): name(copy.name), hitPoints(copy.hitPoints), energyPoints(copy.energyPoints), attackDamage(copy.attackDamage)
+ClapTrap::ClapTrap(const ClapTrap& copy): name(copy.name), hitPoints(copy.hitPoints), energyPoints(copy.energyPoints), attackDamage(copy.attackDamage)
 {	
 	std::cout << "Copy constructor called on " << copy.name << std::endl;
 }

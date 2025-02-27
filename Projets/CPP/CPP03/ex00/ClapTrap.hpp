@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 00:08:53 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/18 01:07:37 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/27 20:46:22 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class ClapTrap
 	public:
 	    ClapTrap();
 		ClapTrap(std::string name);
-		ClapTrap(ClapTrap& copy);
+		ClapTrap(const ClapTrap& copy);
  	   ~ClapTrap();
 
 		void	attack(const std::string& target);

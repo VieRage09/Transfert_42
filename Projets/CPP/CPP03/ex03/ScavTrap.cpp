@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 01:06:52 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/24 01:57:31 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/27 20:42:08 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ ScavTrap::ScavTrap(const std::string str): ClapTrap(str)
 	std::cout << "ScavTrap " << name << " is born\n";
 }
 
-ScavTrap::ScavTrap(const ScavTrap& copy): ClapTrap(copy.name) // Est ce vraiment comme ca qu'on fait ???
+ScavTrap::ScavTrap(const ScavTrap& copy): ClapTrap(copy)
 {
 	this->name = copy.name;
 	this->hitPoints = copy.hitPoints;

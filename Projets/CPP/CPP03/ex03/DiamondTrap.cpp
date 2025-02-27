@@ -22,7 +22,7 @@ DiamondTrap::DiamondTrap(const std::string& str): ClapTrap(str), ScavTrap(str), 
 	std::cout << "A strange entity has appeared. It says its called " << this->name << ".\n";
 }
 
-DiamondTrap::DiamondTrap(const DiamondTrap& copy): ClapTrap(copy.name), ScavTrap(copy.name), FragTrap(copy.name) 
+DiamondTrap::DiamondTrap(const DiamondTrap& copy): ClapTrap(copy), ScavTrap(copy), FragTrap(copy) 
 {
 	this->name = copy.name;
 	this->ClapTrap::name = copy.ClapTrap::name;

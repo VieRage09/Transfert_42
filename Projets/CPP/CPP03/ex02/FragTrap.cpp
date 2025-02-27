@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 19:58:11 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/18 20:09:45 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/02/27 20:45:57 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ FragTrap::FragTrap(const std::string name): ClapTrap(name)
 	std::cout << "FragTrap " << name << " is in the BUILDIIIIIING\n";
 }
 
-FragTrap::FragTrap(const FragTrap& copy): ClapTrap(copy.name)
+FragTrap::FragTrap(const FragTrap& copy): ClapTrap(copy)
 {
 	this->hitPoints = copy.hitPoints;
 	this->energyPoints = copy.energyPoints;
