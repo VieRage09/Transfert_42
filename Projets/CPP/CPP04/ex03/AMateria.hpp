@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 16:10:04 by tlebon            #+#    #+#             */
-/*   Updated: 2025/03/06 18:52:41 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/03/07 16:50:21 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 // includes //
 #include <iostream>
-#include "ICharacter.hpp"
 
 class ICharacter;
 

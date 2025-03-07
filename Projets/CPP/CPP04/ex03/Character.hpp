@@ -2,7 +2,19 @@
 #define	CHARACTER_HPP
 
 // includes //
-#include "ICharacter.hpp"
+#include "AMateria.hpp"
+
+class AMateria;
+
+class ICharacter
+{
+	public:
+		virtual ~ICharacter() {}
+		virtual std::string const & getName() const = 0;
+		virtual void equip(AMateria* m) = 0;
+		virtual void unequip(int idx) = 0;
+		virtual void use(int idx, ICharacter& target) = 0;
+};
 
 class Character : public ICharacter
 {
@@ -10,8 +22,10 @@ class Character : public ICharacter
 
 		// attributes //
 		std::string			name;
-		static const int	inventory_size;
-		AMateria *			inventory;
+		AMateria *			inventory[4];
+		AMateria ** floor;
+		int floor_size;
+		int floor_count;
 
 	public:
 		// Default constructor

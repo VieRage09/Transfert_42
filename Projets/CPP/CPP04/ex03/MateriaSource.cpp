@@ -1,38 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Ice.cpp                                            :+:      :+:    :+:   */
+/*   MateriaSource.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/07 16:40:18 by tlebon            #+#    #+#             */
-/*   Updated: 2025/03/07 16:40:28 by tlebon           ###   ########.fr       */
+/*   Created: 2025/03/07 16:51:30 by tlebon            #+#    #+#             */
+/*   Updated: 2025/03/07 18:39:31 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Ice.hpp"
+#include "MateriaSource.hpp"
+
+// STATIC INIT //
+
+const int	MateriaSource::temp_size = 4;
 
 // CONSTRUCTORS & DESTRUCTORS //
 
-Ice::Ice() : AMateria("ice") {std::cout << "Ice constructor called\n";}
+MateriaSource::MateriaSource()
+{
+	templates = new AMateria[4];
+	std::cout << "MateriaSource constructor called\n";
+}
 
-Ice::Ice(const Ice& copy) {}
+MateriaSource::MateriaSource(const MateriaSource& copy) {}
 
-Ice::~Ice() {std::cout << "Ice destructor called\n";}
+MateriaSource::~MateriaSource() {std::cout << "MateriaSource destructor called\n";}
 
 // METHODS //
 
-AMateria* Ice::clone() const
-{
-	AMateria *	clone = new Ice(*this);
-	return (clone);
-}
-
-void Ice::use(ICharacter& target) {std::cout << "* shoots an ice bolt at " << target.getName() << " *\n";}
 
 // OPERATORS //
 
-Ice& Ice::operator = (const Ice& copy)
+MateriaSource& MateriaSource::operator = (const MateriaSource& copy)
 {
 	if (this != &copy)
 	{
