@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 16:51:26 by tlebon            #+#    #+#             */
-/*   Updated: 2025/03/07 16:56:43 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/03/08 22:21:58 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,18 @@
 class IMateriaSource
 {
 	public:
-		virtual ~IMateriaSource() {}
-		virtual void learnMateria(AMateria*) = 0;
-		virtual AMateria* createMateria(std::string const & type) = 0;
+		virtual				~IMateriaSource() {}
+		virtual void		learnMateria(AMateria*) = 0;
+		virtual AMateria*	createMateria(std::string const & type) = 0;
+		virtual	void		printBook() = 0;
 };
 
-class MateriaSource
+class MateriaSource : public IMateriaSource
 {
 	private:
 
 		// attributes //
-		AMateria *			templates;
-		static const int	temp_size;
+		AMateria *			book[4];
 
 	public:
 		// Default constructor
@@ -41,10 +41,10 @@ class MateriaSource
 		~MateriaSource();
 
 		// Methods //
-		void learnMateria(AMateria*);
-		AMateria* createMateria(std::string const & type);
+		void		printBook();	
+		void		learnMateria(AMateria*);
+		AMateria *	createMateria(std::string const & type);
 		
-
 		// Operators //
 		MateriaSource&	operator = (const MateriaSource& copy);
 

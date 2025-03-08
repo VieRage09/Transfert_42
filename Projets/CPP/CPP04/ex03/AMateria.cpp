@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 16:10:13 by tlebon            #+#    #+#             */
-/*   Updated: 2025/03/07 16:38:06 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/03/08 21:19:13 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,10 @@ void AMateria::use(ICharacter& target) {std::cout << "*Blows a kiss at " << targ
 
 // OPERATORS //
 
-AMateria& AMateria::operator = (const AMateria& copy) // EUUUUUUh pas logique selon le sujet ??
+AMateria& AMateria::operator = (const AMateria& copy)
 {
 	if (this != &copy)
-	{
 		this->type = copy.type;
-	}
 	return (*this);
 }
 

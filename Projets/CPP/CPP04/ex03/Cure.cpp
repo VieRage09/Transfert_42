@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 16:40:05 by tlebon            #+#    #+#             */
-/*   Updated: 2025/03/07 16:40:06 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/03/08 22:19:42 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 Cure::Cure(): AMateria("cure") {std::cout << "Cure constructor called\n";}
 
-Cure::Cure(const Cure& copy) {}
+Cure::Cure(const Cure& copy) : AMateria(copy.type) {std::cout << "Cure copy constructor called\n";}
 
 Cure::~Cure() {std::cout << "Cure destructor called\n";}
 
@@ -24,19 +24,17 @@ Cure::~Cure() {std::cout << "Cure destructor called\n";}
 
 AMateria* Cure::clone() const
 {
-	AMateria *	clone = new Cure(*this); // nothrow / try catch pour verifier l'alloc ?
-	return (clone);
+	std::cout << "Cloning " << getType() << " materia\n";
+	return (new Cure(*this));
 }
 
-void Cure::use(ICharacter& target) {std::cout << "* heals " << target.getName() << "\'s wounds *";}
+void Cure::use(ICharacter& target) {std::cout << "* heals " << target.getName() << "\'s wounds *\n";}
 
 // OPERATORS //
 
-Cure& Cure::operator = (const Cure& copy) // Jcp 
+Cure& Cure::operator = (const Cure& copy) // Sert a rien
 {
 	if (this != &copy)
-	{
-		
-	}
+		type = copy.type;
 	return (*this);
 }

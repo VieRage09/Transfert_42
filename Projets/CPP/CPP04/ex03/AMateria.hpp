@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 16:10:04 by tlebon            #+#    #+#             */
-/*   Updated: 2025/03/07 16:50:21 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/03/08 22:18:20 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 // includes //
 #include <iostream>
+#include "Character.hpp"
 
 class ICharacter;
 
@@ -37,11 +38,11 @@ class AMateria
 		virtual AMateria* clone() const = 0;
 		virtual void use(ICharacter& target);
 
-		// Getters //
-		std::string const & getType() const; //Returns the materia type
-
 		// Operators //
-		AMateria &	operator = (const AMateria & copy); // A nettre en pure virtual ?
+		virtual AMateria &	operator = (const AMateria & copy);
+
+		// Getter//
+		std::string const & getType() const; //Returns the materia type
 
 };
 
