@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 15:26:13 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/26 12:55:15 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/03/10 18:46:23 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,3 +54,6 @@ Cat& Cat::operator = (const Cat& copy)
 	}
 	return (*this);
 }
+
+// GETTERS //
+Brain *	Cat::getBrain() {return (brain);}

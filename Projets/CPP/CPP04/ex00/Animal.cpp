@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 15:20:50 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/25 15:20:51 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/03/10 18:23:43 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 // CONSTRUCTORS & DESTRUCTORS //
 
-Animal::Animal() {std::cout << "An unknowned animal just spawned\n";}
+Animal::Animal(): type("Chimera") {std::cout << "An unknowned animal just spawned\n";}
 
-Animal::Animal(const std::string& str): type(str) {std::cout << "A " << type << " just spawned\n";}
+Animal::Animal(const std::string& str): type(str) {std::cout << "An animal just spawned\n";}
 
 Animal::Animal(const Animal& copy): type(copy.type) {std::cout << "A " << type << " got duplicated\n";}
 

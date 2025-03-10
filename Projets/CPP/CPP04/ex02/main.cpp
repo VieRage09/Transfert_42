@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 14:15:29 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/26 15:38:04 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/03/10 18:50:52 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,3 @@ int main()
 		delete animarray[i];
 	return (0);
 }
-
-// int main()
-// {
-// 	A_Animal a;
-// 	return 0;
-// }
-
-// int	main()
-// {
-// 	Brain a;
-
-// 	a.set_idea("Salut", 0);
-// 	a.set_idea("Slt", 1);
-// 	a.set_idea("Goodbye", 3);
-// 	std::cout << "First 4 ideas of brain a: " << a.get_idea(0) << "," << a.get_idea(1) << "," << a.get_idea(2) << "," << a.get_idea(3) << "\n";
-// 	Cat	patoune(&a);
-
-// 	patoune.makeSound();
-// 	return (0);
-// }

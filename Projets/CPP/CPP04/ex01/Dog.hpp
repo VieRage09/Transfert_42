@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 15:43:08 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/26 12:30:27 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/03/10 18:45:32 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@ class Dog : public Animal
 
 		// Operators //
 		Dog&				operator = (const Dog& copy);
+
+		// Getters //
+		Brain *	getBrain();
 };
 
 #endif // DOG_HPP

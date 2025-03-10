@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 15:42:58 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/26 12:15:14 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/03/10 18:30:44 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ Brain::Brain(std::string arr[100])
 Brain::Brain(const Brain& copy) // Check for DDDEEEEEEP copy or shallow ???
 {
 	for (int i = 0; i < 100; i++)
-		(this->ideas)[i] = copy.ideas[i];
+		set_idea(copy.ideas[i], i);
 	std::cout << "A Brain has been copied\n";
 }
 
@@ -47,7 +47,7 @@ Brain& Brain::operator = (const Brain& copy)
 	if (this != &copy)
 	{
 		for (int i = 0; i < 100; i++)
-			(this->ideas)[i] = copy.ideas[i];
+			set_idea(copy.ideas[i], i);
 	}
 	return (*this);
 }

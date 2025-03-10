@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 14:15:29 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/26 15:27:52 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/03/10 18:49:21 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,65 @@
 #include "Cat.hpp"
 #include "Brain.hpp"
 
-// int main()
-// {
-// 	int size = 4;
-// 	Animal *animarray[size];
-
-// 	for (int i = 0; i < size / 2; i++)
-// 		animarray[i] = new Cat();
-// 	for (int i = size / 2; i < size; i++)
-// 		animarray[i] = new Dog();
-
-// 	for (int i = 0; i < size; i++)
-// 		animarray[i]->makeSound();
-
-// 	for (int i = 0; i < size; i++)
-// 		delete animarray[i];
-// 	return (0);
-// }
-
 int main()
 {
-	const Animal *j = new Dog();
-	const Animal *i = new Cat();
-	delete j; // should not create a leak
+	std::cout << "Array test\n";
+	int size = 4;
+	Animal *animarray[size];
+
+	for (int i = 0; i < size / 2; i++)
+		animarray[i] = new Cat();
+	for (int i = size / 2; i < size; i++)
+		animarray[i] = new Dog();
+
+	for (int i = 0; i < size; i++)
+		animarray[i]->makeSound();
+
+	for (int i = 0; i < size; i++)
+		delete animarray[i];
+
+	std::cout << "\n\nLeaks test\n\n";
+	const Animal* j = new Dog();
+	const Animal* i = new Cat();
+	delete j;//should not create a leak
 	delete i;
-	return 0;
+
+	std::cout << "\n\nTest Brain copy is deep\n\n";
+	std::string thoughts[100] = {"Eat", "Sleep", "Hunt"};
+	Brain	*a = new Brain(thoughts);
+	std::cout << a->get_idea(0) << std::endl;
+	std::cout << a->get_idea(1) << std::endl;
+	std::cout << a->get_idea(2) << std::endl;
+	Brain	b(*a);
+	a->set_idea("Marcher dans les bois", 0);
+	std::cout << a->get_idea(0) << std::endl;
+	std::cout << b.get_idea(0) << std::endl;
+	delete a;
+	std::cout << b.get_idea(0) << std::endl;
+	std::cout << b.get_idea(1) << std::endl;
+	std::cout << b.get_idea(2) << std::endl;
+
+	std::cout << "\n\nTest Cat copy is deep\n\n";
+	Cat *	pip = new Cat (&b);
+	Cat *	aza = new Cat (*pip);
+
+	std::cout << pip->getBrain()->get_idea(0) << std::endl;	
+	std::cout << pip->getBrain()->get_idea(1) << std::endl;	
+	std::cout << pip->getBrain()->get_idea(2) << std::endl;	
+	std::cout << aza->getBrain()->get_idea(0) << std::endl;	
+	std::cout << aza->getBrain()->get_idea(1) << std::endl;	
+	std::cout << aza->getBrain()->get_idea(2) << std::endl;	
+	pip->getBrain()->set_idea("La nuit je mens", 0);
+	std::cout << pip->getBrain()->get_idea(0) << std::endl;	
+	std::cout << aza->getBrain()->get_idea(0) << std::endl;	
+	delete pip;
+	std::cout << aza->getBrain()->get_idea(0) << std::endl;	
+	std::cout << aza->getBrain()->get_idea(1) << std::endl;	
+	std::cout << aza->getBrain()->get_idea(2) << std::endl;	
+	delete aza;
+	return (0);
 }
+
 
 // int	main()
 // {

@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 15:20:56 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/25 15:25:56 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/03/10 18:24:55 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 WrongAnimal::WrongAnimal() {std::cout << "An unknowned wrong animal just spawned\n";}
 
-WrongAnimal::WrongAnimal(const std::string& str): type(str) {std::cout << "A wrong" << type << " just spawned\n";}
+WrongAnimal::WrongAnimal(const std::string& str): type(str) {std::cout << "A wrong animal just spawned\n";}
 
 WrongAnimal::WrongAnimal(const WrongAnimal& copy): type(copy.type) {std::cout << "A wrong" << type << " got duplicated\n";}
 

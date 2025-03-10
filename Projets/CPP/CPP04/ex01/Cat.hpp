@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 14:20:40 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/26 12:28:55 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/03/10 18:45:19 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@ class Cat : public Animal
 
 		// Operators //
 		Cat&				operator = (const Cat& copy);
+
+		// Getters //
+		Brain *	getBrain();
 
 };
 

@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 15:43:05 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/26 12:55:48 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/03/10 18:46:37 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,3 +54,7 @@ Dog& Dog::operator = (const Dog& copy)
 	}
 	return (*this);
 }
+
+// GETTERS //
+
+Brain *	Dog::getBrain() {return (brain);}
