@@ -1,0 +1,15 @@
+extension .bfe = fichier crypte par bcrypt(blowfish algo) 
+L'encryptage se fait a partir d'une passphrase --> Logiquement egale a l'indice du cercle 2
+
+Possibilite d'utiliser bcrypt via un script python
+
+
+
+
+FDF			file.bfe:VADYjxBiOQSAWNqB652klCj13URaziELdHd+2Z38XCMD9dvO9tSyFob6Il3NBX9YXrgZEiQK7JZJ7w5t0N80wMl7
+minitalk	file.bfe:VAAe8ElCrUAbXivz0ueiIpv/u/ia9PL50+HI+8/bgPKLESHlptPLpu0PW9zWV/LwDVaOqCRCGu6Gopk1X0i6Kn7t
+
+so_long		file.bfe:VAA0DAYFf07ym3 ROeASsmsgnY0o0sDMJev7zFHhwQS8mvM8V5xQQpLc6cDCFXDWTiFzZ2H9skYkiJ/DpQtnM/uZ0	}
+fractol		file.bfe:VAD2sO2qgbqPEX ROeASsmsgnY0o0sDMJev7zFHhwQS8mvM8V5xQQpLc6cDCFXDWTiFzZ2H9skYkiJ/DpQtnM/uZ0	} ==> ROeASsmsgnY0o0sDMJev7zFHhwQS8mvM8V5xQQpLc6cDCFXDWTiFzZ2H9skYkiJ/DpQtnM/uZ0
+pipex		file.bfe:VACsSfsWN1cy33 ROeASsmsgnY0o0sDMJev7zFHhwQS8mvM8V5xQQpLc6cDCFXDWTiFzZ2H9skYkiJ/DpQtnM/uZ0	} ==> Partie commune aux 4
+push_swap	file.bfe:VABB7yO9xm7xWX ROeASsmsgnY0o0sDMJev7zFHhwQS8mvM8V5xQQpLc6cDCFXDWTiFzZ2H9skYkiJ/DpQtnM/uZ0	}
