@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 16:51:30 by tlebon            #+#    #+#             */
-/*   Updated: 2025/03/08 22:14:58 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/03/17 14:32:39 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ void	MateriaSource::learnMateria(AMateria * newMateria)
 	{
 		if (book[i] == NULL)
 		{
-			// book[i] = newMateria->clone();
-			book[i] = newMateria;
+			book[i] = newMateria->clone();
+			// book[i] = newMateria;
 			std::cout << "New Materia learned : " << newMateria->getType() << std::endl;
 			return ;
 		}

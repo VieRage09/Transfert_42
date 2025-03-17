@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 16:51:26 by tlebon            #+#    #+#             */
-/*   Updated: 2025/03/08 22:21:58 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/03/17 14:32:25 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ class MateriaSource : public IMateriaSource
 		// Copy constructor
 		MateriaSource(const MateriaSource& copy);
 		// Destructor
-		~MateriaSource();
+		virtual ~MateriaSource();
 
 		// Methods //
 		void		printBook();	

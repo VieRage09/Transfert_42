@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 14:20:47 by tlebon            #+#    #+#             */
-/*   Updated: 2025/02/25 15:07:18 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/03/17 14:30:51 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ class Animal
 		// Copy constructor
 		Animal(const Animal& copy);
 		// Destructor
-		~Animal();
+		virtual ~Animal();
 
 		// Methods //
 

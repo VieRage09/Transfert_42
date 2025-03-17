@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 16:56:54 by tlebon            #+#    #+#             */
-/*   Updated: 2025/03/08 22:16:43 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/03/17 14:31:42 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ void Character::equip(AMateria* m)
 	{
 		if (inventory[i] == NULL)
 		{
-			// inventory[i] = m->clone();	// Faut il copier la materia ou pas ?	
-			inventory[i] = m;
+			inventory[i] = m->clone();	// Faut il copier la materia ou pas ?	
+			// inventory[i] = m;
 			return ;
 		}
 		i++;

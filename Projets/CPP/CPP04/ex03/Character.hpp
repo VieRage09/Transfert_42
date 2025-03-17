@@ -49,7 +49,7 @@ class Character : public ICharacter
 		Character&		operator = (const Character& copy);
 
 		// Getters // 
-		virtual std::string const & getName() const;
+		std::string const & getName() const;
 };
 
 #endif // CHARACTER_HPP

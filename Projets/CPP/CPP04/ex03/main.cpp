@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 16:07:42 by tlebon            #+#    #+#             */
-/*   Updated: 2025/03/10 18:57:27 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/03/17 14:37:15 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,4 +101,11 @@ int	main()
 	ex = src->createMateria("ice");
 	ex = src->createMateria("cure");
 	std::cout << "Materia created = " << ex->getType() << std::endl;
+
+	delete ex;
+	delete src;
+	delete tarzan;
+	delete bob;
+	delete b;
+	return (0);
 }
