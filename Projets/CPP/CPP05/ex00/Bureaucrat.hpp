@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:07:08 by tlebon            #+#    #+#             */
-/*   Updated: 2025/04/10 16:44:45 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/04/10 17:55:30 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class Bureaucrat
 		// Default constructor
 		Bureaucrat();
 		// Personnalized constructor
-		Bureaucrat(std::string &name, int grade);
+		Bureaucrat(std::string name, int grade);
 		// Copy constructor
 		Bureaucrat(const Bureaucrat& copy);
 		// Destructor
@@ -46,22 +46,16 @@ class Bureaucrat
 		const int&			get_grade() const;
 
 		// Exception classes //
-		class GradeToHighException : public std::exception
+		class GradeTooHighException : public std::exception
 		{
-			private:
-				const std::string		_error_msg;
 			public:
-				GradeToHighException(std::string msg);
-				virtual const std::string&	GradeToHighException::what();
+				virtual const char	*what() const throw ();
 		};
 		
-		class GradeToLowException : public std::exception
+		class GradeTooLowException : public std::exception
 		{
-			private:
-				const std::string		_error_msg;
-			public:
-				GradeToLowException(std::string msg);
-				virtual const std::string&	GradeToLowException::what();
+			public: 
+				virtual const char	*what() const throw ();
 		};
 };
 

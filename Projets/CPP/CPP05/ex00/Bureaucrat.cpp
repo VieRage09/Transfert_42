@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:07:11 by tlebon            #+#    #+#             */
-/*   Updated: 2025/04/10 16:49:05 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/04/10 19:08:21 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 
 Bureaucrat::Bureaucrat(): _name("Fredo"), _grade(150) {std::cout << "Fredo instance created\n";}
 
-Bureaucrat::Bureaucrat(std::string &name, int grade): _name(name)
+Bureaucrat::Bureaucrat(std::string name, int grade): _name(name)
 {
 	if (grade < 1)
-		throw (Bureaucrat::GradeTooHighException);
+		throw (Bureaucrat::GradeTooHighException());
 	else if (grade > 150)
-		throw (Bureaucrat::GradeTooLowException);
+		throw (Bureaucrat::GradeTooLowException());
 	_grade = grade;
 	std::cout << name << " instance created\n";
 }
@@ -38,14 +38,14 @@ Bureaucrat::~Bureaucrat() {std::cout << get_name() << " destroyed\n";}
 void	Bureaucrat::incr_grade()
 {
 	if (_grade < 2)
-		throw (Bureaucrat::GradeTooHighException(""));
+		throw (Bureaucrat::GradeTooHighException());
 	_grade--;
 }
 
 void	Bureaucrat::decr_grade()
 {
 	if (_grade > 149)
-		throw (Bureaucrat::GradeTooLowException::what());
+		throw (Bureaucrat::GradeTooLowException());
 	_grade++;
 }
 
@@ -66,10 +66,8 @@ const int&	Bureaucrat::get_grade() const { return ( _grade );}
 
 // EXCEPTION CLASSES //
 
-Bureaucrat::GradeToHighException::GradeToHighException(std::string msg) : _error_msg(msg) {}
-Bureaucrat::GradeToLowException::GradeToLowException(std::string msg) : _error_msg(msg) {}
-const std::string&	Bureaucrat::GradeToHighException::what() {return (_error_msg);}
-const std::string&	Bureaucrat::GradeToLowException::what() {return (_error_msg);}
+const char	*Bureaucrat::GradeTooHighException::what() const throw () {return ("[ERROR] Grade is too high\n");}
+const char	*Bureaucrat::GradeTooLowException::what() const throw() {return ("[ERROR] Grade is too low\n");}
 
 // OTHERS //
 
