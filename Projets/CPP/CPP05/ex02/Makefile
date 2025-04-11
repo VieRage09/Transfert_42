@@ -6,11 +6,11 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/03/17 14:35:15 by tlebon           ###   ########.fr        #
+#    Updated: 2025/04/11 21:28:30 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	=	materia
+NAME	=	forms
 
 #---------------------------------------------------------COMPILATION----------#
 
@@ -22,22 +22,15 @@ CFLAGS	=	-Wall -Werror -Wextra -std=c++98
 
 SRC			= 									\
 				main.cpp						\
-				AMateria.cpp					\
-				Character.cpp					\
-				Cure.cpp						\
-				Ice.cpp							\
-				MateriaSource.cpp				\
+				Bureaucrat.cpp					\
+				Form.cpp						\
 #------------------------------------------------------------------------------#
 
 #-------------------------------------------------------------HEADERS----------#
 
 HDR			=									\
-				hgroup.hpp						\
-				AMateria.hpp					\
-				Character.hpp					\
-				Cure.hpp						\
-				Ice.hpp							\
-				MateriaSource.hpp				\
+				Bureaucrat.hpp					\
+				Form.hpp						\
 #------------------------------------------------------------------------------#
 
 #--------------------------------------------------------------OBJETS----------#
