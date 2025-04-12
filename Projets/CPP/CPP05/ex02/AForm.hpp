@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 20:47:36 by tlebon            #+#    #+#             */
-/*   Updated: 2025/04/11 22:50:49 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/04/12 02:02:54 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,10 @@ class AForm
 		~AForm();
 
 		// Methods //
-		void				beSigned(Bureaucrat& bureaucrat);
+		void				beSigned(Bureaucrat & bureaucrat);
+		bool				checkRequirements(Bureaucrat const & executor) const;
 		virtual void		execute(Bureaucrat const & executor) const = 0;
-
+	
 		// Operators //
 		// Form&				operator = (const Form& copy);
 

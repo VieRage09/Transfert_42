@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 22:40:29 by tlebon            #+#    #+#             */
-/*   Updated: 2025/04/11 22:44:39 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/04/12 02:22:53 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@ PresidentialPardonForm::PresidentialPardonForm(const PresidentialPardonForm& cop
 PresidentialPardonForm::~PresidentialPardonForm() {std::cout << get_name() << " form on " << _target << " destroyed\n";}
 
 // METHODS //
+void	PresidentialPardonForm::execute(Bureaucrat const & executor) const
+{
+	if (!checkRequirements(executor))
+		throw (AForm::GradeTooLowException());
+	std::cout << _target << " has been pardonned by his highness mister president Zaphod Beeblebrox\n";
+}
 
 
 // ATTENTION CONNONICAL FORM

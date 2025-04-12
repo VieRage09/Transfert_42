@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 22:31:47 by tlebon            #+#    #+#             */
-/*   Updated: 2025/04/11 22:40:04 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/04/12 02:20:55 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,16 @@ RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm& copy) : Robo
 RobotomyRequestForm::~RobotomyRequestForm() {std::cout << get_name() << " form on " << _target << " destroyed\n";}
 
 // METHODS //
+void	RobotomyRequestForm::execute(Bureaucrat const & executor) const
+{
+	if (!checkRequirements(executor))
+		throw (AForm::GradeTooLowException());
+	std::cout << "Bzzzzzz Brrrrzzzzrrzrzr BRRRRRRRRrrrrzzzz Brbrbrbrbrb Brz Bzh\n";
+	if ((std::rand() % 101) > 50)
+		std::cout << _target << " has been robotomized successfully !\n";
+	else
+		std::cout << "The robotomy failed on " << _target << " ):\n";
+}
 
 
 // OPERATORS //

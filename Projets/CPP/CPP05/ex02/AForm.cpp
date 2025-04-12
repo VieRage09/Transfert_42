@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 20:47:41 by tlebon            #+#    #+#             */
-/*   Updated: 2025/04/11 22:20:39 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/04/12 01:55:53 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,10 @@ void	AForm::beSigned(Bureaucrat& bureaucrat)
 		throw (AForm::GradeTooLowException());
 }
 
+bool	AForm::checkRequirements(Bureaucrat const & executor) const
+{
+	return (executor.get_grade() <= _grade_to_exec && _signed);
+}
 // OPERATORS //
 
 

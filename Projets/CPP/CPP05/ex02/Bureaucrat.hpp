@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:07:08 by tlebon            #+#    #+#             */
-/*   Updated: 2025/04/11 22:51:22 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/04/12 02:24:44 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ class Bureaucrat
 		void				incr_grade();
 		void				decr_grade();
 		void				signForm(AForm& form);
+		void				executeForm(AForm const & form) const;
 
 		// Operators //
 		Bureaucrat&			operator = (const Bureaucrat& copy);
