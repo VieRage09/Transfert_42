@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/04/11 21:28:30 by tlebon           ###   ########.fr        #
+#    Updated: 2025/04/12 12:37:34 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,14 +23,20 @@ CFLAGS	=	-Wall -Werror -Wextra -std=c++98
 SRC			= 									\
 				main.cpp						\
 				Bureaucrat.cpp					\
-				Form.cpp						\
+				AForm.cpp						\
+				PresidentialPardonForm.cpp		\
+				RobotomyRequestForm.cpp			\
+				ShrubberyCreationForm.cpp		\
 #------------------------------------------------------------------------------#
 
 #-------------------------------------------------------------HEADERS----------#
 
 HDR			=									\
 				Bureaucrat.hpp					\
-				Form.hpp						\
+				AForm.hpp						\
+				PresidentialPardonForm.cpp		\
+				RobotomyRequestForm.cpp			\
+				ShrubberyCreationForm.cpp		\
 #------------------------------------------------------------------------------#
 
 #--------------------------------------------------------------OBJETS----------#
