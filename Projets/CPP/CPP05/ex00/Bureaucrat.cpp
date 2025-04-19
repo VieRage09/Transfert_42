@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:07:11 by tlebon            #+#    #+#             */
-/*   Updated: 2025/04/10 19:08:21 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/04/19 19:43:18 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 Bureaucrat::Bureaucrat(): _name("Fredo"), _grade(150) {std::cout << "Fredo instance created\n";}
 
-Bureaucrat::Bureaucrat(std::string name, int grade): _name(name)
+Bureaucrat::Bureaucrat(std::string name, int grade) : _name(name)
 {
 	if (grade < 1)
 		throw (Bureaucrat::GradeTooHighException());
@@ -35,7 +35,7 @@ Bureaucrat::~Bureaucrat() {std::cout << get_name() << " destroyed\n";}
 
 // METHODS //
 
-void	Bureaucrat::incr_grade()
+void	Bureaucrat::incr_grade() 
 {
 	if (_grade < 2)
 		throw (Bureaucrat::GradeTooHighException());

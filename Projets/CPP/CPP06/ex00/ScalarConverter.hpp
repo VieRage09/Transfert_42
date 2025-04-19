@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:51 by tlebon            #+#    #+#             */
-/*   Updated: 2025/04/14 18:18:30 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/04/20 01:14:20 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,27 @@
 
 // includes //
 #include <iostream>
+#include <string>
+#include <limits>
+#include <cmath>
+#include <sstream>
 
 class ScalarConverter
 {
 	private:
 		// Default constructor
 		ScalarConverter();
-
+		static bool	check_nan_inf(std::string str);
+		static void print_conv_char(std::string str);
+		static void print_conv_int(std::string str);
+		static void print_conv_float(std::string str);
+		static void print_conv_double(std::string str);
 	public:
 		// Destructor
 		~ScalarConverter();
 
 		// Methods //
-		static void		convert(char *str);
+		static void		convert(const std::string str);
 
 };
 
