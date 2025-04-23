@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:51 by tlebon            #+#    #+#             */
-/*   Updated: 2025/04/20 16:53:39 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/04/23 21:41:20 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class ScalarConverter
 	private:
 		// Default constructor
 		ScalarConverter();
-		static bool	check_nan_inf(std::string str);
+		static bool	handle_nan_inf(std::string str);
 		static void print_conv_char(std::string str);
 		static void print_conv_int(std::string str);
 		static void print_conv_float(std::string str);
