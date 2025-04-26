@@ -1,37 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ScalarConverter.hpp                                :+:      :+:    :+:   */
+/*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 17:13:51 by tlebon            #+#    #+#             */
-/*   Updated: 2025/04/26 23:19:26 by tlebon           ###   ########.fr       */
+/*   Created: 2025/04/26 23:45:31 by tlebon            #+#    #+#             */
+/*   Updated: 2025/04/26 23:52:58 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	SCALARCONVERTER_HPP
-#define	SCALARCONVERTER_HPP
+#include "Serializer.hpp"
 
-// includes //
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <limits>
-#include <cmath>
-
-class ScalarConverter
+int	main( void )
 {
-	private:
-		// Default constructor
-		ScalarConverter();
-	public:
-		// Destructor
-		~ScalarConverter();
-
-		// Methods //
-		static void		convert(const std::string str);
-
-};
-
-#endif // SCALARCONVERTER_HPP
+	Data	test(12, 1, 1234567890123456, 12.45, 1234567890123456798.6);
+	uintptr_t a = Serializer::serialize(&test);
+	Data	*b = Serializer::deserialize(a);
+	std::cout 	<< "Pointeur de base\t\t=\t" << &test << std::endl
+				<< "Valeur apres serialize\t\t=\t" << a << std::endl
+				<< "Valeur apres deserialize\t=\t" << b << std::endl;
+	return (0);
+}

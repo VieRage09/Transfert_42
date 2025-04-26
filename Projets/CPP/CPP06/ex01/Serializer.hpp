@@ -1,37 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ScalarConverter.hpp                                :+:      :+:    :+:   */
+/*   Serializer.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 17:13:51 by tlebon            #+#    #+#             */
-/*   Updated: 2025/04/26 23:19:26 by tlebon           ###   ########.fr       */
+/*   Created: 2025/04/26 23:31:18 by tlebon            #+#    #+#             */
+/*   Updated: 2025/04/26 23:46:12 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	SCALARCONVERTER_HPP
-#define	SCALARCONVERTER_HPP
+#ifndef	SERIALIZER_HPP
+#define	SERIALIZER_HPP
 
 // includes //
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <limits>
-#include <cmath>
+#include "Data.hpp"
 
-class ScalarConverter
+class Serializer
 {
 	private:
+
 		// Default constructor
-		ScalarConverter();
+		Serializer();
+
 	public:
 		// Destructor
-		~ScalarConverter();
+		~Serializer();
 
 		// Methods //
-		static void		convert(const std::string str);
-
+		static uintptr_t	serialize(Data* ptr);
+		static Data*		deserialize(uintptr_t raw);
 };
 
-#endif // SCALARCONVERTER_HPP
+#endif // SERIALIZER_HPP

@@ -1,37 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ScalarConverter.hpp                                :+:      :+:    :+:   */
+/*   Serializer.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 17:13:51 by tlebon            #+#    #+#             */
-/*   Updated: 2025/04/26 23:19:26 by tlebon           ###   ########.fr       */
+/*   Created: 2025/04/26 23:45:40 by tlebon            #+#    #+#             */
+/*   Updated: 2025/04/26 23:45:41 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	SCALARCONVERTER_HPP
-#define	SCALARCONVERTER_HPP
+#include "Serializer.hpp"
 
-// includes //
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <limits>
-#include <cmath>
+// CONSTRUCTORS & DESTRUCTORS //
 
-class ScalarConverter
+Serializer::Serializer() {}
+
+Serializer::~Serializer() {}
+
+// METHODS //
+
+uintptr_t	Serializer::serialize(Data* ptr)
 {
-	private:
-		// Default constructor
-		ScalarConverter();
-	public:
-		// Destructor
-		~ScalarConverter();
+	return (reinterpret_cast <uintptr_t> (ptr));
+}
 
-		// Methods //
-		static void		convert(const std::string str);
-
-};
-
-#endif // SCALARCONVERTER_HPP
+Data*		Serializer::deserialize(uintptr_t raw)
+{
+	return (reinterpret_cast <Data*> (raw));
+}

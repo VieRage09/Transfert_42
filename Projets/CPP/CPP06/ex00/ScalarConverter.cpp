@@ -21,9 +21,17 @@ ScalarConverter::~ScalarConverter() {}
 
 // METHODS //
 
+void	print_floats(long double val)
+{
+	if (val == floor(val))
+		std::cout << std::fixed << std::setprecision(1);
+	std::cout 	<< "float: " << static_cast <float> (val) << "f" << std::endl
+				<< "double: " << static_cast <double> (val) << std::endl;
+}
+
 bool	has_lone_point(std::string str)
 {
-	return (str.find('.') != std::string::npos && str.find('.') == str.rfind('.'));
+	return (str.find('.') == str.rfind('.'));
 }
 
 bool	str_is_char(std::string str)
@@ -85,8 +93,7 @@ void		display_converted(T val, char overflow)
 	}
 	else
 	{
-		std::cout 	<< "float: " << static_cast <float> (val) << "f" << std::endl
-					<< "double: " << static_cast <double> (val) << std::endl;
+		print_floats(static_cast <long double> (val));
 	}
 
 }

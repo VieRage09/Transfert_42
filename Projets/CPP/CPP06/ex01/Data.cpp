@@ -1,37 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ScalarConverter.hpp                                :+:      :+:    :+:   */
+/*   Data.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 17:13:51 by tlebon            #+#    #+#             */
-/*   Updated: 2025/04/26 23:19:26 by tlebon           ###   ########.fr       */
+/*   Created: 2025/04/26 23:45:38 by tlebon            #+#    #+#             */
+/*   Updated: 2025/04/26 23:45:39 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	SCALARCONVERTER_HPP
-#define	SCALARCONVERTER_HPP
+#include "Data.hpp"
 
-// includes //
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <limits>
-#include <cmath>
+// CONSTRUCTORS & DESTRUCTORS //
 
-class ScalarConverter
-{
-	private:
-		// Default constructor
-		ScalarConverter();
-	public:
-		// Destructor
-		~ScalarConverter();
+Data::Data(char c, int i, long l, float f, long double ld) : c(c), i(i), l(l), f(f), ld(ld) {std::cout << "Struct Data created\n";}
 
-		// Methods //
-		static void		convert(const std::string str);
-
-};
-
-#endif // SCALARCONVERTER_HPP
+Data::~Data() {std::cout << "Struct Data destroyed\n";}

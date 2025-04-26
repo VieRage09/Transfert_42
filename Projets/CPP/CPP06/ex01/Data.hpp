@@ -1,37 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ScalarConverter.hpp                                :+:      :+:    :+:   */
+/*   Data.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 17:13:51 by tlebon            #+#    #+#             */
-/*   Updated: 2025/04/26 23:19:26 by tlebon           ###   ########.fr       */
+/*   Created: 2025/04/26 23:45:36 by tlebon            #+#    #+#             */
+/*   Updated: 2025/04/26 23:48:08 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	SCALARCONVERTER_HPP
-#define	SCALARCONVERTER_HPP
+#ifndef	DATA_HPP
+#define	DATA_HPP
 
 // includes //
 #include <iostream>
-#include <iomanip>
-#include <string>
-#include <limits>
-#include <cmath>
 
-class ScalarConverter
+struct Data
 {
-	private:
-		// Default constructor
-		ScalarConverter();
-	public:
-		// Destructor
-		~ScalarConverter();
+	// Default constructor
+	Data(char c, int i, long l, float f, long double ld);
+	// Destructor
+	~Data();
 
-		// Methods //
-		static void		convert(const std::string str);
-
+	char		c;
+	int			i;
+	long		l;
+	float		f;
+	long double ld;
 };
 
-#endif // SCALARCONVERTER_HPP
+#endif // DATA_HPP

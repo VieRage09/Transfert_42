@@ -1,9 +1,5 @@
 Gerer underflow ?? par ex: 32.000055 donne 32.0001 et 32.0001f
 
-affchage des float et double ? 32.0 affiche 32 et 32f
-
-detection des float	? 32f non reconnu comme float / 32.f float par contre (same pour double)
-
 Se renseigner sur les templates et leur utilisation
 
 
@@ -19,15 +15,15 @@ II. Int																OK
 	- Basic int mais char non printable (genre 0) : 				OK
 	- Int Overflow : OK (throw exception)							OK
 
-III. Float															KO
+III. Float															OK	
 	- Basic float genre 32.4f : OK
-	- Float sans . genre 32f : NOT A LITERAL						// Same
+	- Float sans . genre 32f : NOT A LITERAL						OK
 	- 32.ff : OK
 	- 32..f : OK
-	- Float Overflow 3402823000000000000000000000000000000001.f: OK 	// Same (exception mais aucun affichage en double)
+	- Float Overflow 3402823000000000000000000000000000000001.f: 	OK
 	- +inff -inff nanf : OK
 
-IV. Double															KO
+IV. Double															OK
 	- Basic double genre 32.4 : OK
 	- 32.. / 3.2. / .32 : OK
 	- Double Overflow												OK (stold j'arrive pas a trigger son overflow)
