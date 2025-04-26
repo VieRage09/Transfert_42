@@ -12,6 +12,7 @@
 
 #include "ScalarConverter.hpp"
 
+
 // CONSTRUCTORS & DESTRUCTORS //
 
 ScalarConverter::ScalarConverter() {}
@@ -60,35 +61,123 @@ bool	str_is_double(std::string str)
 	return (has_lone_point(str) && str.find_first_of("0123456879") != std::string::npos && str.find_first_not_of("0123456789.") == std::string::npos);
 }
 
-void	display_char(void *addr, char type)
+template <typename T>
+void		display_converted(T val, char overflow)
 {
-	std::cout	<< "char: ";
-	if (type == 'c')
-		std::cout << ""
+	if (std::isnan(static_cast <double> (val)) || std::isinf(static_cast <double> (val)))
+		std::cout	<< "char: impossible" << std::endl
+					<< "int: impossible" << std::endl;
+	else
+	{
+		if (isprint(static_cast <char> (val)) && overflow == 0)
+			std::cout	<< "char: '" << static_cast <char> (val) << "'" << std::endl;
+		else
+			std::cout	<< "char: Non displayable" << std::endl;
+		if (overflow == 'i' || overflow == 'f')
+			std::cout	<< "int: " << "overflow" << std::endl;
+		else
+			std::cout	<< "int: " << static_cast <int> (val) << std::endl;
+	}
+	if (overflow == 'f')
+	{
+		std::cout 	<< "float: " << "overflow" << std::endl
+					<< "double: " << "overflow" << std::endl;
+	}
+	else
+	{
+		std::cout 	<< "float: " << static_cast <float> (val) << "f" << std::endl
+					<< "double: " << static_cast <double> (val) << std::endl;
+	}
+
 }
 
-void	display_int(void *addr, char type)
+void		conv_char_str(std::string str)
 {
+	char	c;
 
+	c = str.front();
+	display_converted(c, 0);
 }
 
-void	display_float(void *addr, char type)
+void		conv_int_str(std::string str)
 {
+	long long	ll;
 
+	try
+	{
+		ll = std::stoll(str, NULL, 10);
+		if (ll > std::numeric_limits<int>::max() || ll < std::numeric_limits<int>::min())
+			display_converted(ll, 'i');
+		else
+			display_converted(ll, 0);
+	}
+	catch(const std::out_of_range& e)
+	{
+		std::cerr << "Error: long long overflow" << std::endl;
+		int	i = 0;
+		display_converted(i, 'f');
+		return ;
+	}
+	catch(const std::exception& e) // Voir si c'est necessaire cf ^^^
+	{
+		std::cerr << "Error: " << e.what() << " failed" << std::endl;
+		return ;
+	}
 }
 
-void	display_double(void *addr, char type)
+void	conv_float_str(std::string str)
 {
+	long double ld;
 
+	try
+	{
+		ld = std::stold(str, NULL);
+		if (ld > std::numeric_limits<float>::max() || ld < std::numeric_limits<float>::min())
+			display_converted(ld, 'f');
+		else if (ld > std::numeric_limits<int>::max() || ld < std::numeric_limits<int>::min())
+			display_converted(ld, 'i');
+		else
+			display_converted(ld, 0);
+	}
+	catch(const std::out_of_range& e)
+	{
+		std::cerr << "Error: long double overflow" << std::endl;
+		return ;
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << "Error: " << e.what() << "failed" << std::endl;
+		return ;
+	}
 }
 
-void	ScalarConverter::display_values(void *addr, char type)
+void	conv_double_str(std::string str)
 {
-	display_char(addr, type);
-	display_int(addr, type);
-	display_float(addr, type);
-	display_double(addr, type);
+	long double ld;
+
+	try
+	{
+		ld = std::stold(str, NULL);
+		if (ld > std::numeric_limits<double>::max() || ld < std::numeric_limits<double>::min())
+			display_converted(ld, 'f');
+		else if (ld > std::numeric_limits<int>::max() || ld < std::numeric_limits<int>::min())
+			display_converted(ld, 'i');
+		else
+			display_converted(ld, 0);
+	}
+	catch(const std::out_of_range& e)
+	{
+		std::cerr << "Error: long double overflow" << std::endl;
+		return ;
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << "Error: " << e.what() << "failed" << std::endl;
+		return ;
+	}
 }
+
+
 
 void		ScalarConverter::convert(const std::string str) // est ce que 4f est un float ? Si oui probleme
 {
@@ -98,33 +187,13 @@ void		ScalarConverter::convert(const std::string str) // est ce que 4f est un fl
 		return ;
 	}
 	if (str_is_char(str))
-	{
-		char	c = str.front();
-		printf("You entered a char: %c\n", c);
-		
-	}
-	if (str_is_int(str))
-	{
-		try
-		{
-			int		i = std::stoi(str, NULL, 10);
-			printf("You entered an int: %i\n", i);
-		}
-		catch(const std::exception& e) // Comment recup la bonne exception ? 
-		{
-			std::cerr <<"Error: " << e.what() << " failed" << std::endl;
-		}
-	}
-	if (str_is_float(str))
-	{
-		float	f = std::stof(str, NULL);
-		printf("You entered a float: %f\n", f);
-
-	}
-	if (str_is_double(str))
-	{
-		double	d = std::stod(str, NULL);
-		printf("You entered a double %f\n", d);
-
-	}
+		conv_char_str(str);
+	else if (str_is_int(str))
+		conv_int_str(str);
+	else if (str_is_float(str))
+		conv_float_str(str);
+	else if (str_is_double(str))
+		conv_double_str(str);
+	else
+		std::cerr << "Wrong input: not a literal\n";
 }
