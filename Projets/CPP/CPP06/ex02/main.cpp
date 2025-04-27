@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 00:04:40 by tlebon            #+#    #+#             */
-/*   Updated: 2025/04/27 00:21:44 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/04/27 14:30:04 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 int	main( void )
 {
-	Base * test = generate();
-	identify(test);
+	Base * testptr = generate();
+	Base & testref = *testptr;
+	identify(testptr);
+	identify(testref);
 	return (0);
 }
