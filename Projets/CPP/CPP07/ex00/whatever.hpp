@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 15:25:22 by tlebon            #+#    #+#             */
-/*   Updated: 2025/04/27 15:50:46 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/04/29 18:10:26 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,11 @@ void	swap(T& a, T& b)
 }
 
 template <typename T>
-T	min(T a, T b)
+T const &	min(T const & a, T const & b)
 {
 	try
 	{
-		if (a < b)
-			return (a);
-		else
-			return (b);
+		return (a < b ? a : b);
 	}
 	catch(const std::exception& e)
 	{
@@ -40,14 +37,11 @@ T	min(T a, T b)
 }
 
 template <typename T>
-T	max(T a, T b)
+T const &	max(T const & a, T const & b)
 {
 	try
 	{
-		if (a > b)
-			return (a);
-		else
-			return (b);
+		return (a > b ? a : b);
 	}
 	catch(const std::exception& e)
 	{
