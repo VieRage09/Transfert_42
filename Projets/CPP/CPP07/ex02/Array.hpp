@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 19:21:09 by tlebon            #+#    #+#             */
-/*   Updated: 2025/04/30 19:25:44 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/04/30 20:28:50 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,16 @@
 #define	ARRAY_HPP
 
 // includes //
+#include <iostream>
+
 template<typename T>
 class Array
 {
 	private:
 
 		// attributes //
-		T	*_parray;
+		T				*_parray;
+		unsigned int	_length;
 
 	public:
 		// Default constructor
@@ -37,7 +40,7 @@ class Array
 
 		// Operators //
 		Array&			operator = (const Array& copy);
-		T&				operator [] () const;
+		T&				operator [] (unsigned int index);
 
 };
 
