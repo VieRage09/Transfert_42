@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:29:51 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/02 19:37:33 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/05 19:43:05 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,13 @@ class Span
 		// Destructor
 		~Span();
 
-		// Methods //
+		// Custom methods //
 		void			display_span( void ) const; 
-		void			add_number(int n);
+		void			add_alot_of_numbers(bool random);
+
+		// Methods //
+		void			addNumber(int n);
+		void			addRange(std::vector<int>::const_iterator first, std::vector<int>::const_iterator last);
 		unsigned int	shortestSpan() const;
 		unsigned int	longestSpan() const;
 		

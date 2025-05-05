@@ -1,3 +1,11 @@
 ex00: 
 Voir pour le msg dans l'exception
 Tester avec plusieurs type differents pour T
+
+ex01:
+Est ce que runtime error est bien une classe fille de std::exception ?
+
+
+
+
+IMPORTANT: Reverifier si il faut try/catch tout le temps + reverifier l'efficatite des fonctions (est ce que <algo> et <vector> fournissent des trucs plus simples ?)
