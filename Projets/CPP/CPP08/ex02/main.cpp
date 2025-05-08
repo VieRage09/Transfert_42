@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:01:49 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/08 18:53:46 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/08 20:28:58 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,17 @@ int	main ( void )
 				<< "Size: " << mss2.size() << std::endl
 				<< "Top: " << mss2.top() << std::endl;
 
+	std::cout	<< "\n\nTrying iterators\n";
+	for (auto it = mss2.begin(); it != mss2.end(); it++)
+	{
+		std::cout << *it << std::endl;
+	}
+	std::cout	<< "checking mss1 != mss2: " << (mss1 != mss2) << std::endl;
+	std::cout	<< "checking mss1 == mss2: " << (mss1 == mss2) << std::endl;
+	std::cout	<< "checking mss1 > mss2: " << (mss1 > mss2) << std::endl;
+	std::cout	<< "checking mss1 >= mss2: " << (mss1 >= mss2) << std::endl;
+	std::cout	<< "checking mss1 < mss2: " << (mss1 < mss2) << std::endl;
+	std::cout	<< "checking mss1 <= mss2: " << (mss1 <= mss2) << std::endl;
 	return (0);
 }
 

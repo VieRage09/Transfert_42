@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:01:52 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/08 18:54:49 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/08 19:08:50y tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,17 @@ class MutantStack
 		void		pop( void ) {stk.pop_back();}
 		void		swap(MutantStack<T, Container> & other) noexcept {stk.swap(other.get_stk());}
 
+		// Iterators //
+
+		auto			begin( void ) {return (stk.begin());}
+		auto			rbegin( void ) {return (stk.rbegin());}
+		const auto		cbegin( void ) const {return (stk.cbegin());}
+		const auto		crbegin( void ) const {return (stk.crbegin());}
+		auto			end( void ) {return (stk.end());}
+		auto			rend( void ) {return (stk.rend());}
+		const auto		cend( void ) const {return (stk.cend());}
+		const auto		crend( void ) const {return (stk.crend());}
+
 		// Operators //
 
 		// MutantStack&		operator = (const MutantStack& copy)
@@ -62,8 +73,28 @@ class MutantStack
 		// }
 
 		// Getters //
+
 		auto &	get_stk( void ) {return (stk);}
 
 };
+
+// Non-member functions overloads //
+
+template <typename T, typename Container>
+bool	operator == (MutantStack<T, Container> & lhs, MutantStack<T, Container> & rhs) {return (lhs.get_stk() == rhs.get_stk());}
+template <typename T, typename Container>
+bool	operator != (MutantStack<T, Container> & lhs, MutantStack<T, Container> & rhs) {return (lhs.get_stk() != rhs.get_stk());}
+template <typename T, typename Container>
+bool	operator > (MutantStack<T, Container> & lhs, MutantStack<T, Container> & rhs) {return (lhs.get_stk() > rhs.get_stk());}
+template <typename T, typename Container>
+bool	operator >= (MutantStack<T, Container> & lhs, MutantStack<T, Container> & rhs) {return (lhs.get_stk() >= rhs.get_stk());}
+template <typename T, typename Container>
+bool	operator < (MutantStack<T, Container> & lhs, MutantStack<T, Container> & rhs) {return (lhs.get_stk() < rhs.get_stk());}
+template <typename T, typename Container>
+bool	operator <= (MutantStack<T, Container> & lhs, MutantStack<T, Container> & rhs) {return (lhs.get_stk() <= rhs.get_stk());}
+
+
+template <typename T, typename Container>
+void		swap(MutantStack<T, Container> & a, MutantStack<T, Container> & b) noexcept {a.swap(b.get_stk());}
 
 #endif // MUTANTSTACK_HPP
