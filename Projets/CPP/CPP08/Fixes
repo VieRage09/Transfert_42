@@ -9,3 +9,5 @@ Est ce que runtime error est bien une classe fille de std::exception ?
 
 
 IMPORTANT: Reverifier si il faut try/catch tout le temps + reverifier l'efficatite des fonctions (est ce que <algo> et <vector> fournissent des trucs plus simples ?)
+
+TESTER ex02 avec valgrind
