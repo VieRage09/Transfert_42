@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:33:01 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/13 21:01:43 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/14 17:10:56 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,19 @@ int	main(int ac, char **av)
 	//	  else
 	//		--> print last element of the stack as the result
 	// ERRORS to manage
-	if (ac < 2)
-		return (std::cerr << "Error: no arguments\n", 1);
+	// if (ac < 2)
+	// 	return (std::cerr << "Error: no arguments\n", 1);
 
 	RPN	rpn_stack;
 
 	if (!rpn_stack.load_stack(av[1]))
 		return (1);
+	RPN	rpn_copy = rpn_stack;
+	if (!rpn_copy.load_stack(av[2]))
+		return (1);
 	try
 	{
+		std::cout << rpn_copy.calculate_rpn() << std::endl;
 		std::cout << rpn_stack.calculate_rpn() << std::endl;
 	}
 	catch(const std::exception& e)

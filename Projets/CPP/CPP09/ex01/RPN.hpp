@@ -30,8 +30,8 @@ class RPN
 		bool	load_stack(std::string s);
 		int		calculate_rpn( void ); // Throw
 
-		// // Operators //
-		// RPN&				operator = (const RPN& copy);
+		// Operators //
+		RPN&				operator = (const RPN& copy);
 
 };
 
