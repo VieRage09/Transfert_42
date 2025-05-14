@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:07:26 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/13 16:28:24 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/14 18:43:18 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 int	main (int ac, char **av)
 {
-	if (!check_infile(ac, av))
-		return (1);	// Throw exception inside check_infile ? + Ajout msg d'erreur
-	// Open data.csv --> Check csv format
-
+	if (ac != 2)
+		return (std::cerr << "Usage: ./btc <file>\n", 1);
+	BitcoinExchange	btw();
+	BitcoinExchange	btx(av[1], "data.csv");
 
 	// Stocker les valeurs de db dans une map/unordered map
 	// Lire la date et la valeur depuis l'input file 
