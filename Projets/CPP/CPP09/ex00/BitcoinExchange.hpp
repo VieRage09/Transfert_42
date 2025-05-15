@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 18:18:34 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/14 18:40:45 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/15 17:04:03by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,35 +17,43 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <string>
 
 class BitcoinExchange
 {
 	private:
 
+		class Date
+		{
+			private:
+				unsigned int	_year;
+				unsigned int	_month;
+				unsigned int	_day;
+			public:
+				Date();
+				Date(unsigned int year, unsigned int month, unsigned int day);
+				Date(Date & copy);
+				~Date();
+				
+
+		};
 		// attributes //
-		std::ifstream		_input;
-		std::ifstream		_database;
-		// Copy constructor
-		BitcoinExchange(const BitcoinExchange& copy);
+		std::map<Date, float>	_db_map;
 
 	public:
 		// Default constructor
 		BitcoinExchange( void );
 		// Personnalized constructor
-		BitcoinExchange(std::string input, std::string database);
+		BitcoinExchange(std::string database);
+		// Copy constructor
+		BitcoinExchange(const BitcoinExchange& copy);
 		// Destructor
 		~BitcoinExchange();
 
 		// Methods //
-
-
+		
 		// Operators //
 		BitcoinExchange&	operator = (const BitcoinExchange& copy);
-
-		// Getters //
-		const std::ifstream&		get_input() const;
-		const std::ifstream&		get_database() const;
-
 };
 
 #endif // BITCOINEXCHANGE_HPP
