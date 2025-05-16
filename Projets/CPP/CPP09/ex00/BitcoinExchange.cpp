@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 18:18:37 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/15 17:52:06 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/16 23:03:43 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,62 +14,113 @@
 
 // CONSTRUCTORS & DESTRUCTORS //
 
-// -- Date -- //
-BitcoinExchange::Date::Date() : _year(0), _month(0), _day(0) {std::cout << "Default date object instanciated\n";}
-
-BitcoinExchange::Date::Date(unsigned int year, unsigned int month, unsigned int day) // A la place on peut mettre ce constructeur en private et utiliser une fonction static pour instancier la Date
-{
-	if (year > 2025 || month > 12 || month == 0 || day > 31 || day == 0)
-		throw std::runtime_error("Invalid date format");
-	if ((month >= 8 && month % 2 == 1 && day > 30) || (month < 8) && month % 2 == 0 && day > 30 || month == 2 && day > 28)
-		throw std::runtime_error("Date doesn't exist");
-	std::cout << "Default date object instanciated\n";
-}
-
-BitcoinExchange::Date::Date(Date & copy) : Date(copy._year, copy._month, copy._day) {std::cout << "Date object copied\n";}
-
-BitcoinExchange::Date::~Date() {std::cout << "Date object destroyed\n";}
-// -- Date -- //
-
-// -- BitcoinExchange -- //
 BitcoinExchange::BitcoinExchange( void ) : _db_map() {std::cout << "Default BitcoinExchange instanciated\n";}
 
-BitcoinExchange::BitcoinExchange(std::string database) : _db_map()
+BitcoinExchange::BitcoinExchange(std::string db_path) : _db_map()
 {
-	std::string line;
-	std::fstream	db(database);
-	unsigned int	year;
-	unsigned int	month;
-	unsigned int	day;
+	std::string		line;
+	std::fstream	db(db_path);
 
 	// ATTENTION AVANT --> Check si le fichier a bien ete ouvert
-	std::getline(db, line);
 	while (!db.eof())
 	{
-		year = std::stoi(line.substr(0, line.find_first_of('-')));
-		month = std::stoi(line.substr(line.find_first_of('-'), line.find_last_of('-')));
-		day = std::stoi(line.substr(line.find_last_of('-'), line.find_first_of(',')));
-		Date	date(year, month, day);
-		float	value = std::stof(line.substr(line.find_first_of(',')));
-		_db_map.insert(date, value);
 		std::getline(db, line);
+		if (line.find_first_of("0123456789") == std::string::npos)
+		{
+			std::cout << "Line skipped\n";
+			continue;
+		}
+		_db_map.insert(create_pair(line, ','));
 	}
-	std::cout << "BitcoinExchange object instanciated with " << database << " as input\n";
+	std::cout << "BitcoinExchange object instanciated with " << db_path << " as input\nSize = " << _db_map.size() << std::endl;
 }
+BitcoinExchange::BitcoinExchange(const BitcoinExchange& copy) : _db_map(copy._db_map) {std::cout << "BitcoinExchange instance copied\n";}
 
 BitcoinExchange::~BitcoinExchange() {std::cout << "BitcoinExchange object destroyed\n";}
-// -- BitcoinExchange -- //
 
 // METHODS //
 
+std::pair<time_t, float>	BitcoinExchange::create_pair(std::string line, char delim)
+{
+	struct tm	date;
+	float		value;
+	time_t		timestamp;
+
+	// Attention au test de nazis du parsing genre par de date ou par de value / par de delimitateur
+	date.tm_year = std::stoi(line.substr(0, line.find_first_of('-'))) - 1900;
+	date.tm_mon = std::stoi(line.substr(line.find_first_of('-') + 1, 2)) - 1;
+	date.tm_mday = std::stoi(line.substr(line.find_last_of('-') + 1, 2));
+	date.tm_hour = 0;
+	date.tm_min = 0;
+	date.tm_sec = 0;
+	date.tm_isdst = -1;
+	value = std::stof(line.substr(line.find_first_of(delim) + 1));
+	timestamp = timegm(&date);
+	if (timestamp < 0)
+		throw std::runtime_error("[ERROR] Invalid date");
+	return (std::make_pair(timestamp, value));
+}
+
+void	BitcoinExchange::display_closest_value(std::pair<time_t, float> pair)
+{
+	struct tm 	*date;
+	char		str[11];
+	float		value;
+
+	date = gmtime(&(pair.first));
+	if (strftime(str, 11, "%Y-%m-%d", date) == 0)
+	{
+		throw std::runtime_error("[ERROR] strftime");
+		return ;
+	}
+	std::cout << str << " => " << pair.second << " = ";
+	try
+	{
+		value = _db_map.at(pair.first);
+		std::cout << value * pair.second << std::endl;
+	}
+	catch(const std::exception& e)
+	{
+		// Comparer pour chopper la date inferieure la plus proche
+		
+		
+		// std::cout << value * _db_map.lower_bound(value)->second << std::endl;
+	}
+}
+
+void	BitcoinExchange::cmpdisplay_file_values(std::string path)
+{
+	if (path.empty())
+		throw std::runtime_error("[ERROR] Wrong file path\n");
+	std::fstream				input(path);
+	std::string					line;
+	std::pair<time_t, float> 	tmp;
+
+	// Check si le fichier existe et a bien ete ouvert
+	while (!input.eof())
+	{
+		std::getline(input, line);
+		if (line.find_first_of("0123456789") == std::string::npos)
+		{
+			std::cout << "Line skipped\n";
+			continue;
+		}
+		tmp = create_pair(line, '|');
+		if (tmp.second < 0)
+			throw std::runtime_error("[ERROR] Not a positive number\n");
+		if (tmp.second > 1000)
+			throw std::runtime_error("[ERROR] Too large number\n");
+		display_closest_value(tmp);
+	}
+
+
+}
 
 // OPERATORS //
 
 BitcoinExchange& BitcoinExchange::operator = (const BitcoinExchange& copy)
 {
 	if (this != &copy)
-	{
-		
-	}
+		_db_map = copy._db_map;
 	return (*this);
 }
