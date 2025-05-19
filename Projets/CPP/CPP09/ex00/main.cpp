@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:07:26 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/16 22:39:45 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/19 17:57:02 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ int	main (int ac, char **av)
 {
 	if (ac != 2)
 		return (std::cerr << "Usage: ./btc <file>\n", 1);
-	BitcoinExchange	btx("data.csv");
 
 	try
 	{
+		BitcoinExchange	btx("data.csv");
 		btx.cmpdisplay_file_values(av[1]);
 	}
 	catch(const std::exception& e)
