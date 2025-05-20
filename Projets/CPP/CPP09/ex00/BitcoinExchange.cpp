@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 18:18:37 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/19 18:55:22 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/20 19:41:37 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ BitcoinExchange::BitcoinExchange(std::string db_path) : _db_map()
 		std::getline(db, line);
 		if (line.find_first_of("0123456789") == std::string::npos)
 		{
-			// std::cout << "Line skipped\n";
+			std::cout << "Line skipped\n";
 			continue;
 		}
 		_db_map.insert(create_pair(line, ','));
@@ -42,24 +42,59 @@ BitcoinExchange::~BitcoinExchange() {std::cout << "BitcoinExchange object destro
 
 // METHODS //
 
+bool	BitcoinExchange::isBisextile(int year)
+{
+    if(year % 4 == 0){ 
+        if(year % 100 == 0){
+            if(year % 400 == 0){
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
+    return false;
+}
+
+bool	BitcoinExchange::isValidDate(struct tm * date)
+{
+	int	days_nb[12] = {31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+	if (date->tm_mon < 0 || date->tm_mon > 11)
+		return (false);
+	if (isBisextile(date->tm_year + 1900))
+		days_nb[1] = 29;
+	else
+		days_nb[1] = 28;
+	return (date->tm_mday <= days_nb[date->tm_mon]);
+}
+
 std::pair<time_t, float>	BitcoinExchange::create_pair(std::string line, char delim)
 {
 	struct tm	date;
 	float		value;
 	time_t		timestamp;
 
-	// Attention au test de nazis du parsing genre par de date ou par de value / par de delimitateur
-	date.tm_year = std::stoi(line.substr(0, line.find_first_of('-'))) - 1900;
-	date.tm_mon = std::stoi(line.substr(line.find_first_of('-') + 1, 2)) - 1;
-	date.tm_mday = std::stoi(line.substr(line.find_last_of('-') + 1, 2));
-	date.tm_hour = 0;
-	date.tm_min = 0;
-	date.tm_sec = 0;
-	date.tm_isdst = -1;
-	value = std::stof(line.substr(line.find_first_of(delim) + 1));
-	timestamp = timegm(&date);
-	if (timestamp < 0)
+	if (line.find_first_of(delim) == std::string::npos)
+		throw std::runtime_error("[ERROR] Bad input: " + line);
+	try
+	{
+		date.tm_year = std::stoi(line.substr(0, line.find_first_of('-'))) - 1900;
+		date.tm_mon = std::stoi(line.substr(line.find_first_of('-') + 1, line.find_last_of('-') - 1)) - 1; // Checkk account l3 pour faire en sorte que ca throw qqch
+		date.tm_mday = std::stoi(line.substr(line.find_last_of('-') + 1, line.find_first_of(delim) - 1)); // -1 apres le find necessaire ???
+		date.tm_hour = 0;
+		date.tm_min = 0;
+		date.tm_sec = 0;
+		date.tm_isdst = -1;
+		value = std::stof(line.substr(line.find_first_of(delim) + 1));
+	}
+	catch(const std::exception& e)
+	{
+		throw std::runtime_error("[ERROR] Bad input: " + line);
+	}
+	if (!isValidDate(&date))
 		throw std::runtime_error("[ERROR] Invalid date");
+	timestamp = timegm(&date);
 	return (std::make_pair(timestamp, value));
 }
 
@@ -103,12 +138,19 @@ void	BitcoinExchange::cmpdisplay_file_values(std::string path)
 			std::cout << "Line skipped\n";
 			continue;
 		}
-		tmp = create_pair(line, '|');
-		if (tmp.second < 0)
-			throw std::runtime_error("[ERROR] Not a positive number\n");
-		if (tmp.second > 1000)
-			throw std::runtime_error("[ERROR] Too large number\n");
-		display_closest_value(tmp);
+		try
+		{
+			tmp = create_pair(line, '|');
+			if (tmp.second < 0)
+				throw std::runtime_error("[ERROR] Not a positive number");
+			if (tmp.second > 1000)
+				throw std::runtime_error("[ERROR] Too large number");
+			display_closest_value(tmp);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << '\n';
+		}
 	}
 	input.close();
 }

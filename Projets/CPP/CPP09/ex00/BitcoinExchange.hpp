@@ -27,8 +27,10 @@ class BitcoinExchange
 		std::map<time_t, float>	_db_map;
 		
 		// private methods //
+		bool						isBisextile(int annee);
+		bool						isValidDate(struct tm * date);
 		std::pair<time_t, float>	create_pair(std::string line, char delim);
-		void	display_closest_value(std::pair<time_t, float> pair);
+		void						display_closest_value(std::pair<time_t, float> pair);
 
 
 	public:
