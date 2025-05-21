@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 18:18:37 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/20 19:41:37 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/21 18:09:51 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,25 @@ bool	BitcoinExchange::isValidDate(struct tm * date)
 		days_nb[1] = 29;
 	else
 		days_nb[1] = 28;
-	return (date->tm_mday <= days_nb[date->tm_mon]);
+	return (date->tm_mday <= days_nb[date->tm_mon] && date->tm_mday > 0);
+}
+
+bool	BitcoinExchange::check_format(std::string line, char delim)
+{
+	if (line.find_first_of(delim) == std::string::npos
+		|| line.find_first_of(delim) != line.find_last_of(delim))
+		return (false);
+
+	std::string	date = line.substr(0, line.find_first_of(delim));
+	while (date.back() == ' ')
+		date.pop_back();
+
+	if (date.size() != 10 || date[4] != '-' || date[7] != '-')
+		return (false);
+	if (line.substr(line.find_first_of(delim) + 1).empty()
+		|| line.substr(line.find_first_of(delim) + 1).find_first_not_of("0123456789. ") != std::string::npos)
+		return (false);
+	return (true);
 }
 
 std::pair<time_t, float>	BitcoinExchange::create_pair(std::string line, char delim)
@@ -75,13 +93,13 @@ std::pair<time_t, float>	BitcoinExchange::create_pair(std::string line, char del
 	float		value;
 	time_t		timestamp;
 
-	if (line.find_first_of(delim) == std::string::npos)
+	if (!check_format(line, delim))
 		throw std::runtime_error("[ERROR] Bad input: " + line);
 	try
 	{
 		date.tm_year = std::stoi(line.substr(0, line.find_first_of('-'))) - 1900;
-		date.tm_mon = std::stoi(line.substr(line.find_first_of('-') + 1, line.find_last_of('-') - 1)) - 1; // Checkk account l3 pour faire en sorte que ca throw qqch
-		date.tm_mday = std::stoi(line.substr(line.find_last_of('-') + 1, line.find_first_of(delim) - 1)); // -1 apres le find necessaire ???
+		date.tm_mon = std::stoi(line.substr(line.find_first_of('-') + 1, 2)) - 1; // Checkk account l3 pour faire en sorte que ca throw qqch
+		date.tm_mday = std::stoi(line.substr(line.find_last_of('-') + 1, 2));
 		date.tm_hour = 0;
 		date.tm_min = 0;
 		date.tm_sec = 0;
@@ -121,6 +139,7 @@ void	BitcoinExchange::cmpdisplay_file_values(std::string path)
 {
 	if (path.empty())
 		throw std::runtime_error("[ERROR] Wrong file path\n");
+
 	std::ifstream				input(path);
 	std::string					line;
 	std::pair<time_t, float> 	tmp;

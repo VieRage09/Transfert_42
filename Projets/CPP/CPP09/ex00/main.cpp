@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:07:26 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/20 19:29:00 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/21 18:12:25 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@ int	main (int ac, char **av)
 	try
 	{
 		BitcoinExchange	btx("data.csv");
+		BitcoinExchange copy = btx;
 		btx.cmpdisplay_file_values(av[1]);
+		copy.cmpdisplay_file_values(av[1]);
 	}
 	catch(const std::exception& e)
 	{
