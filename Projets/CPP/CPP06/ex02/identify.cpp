@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 00:10:12 by tlebon            #+#    #+#             */
-/*   Updated: 2025/04/27 14:37:39 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/23 04:42:48 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ Base	*	generate( void )
 	}
 }
 
-void		identify(Base * p)
+void		identify(Base * p) // Principle: dynamic cast returns NULL when used to convert to pointer
 {
 	A*	aptr = dynamic_cast <A*> (p);
 	B*	bptr = dynamic_cast <B*> (p);
@@ -48,13 +48,12 @@ void		identify(Base * p)
 		std::cout << "This object is of type C\n";
 }
 
-void		identify(Base & p)
+void		identify(Base & p) // Principle: dynamic cast throws a bad_cast exception when used to convert to reference
 {
 	try
 	{
 		A&	aptr = dynamic_cast <A&> (p);
 		std::cout << "This object is of type A\n";
-		return ;
 	}
 	catch(const std::exception& e) {}
 	try

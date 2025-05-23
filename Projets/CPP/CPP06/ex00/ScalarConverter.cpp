@@ -139,7 +139,9 @@ void	conv_float_str(std::string str)
 	try
 	{
 		ld = std::stold(str, NULL);
-		if (ld > std::numeric_limits<float>::max() || ld < std::numeric_limits<float>::min())
+		if (std::isinf(static_cast <double> (ld)))
+			display_converted(ld, 0);
+		else if (ld > std::numeric_limits<float>::max() || ld < std::numeric_limits<float>::min())
 			display_converted(ld, 'f');
 		else if (ld > std::numeric_limits<int>::max() || ld < std::numeric_limits<int>::min())
 			display_converted(ld, 'i');
@@ -165,7 +167,9 @@ void	conv_double_str(std::string str)
 	try
 	{
 		ld = std::stold(str, NULL);
-		if (ld > std::numeric_limits<double>::max() || ld < std::numeric_limits<double>::min())
+		if (std::isinf(static_cast <double> (ld)))
+			display_converted(ld, 0);
+		else if (ld > std::numeric_limits<double>::max() || ld < std::numeric_limits<double>::min())
 			display_converted(ld, 'f');
 		else if (ld > std::numeric_limits<int>::max() || ld < std::numeric_limits<int>::min())
 			display_converted(ld, 'i');

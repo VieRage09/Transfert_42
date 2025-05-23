@@ -1,0 +1,7 @@
+Youtube:
+	--> Live overflow: https://www.youtube.com/LiveOverflow
+
+Site entrainement:
+	--> Rootme: https://www.root-me.org
+	--> HackTheBox: https://www.hackthebox.com
+	--> TryHackMe: https://tryhackme.com
