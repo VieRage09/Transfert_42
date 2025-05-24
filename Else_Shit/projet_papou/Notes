@@ -1,0 +1,9 @@
+Pour lire un fichier numbers recent, c'est chiant (nik apple):
+
+1. Exporter depuis l'appli numbers en .csv --> Pas pratique car il faudra le faire a chaque envoie automatique de mail + risque de faute de frappe
+2. Il semblerai qu'il existe des parsers pour les fichiers .numbers --> Code en python, papa va surement devoir dl des dependances donc pas ouf
+3. Faire un script AppleScript qui exporte le .numbers automatiquement --> Ouvre une nouvelle fenetre mais sinon parfait
+
+Solution: 3. A tester
+
+Next step, passer sous mac os pour tester et voir le fichier csv exporte pour pouvoir savoir comment le parser
