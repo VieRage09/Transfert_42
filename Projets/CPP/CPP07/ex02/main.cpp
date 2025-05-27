@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 20:23:06 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/02 03:19:28 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/27 17:38:07 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main( void )
 
 	std::cout << "\nTesting copy const and assignement operator\n";
 	Array<float> cpy = Array<float>(afloat5);
-	Array<float> assign = (afloat5);
+	Array<float> assign = afloat5;
 	std::cout << "Copy array:\n";
 	cpy.display_array();
 	std::cout << "Assign array:\n";

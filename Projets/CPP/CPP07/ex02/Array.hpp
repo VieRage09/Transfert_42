@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 19:21:09 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/02 03:18:54 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/27 17:39:26 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ public:
 	}
 
 	// Copy constructor
-	Array(const Array & copy) : Array(copy._length)
+	Array(const Array &copy) : Array(copy._length)
 	{
 		for (int i = 0; i < copy._length; i++)
 			_parray[i] = copy[i];
@@ -75,7 +75,7 @@ public:
 	const unsigned int get_length(void) const { return (_length); }
 
 	// Operators //
-	Array &	operator=(const Array<T> & copy)
+	Array &operator=(const Array<T> &copy)
 	{
 		if (this != &copy)
 		{
@@ -88,13 +88,12 @@ public:
 		return (*this);
 	}
 
-	T &		operator[](unsigned int index) const
+	T &operator[](unsigned int index) const
 	{
 		if (index >= _length && _length > 0)
-			throw std::out_of_range("Index is out of range");
+			throw std::out_of_range("[ERROR]: Index is out of range");
 		return (_parray[index]);
 	}
-
 };
 
 #endif // ARRAY_HPP
