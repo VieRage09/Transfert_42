@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:29:51 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/05 19:43:05 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/27 18:45:30 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ class Span
 		// attributes //
 		unsigned			int _N;
 		std::vector<int>	_vec;
+
+		Span();
 
 	public:
 		// Personnalized constructor

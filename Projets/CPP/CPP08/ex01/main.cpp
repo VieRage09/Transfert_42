@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:22:56 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/05 19:56:00 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/27 19:22:30 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int main(int ac, char **av)
 
 	sp.display_span();
 
-	std::cout << "Test shortest/longest span member functions\n";
+	std::cout << "\e[0;32m" << "Test shortest/longest span member functions\n" << "\e[0;37m";
 	try
 	{
 		std::cout << "Longest span: " << sp.longestSpan() << std::endl;
@@ -36,7 +36,7 @@ int main(int ac, char **av)
 		std::cerr << e.what() << '\n';
 	}
 
-	std::cout << "Test Adding too much elements\n";
+	std::cout << "\e[0;32m" << "Test adding too much elements\n" << "\e[0;37m";
 	try
 	{
 		sp.addNumber(15000);
@@ -46,7 +46,7 @@ int main(int ac, char **av)
 		std::cerr << e.what() << '\n';
 	}
 
-	std::cout << "Test shortest/longestspan member functions with no elements\n";
+	std::cout << "\e[0;32m" << "Test shortest/longestspan member functions with no elements\n" << "\e[0;37m";
 	try
 	{
 		std::cout << "Shortest and longest span: " << empty.shortestSpan() << " " << empty.longestSpan() << std::endl;
@@ -56,7 +56,7 @@ int main(int ac, char **av)
 		std::cerr << e.what() << '\n';
 	}
 
-	std::cout << "Test copy const and assignation operator\n";
+	std::cout << "\e[0;32m" << "Test copy const and assignation operator\n" << "\e[0;37m";
 
 	std::cout << "copy constructor from sp\n";
 	Span cpy(sp);
@@ -67,7 +67,7 @@ int main(int ac, char **av)
 
 	if (ac == 2)
 	{
-		std::cout << "Test with 15 000 numbers\n";
+		std::cout << "\e[0;32m" << "Test with 15000 elements\n" << "\e[0;37m";
 		Span fifteen(15000);
 		fifteen.add_alot_of_numbers(true);
 		fifteen.display_span();
@@ -75,16 +75,17 @@ int main(int ac, char **av)
 	}
 
 	std::vector<int>	new_vec;
-	Span				new_span(10);
+	Span				new_span(5);
 	new_span.addNumber(1);
 	new_span.addNumber(2);
 	new_span.addNumber(3);
 	new_span.addNumber(4);
-	new_vec.push_back(1);
-	new_vec.push_back(2);
-	new_vec.push_back(3);
-	new_vec.push_back(4);
-	std::cout << "Test for addRange\nAdding elements of new_vec\nsp before addRange:\n";
+	new_vec.push_back(5);
+	new_vec.push_back(6);
+	new_vec.push_back(7);
+	new_vec.push_back(8);
+	std::cout << "\e[0;32m" << "Test for addRange: Adding elements of new_vec\n" << "\e[0;37m";
+	std::cout << "sp before addRange:\n";
 	new_span.display_span();
 	try
 	{

@@ -6,13 +6,15 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:29:54 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/05 19:56:52 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/27 18:46:22 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Span.hpp"
 
 // CONSTRUCTORS & DESTRUCTORS //
+
+Span::Span() {}
 
 Span::Span(unsigned int N) : _N(N), _vec(std::vector<int>())
 {
@@ -54,7 +56,7 @@ void			Span::add_alot_of_numbers(bool random)
 void Span::addNumber(int n)
 {
 	if (_vec.size() >= _N)
-		throw std::out_of_range("Max size reached");
+		throw std::runtime_error("Max size reached");
 	_vec.push_back(n);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:30:28 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/02 18:18:31 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/27 18:43:40 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int main(void)
 	}
 	catch (const std::exception &e)
 	{
-		std::cerr << "Value not found\n";
+		std::cerr << e.what() << "\n";
 	}
 
 	return (0);
