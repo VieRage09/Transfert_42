@@ -44,7 +44,7 @@ class MutantStack : public std::stack<T, Container>
 		MutantStack&		operator = (const MutantStack& copy)
 		{
 			if (*this != copy)
-				std::stack<Container>::operator=(copy);
+				std::stack<T, Container>::operator=(copy);
 			return (*this);
 		}
 };
