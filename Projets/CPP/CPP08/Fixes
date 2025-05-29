@@ -1,6 +1,0 @@
-
-TESTER ex02 avec valgrind
-Maybe inverser les iterateurs pour mutantstack
-
-====> Revoir l'architecture (cf copy) Mutant stack doit heriter de stack et donc a revoir (pas besoin de se faire chier a tout recoder)
-Se renseigner sur ce que veux dire le c dans std::stack::c.begin()

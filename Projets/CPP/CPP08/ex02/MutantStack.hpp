@@ -30,14 +30,14 @@ class MutantStack : public std::stack<T, Container>
 
 		// Iterators //
 
-		auto			begin( void ) {return (std::stack<T, Container>::c.begin());} <-- Juste la la 
-		// auto			rbegin( void ) {return (stk.rbegin());}
-		// const auto		cbegin( void ) const {return (stk.cbegin());}
-		// const auto		crbegin( void ) const {return (stk.crbegin());}
-		// auto			end( void ) {return (stk.end());}
-		// auto			rend( void ) {return (stk.rend());}
-		// const auto		cend( void ) const {return (stk.cend());}
-		// const auto		crend( void ) const {return (stk.crend());}
+		auto			begin( void )			{ return (std::stack<T, Container>::c.begin()); } // Ici c correspond au container sous-jacent de stack (protected)
+		auto			rbegin( void )			{ return (std::stack<T, Container>::c.rbegin()); }
+		const auto		cbegin( void ) const	{ return (std::stack<T, Container>::c.cbegin()); }
+		const auto		crbegin( void ) const	{ return (std::stack<T, Container>::c.crbegin()); }
+		auto			end( void )				{ return (std::stack<T, Container>::c.end()); }
+		auto			rend( void )			{ return (std::stack<T, Container>::c.rend()); }
+		const auto		cend( void ) const		{ return (std::stack<T, Container>::c.cend()); }
+		const auto		crend( void ) const		{ return (std::stack<T, Container>::c.crend()); }
 
 		// Operators //
 
