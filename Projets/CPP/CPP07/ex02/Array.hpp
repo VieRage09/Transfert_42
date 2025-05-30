@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 19:21:09 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/27 17:39:26 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/30 15:37:00 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,14 @@ public:
 		return (*this);
 	}
 
-	T &operator[](unsigned int index) const
+	T & operator[](unsigned int index)
+	{
+		if (index >= _length && _length > 0)
+			throw std::out_of_range("[ERROR]: Index is out of range");
+		return (_parray[index]);
+	}
+
+	const T & operator[](unsigned int index) const
 	{
 		if (index >= _length && _length > 0)
 			throw std::out_of_range("[ERROR]: Index is out of range");

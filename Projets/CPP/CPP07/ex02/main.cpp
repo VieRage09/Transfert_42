@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 20:23:06 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/27 17:38:07 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/05/30 15:39:46 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,5 @@ int	main( void )
 	std::cout << "float array size: " << afloat5.size() << std::endl;
 	std::cout << "copy array size: " << cpy.size() << std::endl;
 	
-
 	return (0);
 }
