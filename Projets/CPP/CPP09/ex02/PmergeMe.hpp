@@ -28,6 +28,8 @@ class PmergeMe
 
 		// Methods //
 		void	display_containers() const;
+		void	sort_vector();
+		void	sort_deque();
 
 		// Operators //
 		PmergeMe&		operator = (const PmergeMe& copy);

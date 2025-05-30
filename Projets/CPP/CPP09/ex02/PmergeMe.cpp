@@ -51,6 +51,16 @@ void	PmergeMe::display_containers() const
 	}
 }
 
+void	PmergeMe::sort_vector()
+{
+
+}
+
+void	PmergeMe::sort_deque()
+{
+
+}
+
 // OPERATORS //
 
 PmergeMe& PmergeMe::operator = (const PmergeMe& copy)
