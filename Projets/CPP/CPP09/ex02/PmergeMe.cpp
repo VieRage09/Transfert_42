@@ -1,6 +1,6 @@
 #include "PmergeMe.hpp"
 
-// CONSTRUCTORS & DESTRUCTORS //
+//############################## CONSTRUCTORS & DESTRUCTORS #####################################//
 
 //------------------------------ PMERGEME -------------------------------------------------------//
 PmergeMe::PmergeMe(bool args, char **list)
@@ -53,7 +53,7 @@ template <typename T>
 PmergeMe::Pair<T>::~Pair() {}
 //-----------------------------------------------------------------------------------------------//
 
-// METHODS //
+//############################### METHODS #######################################################//
 
 //------------------------------ PMERGEME -------------------------------------------------------//
 
@@ -64,8 +64,6 @@ void	PmergeMe::create_pairs(std::vector<Pair<std::vector<int>>> & tab, unsigned 
 	{
 		if (it + pair_size - 1 != _vec.end()) // Voir si ca marche si on depasse carrement end()
 			tab.push_back(Pair<std::vector<int>>(it, it + pair_size - 1));
-		else
-			return ;
 	}
 }
 
@@ -98,13 +96,16 @@ void	PmergeMe::recursive_sort(unsigned int pair_size)
 {
 	std::vector<Pair<std::vector<int>>> pair_vec;
 
+	
 	create_pairs(pair_vec, pair_size);
+	std::cout << "Pair size = " << pair_size << std::endl;
 	for(auto elem : pair_vec)
-		elem.sort_pair();
-	if (pair_size <= _size)
+		std::cout << elem << std::endl;
+		// elem.sort_pair();
+	if (pair_size < _size / 2)
 		recursive_sort(pair_size * 2);
-	// else
-		// Suite de l'algo main pend tout ca
+	else
+		return ;// Suite de l'algo main pend tout ca
 }
 
 
@@ -129,12 +130,13 @@ void	PmergeMe::Pair<T>::sort_pair()
 	typename T::const_iterator	right = _finish;
 
 	if (*left > *right)
-		// Operate swap
 	
+		// Operate swap
+	return ;
 }
 //-----------------------------------------------------------------------------------------------//
 
-// OPERATORS //
+//############################## OPERATORS ######################################################//
 
 //------------------------------ PMERGEME -------------------------------------------------------//
 
@@ -172,7 +174,7 @@ std::ostream&	operator << (std::ostream & os, const PmergeMe::Pair<T>& pair)
 }
 //-----------------------------------------------------------------------------------------------//
 
-// GETTERS //
+//############################## GETTERS ########################################################//
 
 //------------------------------ PMERGEME -------------------------------------------------------//
 const std::vector<int>&	PmergeMe::get_vec() const { return ( _vec );}
