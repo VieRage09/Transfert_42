@@ -6,6 +6,7 @@
 #include <deque>
 #include <iostream>
 #include <exception>
+#include <algorithm>
 
 
 

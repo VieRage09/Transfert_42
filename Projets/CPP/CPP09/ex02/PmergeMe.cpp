@@ -57,16 +57,6 @@ PmergeMe::Pair<T>::~Pair() {}
 
 //------------------------------ PMERGEME -------------------------------------------------------//
 
-// Private methods //
-void	PmergeMe::create_pairs(std::vector<Pair<std::vector<int>>> & tab, unsigned int pair_size)
-{
-	for (auto it = _vec.begin(); it != _vec.end(); it += pair_size)
-	{
-		if (it + pair_size - 1 != _vec.end()) // Voir si ca marche si on depasse carrement end()
-			tab.push_back(Pair<std::vector<int>>(it, it + pair_size - 1));
-	}
-}
-
 // Public Methods // 
 
 void	PmergeMe::display_vec() const
@@ -87,21 +77,24 @@ void	PmergeMe::display_deq() const
 	}
 }
 
-// Algo =
-// 1. Former des pair d'elements (pair de nombre au depart, puis pair de pair de nombre etc)
-// 2. Trier dans l'ordre ces pairs (ascendant, on trie les pairs de pair de nombre en checkant le nombre le plus gros de chaque)
-// --> 
+// Idee d'implementation pour la phase 1 (n nombres a trier):
+// Ordre 1: chaque element contient un seul nombre. --> On peut trier deux a deux directement dans _vec ou dans un copie exclusive a la fonction recursive ?
+// Ordre 2: chaque element contient une paire de nombre. --> Vecteur de vecteur: Les sous vecteurs contiennent une paire de nombre (.top() pour recup le nombre a droite), puis on switch
+// Ordre 3: chaque element contient une paire de paire de nombre (4). --> Vecteur de vecteur de vecteur
 
 void	PmergeMe::recursive_sort(unsigned int pair_size)
 {
-	std::vector<Pair<std::vector<int>>> pair_vec;
-
-	
-	create_pairs(pair_vec, pair_size);
+	for (std::vector<int>::iterator it = _vec.begin(); std::distance(it, _vec.begin()) < _vec.size(); it += pair_size) // Check si ca marche pour odd --> Shift fonctiona recoder
+	{
+		if (pair_size == 2 && it != _vec.end() - 1 && *it > *(it + 1))
+			std::iter_swap(it, it + 1); // PB: Ne swap pas les nombre par chunck mais 1 a 1
+		if (pair_size > 2 && it != _vec.end() - pair_size + 1 && *(it + (pair_size / 2) - 1) > *(it + pair_size - 1))
+			std::swap_ranges(it, it + (pair_size / 2) - 1, it + (pair_size / 2));
+		else
+			std::cerr << "No sort to operate on level " << pair_size << std::endl;
+	}
 	std::cout << "Pair size = " << pair_size << std::endl;
-	for(auto elem : pair_vec)
-		std::cout << elem << std::endl;
-		// elem.sort_pair();
+	display_vec();	
 	if (pair_size < _size / 2)
 		recursive_sort(pair_size * 2);
 	else

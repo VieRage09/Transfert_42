@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:58 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/31 20:28:01 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/06/05 16:44:25 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ int	main(int ac, char **av)
 	}
 
 	PmergeMe	obj(ac == 2, av);
-	obj.display_vec();
-	obj.display_deq();
 	obj.sort_vector();
 	
 	// Check input: positive integers only
