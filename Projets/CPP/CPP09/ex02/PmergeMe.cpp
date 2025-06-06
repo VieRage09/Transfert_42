@@ -61,7 +61,7 @@ PmergeMe::Pair<T>::~Pair() {}
 
 void	PmergeMe::display_vec() const
 {
-	std::cout << "Vector:\n";
+	std::cout << "Vector of size " << _vec.size() << ":\n";
 	for(auto it = _vec.begin(); it != _vec.end(); it++)
 	{
 		std::cout << *it << std::endl;
@@ -82,26 +82,52 @@ void	PmergeMe::display_deq() const
 // Ordre 2: chaque element contient une paire de nombre. --> Vecteur de vecteur: Les sous vecteurs contiennent une paire de nombre (.top() pour recup le nombre a droite), puis on switch
 // Ordre 3: chaque element contient une paire de paire de nombre (4). --> Vecteur de vecteur de vecteur
 
-void	PmergeMe::recursive_sort(unsigned int pair_size)
+bool	PmergeMe::safe_advance(std::vector<int>::iterator pos, unsigned int n) const
 {
-	for (std::vector<int>::iterator it = _vec.begin(); std::distance(it, _vec.begin()) < _vec.size(); it += pair_size) // Check si ca marche pour odd --> Shift fonctiona recoder
+	int i = 0;
+	for (std::vector<int>::iterator it = pos; i < n ; it++, i++)
+	{
+		if (it == _vec.end())
+			return (false);
+	}
+	return (true);
+}
+
+// Sort pairs of numbers or pairs of pairs etc following the the first step of FJ algo
+void	PmergeMe::sort_pairs(unsigned int pair_size)
+{
+	for (std::vector<int>::iterator it = _vec.begin(); safe_advance(it, pair_size); it += pair_size) // Check si ca marche pour odd --> Shift fonctiona recoder
 	{
 		if (pair_size == 2 && it != _vec.end() - 1 && *it > *(it + 1))
+		{
+			std::cout << "Swapping: " << *it << " and " << *(it + 1) << std::endl;
 			std::iter_swap(it, it + 1); // PB: Ne swap pas les nombre par chunck mais 1 a 1
-		if (pair_size > 2 && it != _vec.end() - pair_size + 1 && *(it + (pair_size / 2) - 1) > *(it + pair_size - 1))
-			std::swap_ranges(it, it + (pair_size / 2) - 1, it + (pair_size / 2));
+		}
+		else if (pair_size > 2 && it != _vec.end() - pair_size + 1 && *(it + (pair_size / 2) - 1) > *(it + pair_size - 1))
+		{
+			std::cout << "Swapping pair: [" << *it << ", " << *(it + (pair_size - 1)) << "]" << std::endl;
+			std::swap_ranges(it, it + (pair_size / 2), it + (pair_size / 2));
+		}
 		else
-			std::cerr << "No sort to operate on level " << pair_size << std::endl;
-	}
-	std::cout << "Pair size = " << pair_size << std::endl;
+			std::cout << "No swap needed for pair [" << *it << ", " << *(it + pair_size - 1) << "]" << std::endl;
+	}	
+}
+
+// Used by sort_vector to recursively create/sort pairs and call other functions for main pend etc
+void	PmergeMe::recursive_sort(unsigned int pair_size)
+{
+	std::cout << "Recursive sort called with pair size: " << pair_size << std::endl;
+	sort_pairs(pair_size);
+	std::cout << "Displaying vector sorted with pair size = " << pair_size << std::endl;
 	display_vec();	
-	if (pair_size < _size / 2)
+	if (pair_size <= _size / 2)
 		recursive_sort(pair_size * 2);
 	else
 		return ;// Suite de l'algo main pend tout ca
 }
 
 
+// Sort _vec following Ford-Johnson algo
 void	PmergeMe::sort_vector()
 {
 	recursive_sort(2);
