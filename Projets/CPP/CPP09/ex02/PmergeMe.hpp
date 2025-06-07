@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   PmergeMe.hpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/07 16:13:05 by tlebon            #+#    #+#             */
+/*   Updated: 2025/06/07 17:43:55 by tlebon           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef	PMERGEME_HPP
 #define	PMERGEME_HPP
 
@@ -7,8 +19,6 @@
 #include <iostream>
 #include <exception>
 #include <algorithm>
-
-
 
 class PmergeMe
 {
@@ -23,9 +33,11 @@ class PmergeMe
 		PmergeMe();
 		
 		// Private Methods
-		bool	safe_advance(std::vector<int>::iterator pos, unsigned int n) const;	
+		template <typename T>
+		bool	safe_advance(typename T::iterator pos, unsigned int n) const;	
 		void	sort_pairs(unsigned int pair_size);
 		void	recursive_sort(unsigned int pair_size);
+		void	insert_vec(unsigned int elem_size);
 
 	public:
 		// Personnalized constructor

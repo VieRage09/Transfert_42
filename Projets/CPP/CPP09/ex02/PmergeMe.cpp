@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   PmergeMe.cpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/07 16:13:02 by tlebon            #+#    #+#             */
+/*   Updated: 2025/06/07 17:45:52 by tlebon           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "PmergeMe.hpp"
 
 //############################## CONSTRUCTORS & DESTRUCTORS #####################################//
@@ -44,6 +56,7 @@ PmergeMe::~PmergeMe() { std::cout << "PmergeMe object destroyed\n";}
 
 // Public Methods // 
 
+// Displays the private attribute _vec
 void	PmergeMe::display_vec() const
 {
 	std::cout << "Vector of size " << _vec.size() << ":\n";
@@ -53,6 +66,7 @@ void	PmergeMe::display_vec() const
 	}
 }
 
+// Displays the private attribute _deq
 void	PmergeMe::display_deq() const
 {
 	std::cout << "Deque:\n";
@@ -62,10 +76,12 @@ void	PmergeMe::display_deq() const
 	}
 }
 
-bool	PmergeMe::safe_advance(std::vector<int>::iterator pos, unsigned int n) const
+// Used to check if we can increment pos n times w/o getting past end()
+template <typename T>
+bool	PmergeMe::safe_advance(typename T::iterator pos, unsigned int n) const
 {
 	int i = 0;
-	for (std::vector<int>::iterator it = pos; i < n ; it++, i++)
+	for (auto it = pos; i < n ; it++, i++)
 	{
 		if (it == _vec.end())
 			return (false);
@@ -73,24 +89,54 @@ bool	PmergeMe::safe_advance(std::vector<int>::iterator pos, unsigned int n) cons
 	return (true);
 }
 
-// Sort pairs of numbers or pairs of pairs etc following the the first step of FJ algo
+// Sort blocks of numbers following the first step of FJ algo
 void	PmergeMe::sort_pairs(unsigned int pair_size)
 {
-	for (std::vector<int>::iterator it = _vec.begin(); safe_advance(it, pair_size); it += pair_size)
+	for (std::vector<int>::iterator it = _vec.begin(); safe_advance<std::vector<int>>(it, pair_size); it += pair_size)
 	{
 		if (pair_size == 2 && *it > *(it + 1))
-		{
-			// std::cout << "Swapping: " << *it << " and " << *(it + 1) << std::endl;
 			std::iter_swap(it, it + 1);
-		}
 		else if (pair_size > 2 && *(it + (pair_size / 2) - 1) > *(it + pair_size - 1))
-		{
-			// std::cout << "Swapping pair: [" << *(it + (pair_size / 2) - 1) << ", " << *(it + (pair_size - 1)) << "]" << std::endl;
 			std::swap_ranges(it, it + (pair_size / 2), it + (pair_size / 2));
-		}
-		// else
-		// 	std::cout << "No swap needed for pair [" << *(it + (pair_size / 2) - 1) << ", " << *(it + pair_size - 1) << "]" << std::endl;
 	}	
+}
+
+// Creates and loads 2 vectors (main & pend) then insert the pend into main and update _vec in the end
+void	PmergeMe::insert_vec(unsigned int elem_size)
+{
+	std::vector<int>	main;
+	std::vector<int>	pend;
+	std::vector<int>	remains;
+
+	bool				is_upper_in_pair = false;
+
+	std::cout << "insert_vec called with elem_size: " << elem_size << std::endl;
+	// Loading main's 2 first elems 
+	for (std::vector<int>::iterator it = _vec.begin(); it != _vec.begin() + (elem_size * 2); it++)
+		main.push_back(*it);
+	for(std::vector<int>::iterator it = _vec.begin() + (elem_size * 2); safe_advance<std::vector<int>>(it, elem_size); it += elem_size)
+	{
+		if (!is_upper_in_pair)
+			for(std::vector<int>::iterator it_elem = it; it_elem != it + elem_size; it_elem++)
+				pend.push_back(*it_elem);
+		else
+			for(std::vector<int>::iterator it_elem = it; it_elem != it + elem_size; it_elem++)
+				main.push_back(*it_elem);
+		is_upper_in_pair = !is_upper_in_pair;
+		if (!safe_advance<std::vector<int>>(it, elem_size)) // Normalement, garde les elements qui ne participent pas a l'insertion (incapable de former un element complet): A TESTER
+			for(std::vector<int>::iterator it_elem = it; it_elem != it + elem_size; it_elem++)
+				remains.push_back(*it_elem);
+	}
+	if (!pend.empty()) // Algo d'insertion a faire
+	{
+		
+		// Insert the pend into main
+	}
+	for(std::vector<int>::iterator it = remains.begin(); it != remains.end(); it++) // On ajoute en queue les valeurs qui n'ont pas participees a l'insertion
+		main.push_back(*it);
+	_vec.swap(main);
+	main.clear(); // Useless je pense
+	pend.clear();
 }
 
 // Used by sort_vector to recursively create/sort pairs and call other functions for main pend etc
@@ -102,8 +148,8 @@ void	PmergeMe::recursive_sort(unsigned int pair_size)
 	// display_vec();	
 	if (pair_size <= _size / 2)
 		recursive_sort(pair_size * 2);
-	
-		return ;// Suite de l'algo main pend tout ca
+	display_vec();
+	insert_vec(pair_size / 2);
 }
 
 
