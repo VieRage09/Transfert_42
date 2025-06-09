@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 18:18:37 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/06 17:49:07 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/06/10 00:22:53 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,14 @@ BitcoinExchange::BitcoinExchange(std::string db_path) : _db_map()
 	{
 		std::getline(db, line);
 		if (line.find_first_of("0123456789") == std::string::npos)
-		{
-			std::cout << "Line skipped\n";
 			continue;
-		}
 		_db_map.insert(create_pair(line, ','));
 	}
 	db.close();
-	std::cout << "BitcoinExchange object instanciated with " << db_path << " as input\nSize = " << _db_map.size() << std::endl;
 }
-BitcoinExchange::BitcoinExchange(const BitcoinExchange& copy) : _db_map(copy._db_map) {std::cout << "BitcoinExchange instance copied\n";}
+BitcoinExchange::BitcoinExchange(const BitcoinExchange& copy) : _db_map(copy._db_map) {}
 
-BitcoinExchange::~BitcoinExchange() {std::cout << "BitcoinExchange object destroyed\n";}
+BitcoinExchange::~BitcoinExchange() {}
 
 // METHODS //
 
@@ -98,7 +94,7 @@ std::pair<time_t, float>	BitcoinExchange::create_pair(std::string line, char del
 	try
 	{
 		date.tm_year = std::stoi(line.substr(0, line.find_first_of('-'))) - 1900;
-		date.tm_mon = std::stoi(line.substr(line.find_first_of('-') + 1, 2)) - 1; // Checkk account l3 pour faire en sorte que ca throw qqch
+		date.tm_mon = std::stoi(line.substr(line.find_first_of('-') + 1, 2)) - 1;
 		date.tm_mday = std::stoi(line.substr(line.find_last_of('-') + 1, 2));
 		date.tm_hour = 0;
 		date.tm_min = 0;
@@ -153,10 +149,7 @@ void	BitcoinExchange::cmpdisplay_file_values(std::string path)
 	{
 		std::getline(input, line);
 		if (line.find_first_of("0123456789") == std::string::npos)
-		{
-			std::cout << "Line skipped\n";
 			continue;
-		}
 		try
 		{
 			tmp = create_pair(line, '|');

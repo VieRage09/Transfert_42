@@ -2,11 +2,11 @@
 
 // CONSTRUCTORS & DESTRUCTORS //
 
-RPN::RPN() { std::cout << "RPN instanciated\n"; }
+RPN::RPN() {}
 
-RPN::RPN(const RPN &copy) : _rpn(copy._rpn) {std::cout << "RPN copied\n";}
+RPN::RPN(const RPN &copy) : _rpn(copy._rpn) {}
 
-RPN::~RPN() { std::cout << "RPN destroyed\n"; }
+RPN::~RPN() {}
 
 // METHODS //
 
