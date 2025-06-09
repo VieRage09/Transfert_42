@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:58 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/07 16:13:17 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/06/09 17:02:39 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	main(int ac, char **av)
 		return (std::cerr << "[ERROR]: Wrong argument: " << e.what() << std::endl, 1);
 	}
 
-	PmergeMe	obj(ac == 2, av);
+	PmergeMe	obj(av);
 	obj.sort_vector();
 	obj.display_vec();	
 	

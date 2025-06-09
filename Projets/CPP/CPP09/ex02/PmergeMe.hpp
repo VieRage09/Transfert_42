@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:13:05 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/07 17:43:55 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/06/09 17:02:54 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ class PmergeMe
 
 	public:
 		// Personnalized constructor
-		PmergeMe(bool args, char **list);
+		PmergeMe(char **list);
 		// Copy constructor
 		PmergeMe(const PmergeMe& copy);
 		// Destructor
