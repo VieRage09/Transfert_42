@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:13:02 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/10 02:08:03 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/06/10 13:19:39by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,7 @@ unsigned int	PmergeMe::get_nth_jacobsthal(unsigned int n) const
 	return (static_cast<unsigned int>(round(pow(2, n) - pow(-1, n)) / 3));
 }
 
-void	PmergeMe::binary_insert(std::pair<int, std::vector<int>> &element,
-	std::vector<std::pair<int, std::vector<int>>> &main) const
-{
-// 	int binarySearch(int a[], int item,
+// int binarySearch(int a[], int item,
 //                 int low, int high)
 // {
 //     if (high <= low)
@@ -98,6 +95,49 @@ void	PmergeMe::binary_insert(std::pair<int, std::vector<int>> &element,
 //     return binarySearch(a, item, low,
 //                         mid - 1);
 // }
+
+
+std::vector<std::pair<int, std::vector<int>>>::iterator	binary_search(
+	std::vector<std::pair<int, std::vector<int>>> &main,
+	std::pair<int, std::vector<int>> &elem,
+	std::vector<std::pair<int, std::vector<int>>>::iterator lower_bound,
+	std::vector<std::pair<int, std::vector<int>>>::iterator upper_bound)
+{
+	if ((*upper_bound).second.back() <= (*lower_bound).second.back()) // Pas forcement une belle implementation
+		return (elem.second.back() > (*lower_bound).second.back()) ? lower_bound + 1 : lower_bound;
+
+	std::vector<std::pair<int, std::vector<int>>>::iterator mid = lower_bound + std::distance(lower_bound, upper_bound) / 2;
+
+	if (elem.second.back() == (*mid).second.back())
+		return mid + 1;
+
+	if (elem.second.back() > (*mid).second.back())
+		return binary_search(main, elem, mid + 1, upper_bound);
+
+	return binary_search(main, elem, lower_bound, mid - 1);
+}
+
+void	PmergeMe::binary_insert(std::pair<int, std::vector<int>> &elem,
+	std::vector<std::pair<int, std::vector<int>>> &main) const
+{
+	std::vector<std::pair<int, std::vector<int>>>::iterator	insert_pos;
+	std::vector<std::pair<int, std::vector<int>>>::iterator	upper_bound = main.begin();
+
+	for(; upper_bound != main.end(); upper_bound++)
+		if ((*upper_bound).first == elem.first)
+			break;
+	if (upper_bound == main.end())
+	{
+		upper_bound--;
+		std::cout << "Upper bound not found, using last element" << std::endl;
+	}
+	//print upper_bound vector
+	for(std::vector<int>::iterator it = (*upper_bound).second.begin(); it != (*upper_bound).second.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+
+	insert_pos = binary_search(main, elem, main.begin(), upper_bound);
+	main.insert(insert_pos, elem);
 }
 
 void	PmergeMe::insert_pend(std::vector<std::pair<int, std::vector<int>>> &main,
@@ -110,37 +150,50 @@ void	PmergeMe::insert_pend(std::vector<std::pair<int, std::vector<int>>> &main,
 	{
 		if (pend.back().first < jacobsthal)
 		{
-			// On insert pend dans l'ordre inverse
+			// Prints
+			std::cout << "Inserting last pend element: " << "index = " << pend.back().first << std::endl;
+			for (std::vector<int>::iterator it = pend.back().second.begin(); it != pend.back().second.end(); it++)
+				std::cout << *it << " ";
+			std::cout << std::endl;
+			// 
 			binary_insert(pend.back(), main);
 			pend.erase(pend.end() - 1); // Erase l'element insere
 			continue;
 		}
-		for (std::vector<std::pair<int, std::vector<int>>>::reverse_iterator rit = pend.rend() - (jacobsthal + 1); rit != pend.rend(); ++rit)
+		for (std::vector<std::pair<int, std::vector<int>>>::reverse_iterator rit = pend.rend() - jacobsthal + 1; rit != pend.rend(); ++rit)
 		{
+			// Prints
+			std::cout << "Inserting pend element: " << "index = " << (*rit).first << std::endl;
+			for (std::vector<int>::iterator it = (*rit).second.begin(); it != (*rit).second.end(); it++)
+				std::cout << *it << " ";
+			std::cout << std::endl;
+			//
 			binary_insert(*rit, main);
 		}
 		pend.erase(pend.begin(), pend.begin() + jacobsthal - get_nth_jacobsthal(n - 1) - 1);
 		jacobsthal = get_nth_jacobsthal(++n);
+		// prints
+		std::cout << "New jacobsthal number: " << jacobsthal << std::endl;
+		std::cout << "Main vector after insertion:\n";
+		for (auto &pair : main)
+		{
+			std::cout << "Index: " << pair.first << " Elements: ";
+			for (auto &elem : pair.second)
+				std::cout << elem << " ";
+			std::cout << std::endl;
+		}
+		if (pend.empty())
+			break;
+		std::cout << "Pend vector after insertion:\n";
+		for (auto &pair : pend)
+		{
+			std::cout << "Index: " << pair.first << " Elements: ";
+			for (auto &elem : pair.second)
+				std::cout << elem << " ";
+			std::cout << std::endl;
+		}
+		//
 	}
-	// 1. Definir upperbound pour l'element
-	// int	index = pend.front().first;
-	// int	upper_bound = index + jacobstal - 1;
-	// // 2. Binary insertion sort sur la plage etablie dans le main
-	// auto it = main.begin();
-	// for (; it != main.end() && it->first < upper_bound; it++);
-	// if (it != main.end())
-	// {
-	// 	auto pos = std::lower_bound(it->second.begin(), it->second.end(), pend.front().second[0]);
-	// 	it->second.insert(pos, pend.front().second.begin(), pend.front().second.end());
-	// }
-	// else
-	// 	main.push_back(pend.front());
-	// // 3. Si on a insere assez d'elements, il faut recalculer le jacobstal number
-	// if (pend.size() > 1)
-	// {
-	// 	pend.erase(pend.begin());
-	// 	binary_insertion(main, a_s, pend);
-	// }
 }
 
 // Creates and loads 2 vectors (main & pend) then insert the pend into main and update _vec in the end
@@ -152,7 +205,7 @@ void	PmergeMe::insert_vec(unsigned int elem_size)
 	std::vector<std::pair<int, std::vector<int>>>	pend;
 	std::vector<int>								remains;
 
-	std::cout << "insert_vec called with elem_size: " << elem_size << std::endl;
+	std::cout << "Inserting vector with element size: " << elem_size << std::endl;
 	bool	is_biggest_in_pair = false;
 	int		index = 1;
 	// Loading a_s and b_s so we can keep for later their labels
@@ -176,6 +229,47 @@ void	PmergeMe::insert_vec(unsigned int elem_size)
 	main.insert(main.end(), a_s.begin(), a_s.end());
 	pend.insert(pend.end(), b_s.begin() + 1, b_s.end()); // Attention dans le cas ou on ne peux pas faire de pend
 
+	std::cout << "Vectors after loading:\n";
+	// Display vectors for debug
+	std::cout << "a_s vector:\n";
+	for (auto &pair : a_s)
+	{
+		std::cout << "Index: " << pair.first << " Elements: ";
+		for (auto &elem : pair.second)
+			std::cout << elem << " ";
+		std::cout << std::endl;
+	}
+	std::cout << "b_s vector:\n";
+	for (auto &pair : b_s)
+	{
+		std::cout << "Index: " << pair.first << " Elements: ";
+		for (auto &elem : pair.second)
+			std::cout << elem << " ";
+		std::cout << std::endl;
+	}
+	std::cout << "main vector:\n";
+	for (auto &pair : main)
+	{
+		std::cout << "Index: " << pair.first << " Elements: ";
+		for (auto &elem : pair.second)
+			std::cout << elem << " ";
+		std::cout << std::endl;
+	}
+	std::cout << "pend vector:\n";
+	for (auto &pair : pend)
+	{
+		std::cout << "Index: " << pair.first << " Elements: ";
+		for (auto &elem : pair.second)
+			std::cout << elem << " ";
+		std::cout << std::endl;
+	}	
+	std::cout << "remains vector:\n";
+	for (auto &elem : remains)
+	{
+		std::cout << elem << " ";
+	}
+	std::cout << std::endl;
+
 	// A partir de la, il faut inserer pend dans main
 	// Algo d'insertion binaire = '
 	// 0. Calculer le jackobstal number --> Nous dis quel element doit etre insere en premier dans main
@@ -187,12 +281,24 @@ void	PmergeMe::insert_vec(unsigned int elem_size)
 
 	if (!pend.empty()) // Algo d'insertion a faire
 	{
+		std::cout << "Inserting pend into main\n";
 		insert_pend(main, pend, a_s);
 	}
-	// Adding the remains to main
-	for (std::vector<int>::iterator it = remains.begin(); it != remains.end(); it++)
-		main.emplace_back(0, *it);
 	// Mettre a jour _vec avec main
+	_vec.clear();
+	for (std::vector<std::pair<int, std::vector<int>>>::iterator it = main.begin(); it != main.end(); it++)
+	{
+			_vec.insert(_vec.end(), (*it).second.begin(), (*it).second.end());
+	}
+	// Adding the remains to _vec 
+	_vec.insert(_vec.end(), remains.begin(), remains.end());
+	std::cout << "Vector updated with main and remains\n";
+	if (_vec.size() != _size)
+	{
+		std::cerr << "Error: _vec size mismatch after insertion. Expected: " << _size << ", Actual: " << _vec.size() << std::endl;
+		exit(EXIT_FAILURE);
+	}
+	display_vec();
 	return ;
 }
 
@@ -205,6 +311,7 @@ void PmergeMe::recursive_sort(unsigned int pair_size)
 	// display_vec();
 	if (pair_size <= _size / 2)
 		recursive_sort(pair_size * 2);
+	std::cout << "Displaying vector after recursive sort with pair size = " << pair_size << std::endl;
 	display_vec();
 	insert_vec(pair_size / 2);
 }
