@@ -1,1 +1,3 @@
-Voir si on traite le cas "1 2 3..." ou pas et modifier / terminer le constructeur de PmergeMe 
+Faire la fonction binary_insert
+Recopier le tout pour deque
+Mettre en place le decompte des comparaisons pour les deux pour voir si ca fonctionne bien
