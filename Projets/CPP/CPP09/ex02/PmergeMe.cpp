@@ -97,6 +97,7 @@ unsigned int	PmergeMe::get_nth_jacobsthal(unsigned int n) const
 // }
 
 
+// Ici on peut passer direct les vecteurs intrinsèques
 std::vector<std::pair<int, std::vector<int>>>::iterator	binary_search(
 	std::vector<std::pair<int, std::vector<int>>> &main,
 	std::pair<int, std::vector<int>> &elem,
@@ -107,7 +108,7 @@ std::vector<std::pair<int, std::vector<int>>>::iterator	binary_search(
 		return (elem.second.back() > (*lower_bound).second.back()) ? lower_bound + 1 : lower_bound;
 
 	std::vector<std::pair<int, std::vector<int>>>::iterator mid = lower_bound + std::distance(lower_bound, upper_bound) / 2;
-
+	
 	if (elem.second.back() == (*mid).second.back())
 		return mid + 1;
 
@@ -132,10 +133,7 @@ void	PmergeMe::binary_insert(std::pair<int, std::vector<int>> &elem,
 		std::cout << "Upper bound not found, using last element" << std::endl;
 	}
 	//print upper_bound vector
-	for(std::vector<int>::iterator it = (*upper_bound).second.begin(); it != (*upper_bound).second.end(); it++)
-		std::cout << *it << " ";
-	std::cout << std::endl;
-
+	std::cout << "Upper bound found: index = " << (*upper_bound).first << std::endl;
 	insert_pos = binary_search(main, elem, main.begin(), upper_bound);
 	main.insert(insert_pos, elem);
 }
@@ -152,7 +150,8 @@ void	PmergeMe::insert_pend(std::vector<std::pair<int, std::vector<int>>> &main,
 		{
 			// Prints
 			std::cout << "Inserting last pend element: " << "index = " << pend.back().first << std::endl;
-			for (std::vector<int>::iterator it = pend.back().second.begin(); it != pend.back().second.end(); it++)
+			std::cout << "Elements: ";
+			for (auto it = pend.back().second.begin(); it != pend.back().second.end(); it++)
 				std::cout << *it << " ";
 			std::cout << std::endl;
 			// 
@@ -160,17 +159,21 @@ void	PmergeMe::insert_pend(std::vector<std::pair<int, std::vector<int>>> &main,
 			pend.erase(pend.end() - 1); // Erase l'element insere
 			continue;
 		}
-		for (std::vector<std::pair<int, std::vector<int>>>::reverse_iterator rit = pend.rend() - jacobsthal + 1; rit != pend.rend(); ++rit)
+		for (auto rit = pend.rend() - jacobsthal + 1; rit != pend.rend(); ++rit) // Attention ici, si jacobsthal > pend.size() on va avoir un pb
 		{
 			// Prints
 			std::cout << "Inserting pend element: " << "index = " << (*rit).first << std::endl;
-			for (std::vector<int>::iterator it = (*rit).second.begin(); it != (*rit).second.end(); it++)
+			std::cout << "Elements: ";
+			for (auto it = (*rit).second.begin(); it != (*rit).second.end(); it++)
 				std::cout << *it << " ";
 			std::cout << std::endl;
 			//
 			binary_insert(*rit, main);
 		}
-		pend.erase(pend.begin(), pend.begin() + jacobsthal - get_nth_jacobsthal(n - 1) - 1);
+		unsigned int	erase_count = jacobsthal - get_nth_jacobsthal(n - 1);
+		if (pend.size() < jacobsthal)
+			erase_count = pend.size();
+		pend.erase(pend.begin(), pend.begin() + erase_count);
 		jacobsthal = get_nth_jacobsthal(++n);
 		// prints
 		std::cout << "New jacobsthal number: " << jacobsthal << std::endl;
@@ -222,7 +225,7 @@ void	PmergeMe::insert_vec(unsigned int elem_size)
 	}
 	// Keep the elements that do not participate for this round
 	if (it != _vec.end())
-		for (std::vector<int>::iterator it_elem = it; it_elem != _vec.end(); it_elem++)
+		for (auto it_elem = it; it_elem != _vec.end(); it_elem++)
 			remains.push_back(*it_elem);
 	// Creating main and pend
 	main.insert(main.end(), b_s.begin(), b_s.begin() + 1);
@@ -286,7 +289,7 @@ void	PmergeMe::insert_vec(unsigned int elem_size)
 	}
 	// Mettre a jour _vec avec main
 	_vec.clear();
-	for (std::vector<std::pair<int, std::vector<int>>>::iterator it = main.begin(); it != main.end(); it++)
+	for (auto it = main.begin(); it != main.end(); it++)
 	{
 			_vec.insert(_vec.end(), (*it).second.begin(), (*it).second.end());
 	}
