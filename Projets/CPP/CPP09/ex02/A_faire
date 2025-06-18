@@ -1,3 +1,4 @@
 Regler le soucis du core dump avec PmergeMe 8 2 1 9 7 4 12 43 0 6
+--> plus de SEGFAULT mais des elements vides skippes => a regler
 Recopier le tout pour deque
 Mettre en place le decompte des comparaisons pour les deux pour voir si ca fonctionne bien

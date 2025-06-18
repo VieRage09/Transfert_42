@@ -98,44 +98,120 @@ unsigned int	PmergeMe::get_nth_jacobsthal(unsigned int n) const
 
 
 // Ici on peut passer direct les vecteurs intrinsèques
-std::vector<std::pair<int, std::vector<int>>>::iterator	binary_search(
-	std::vector<std::pair<int, std::vector<int>>> &main,
-	std::pair<int, std::vector<int>> &elem,
-	std::vector<std::pair<int, std::vector<int>>>::iterator lower_bound,
-	std::vector<std::pair<int, std::vector<int>>>::iterator upper_bound)
-{
-	if ((*upper_bound).second.back() <= (*lower_bound).second.back()) // Pas forcement une belle implementation
-		return (elem.second.back() > (*lower_bound).second.back()) ? lower_bound + 1 : lower_bound;
+// std::vector<std::pair<int, std::vector<int>>>::iterator	binary_search(
+// 	std::vector<std::pair<int, std::vector<int>>> &main,
+// 	std::pair<int, std::vector<int>> &elem,
+// 	std::vector<std::pair<int, std::vector<int>>>::iterator lower_bound,
+// 	std::vector<std::pair<int, std::vector<int>>>::iterator upper_bound)
+// {
+// 	std::cout << "bSearching [low;high] boundarie's index : [" << (*lower_bound).first << ";" << (*upper_bound).first << "]\n";
+// 	if ((*upper_bound).second.back() <= (*lower_bound).second.back()) // Pas forcement une belle implementation
+// 		return (elem.second.back() > (*lower_bound).second.back()) ? lower_bound + 1 : lower_bound;
 
-	std::vector<std::pair<int, std::vector<int>>>::iterator mid = lower_bound + std::distance(lower_bound, upper_bound) / 2;
+// 	std::vector<std::pair<int, std::vector<int>>>::iterator mid = lower_bound + std::distance(lower_bound, upper_bound) / 2;
 	
-	if (elem.second.back() == (*mid).second.back())
-		return mid + 1;
+// 	if (elem.second.back() == (*mid).second.back())
+// 		return (mid + 1);
 
-	if (elem.second.back() > (*mid).second.back())
-		return binary_search(main, elem, mid + 1, upper_bound);
+// 	if (elem.second.back() > (*mid).second.back())
+// 		return binary_search(main, elem, mid + 1, upper_bound);
 
-	return binary_search(main, elem, lower_bound, mid - 1);
+// 	if (mid == lower_bound)
+//   		return lower_bound;
+	
+// 	return binary_search(main, elem, lower_bound, mid - 1);
+// }
+
+std::vector<std::pair<int, std::vector<int>>>::iterator binary_search(
+    std::vector<std::pair<int, std::vector<int>>> &main,
+    std::pair<int, std::vector<int>> &elem,
+    std::vector<std::pair<int, std::vector<int>>>::iterator lower_bound,
+    std::vector<std::pair<int, std::vector<int>>>::iterator upper_bound)
+{
+    while (lower_bound <= upper_bound)
+    {
+        auto mid = lower_bound + std::distance(lower_bound, upper_bound) / 2;
+        if (elem.second.back() == mid->second.back())
+            return mid + 1;
+        if (elem.second.back() < mid->second.back())
+        {
+            if (mid == lower_bound) // empêche de reculer en dehors
+                return lower_bound;
+            upper_bound = mid - 1;
+        }
+        else
+            lower_bound = mid + 1;
+    }
+    return lower_bound;
 }
 
-void	PmergeMe::binary_insert(std::pair<int, std::vector<int>> &elem,
-	std::vector<std::pair<int, std::vector<int>>> &main) const
-{
-	std::vector<std::pair<int, std::vector<int>>>::iterator	insert_pos;
-	std::vector<std::pair<int, std::vector<int>>>::iterator	upper_bound = main.begin();
+// void	PmergeMe::binary_insert(std::pair<int, std::vector<int>> &elem,
+// 	std::vector<std::pair<int, std::vector<int>>> &main) const
+// {
+// 	std::vector<std::pair<int, std::vector<int>>>::iterator	insert_pos;
+// 	std::vector<std::pair<int, std::vector<int>>>::iterator	upper_bound = main.begin();
 
-	for(; upper_bound != main.end(); upper_bound++)
-		if ((*upper_bound).first == elem.first)
-			break;
-	if (upper_bound == main.end())
+// 	for(; upper_bound != main.end(); upper_bound++)
+// 		if ((*upper_bound).first == elem.first)
+// 			break;
+// 	if (upper_bound == main.end())
+// 	{
+// 	    if (main.empty()) {
+//         	std::cerr << "Error: main is empty in binary_insert" << std::endl;
+//         	return;
+//     	}
+// 		if (main.size() == 1)			// Main toujours de size >= 2
+//   	    	upper_bound = main.begin();
+// 		else 
+//     		upper_bound--;
+// 		std::cout << "Upper bound not found, using last element" << std::endl;
+// 	}
+// 	//print upper_bound vector
+// 	std::cout << "Upper bound found: index = " << (*upper_bound).first << std::endl;
+// 	if (upper_bound <  main.begin())
+// 		insert_pos = main.begin();
+// 	else
+// 		insert_pos = binary_search(main, elem, main.begin(), upper_bound);
+// 	main.insert(insert_pos, elem);
+// }
+
+void	PmergeMe::binary_insert(std::pair<int, std::vector<int>> &elem,
+    std::vector<std::pair<int, std::vector<int>>> &main) const
+{
+    std::vector<std::pair<int, std::vector<int>>>::iterator	insert_pos;
+    std::vector<std::pair<int, std::vector<int>>>::iterator	upper_bound = main.begin();
+
+	if (elem.second.empty())
 	{
-		upper_bound--;
-		std::cout << "Upper bound not found, using last element" << std::endl;
-	}
-	//print upper_bound vector
-	std::cout << "Upper bound found: index = " << (*upper_bound).first << std::endl;
-	insert_pos = binary_search(main, elem, main.begin(), upper_bound);
-	main.insert(insert_pos, elem);
+        std::cerr << "Error: trying to insert an empty element (index = " << elem.first << ") in binary_insert" << std::endl;
+        return;
+    }
+    for(; upper_bound != main.end(); upper_bound++)
+        if ((*upper_bound).first == elem.first)
+            break;
+    if (upper_bound == main.end())
+    {
+        if (main.empty()) {
+            std::cerr << "Error: main is empty in binary_insert" << std::endl;
+            return;
+        }
+        if (main.size() == 1)
+          	upper_bound = main.begin();
+        else {
+            // Protection ici :
+            if (upper_bound == main.begin()) {
+                // Impossible de décrémenter, on force sur begin()
+                upper_bound = main.begin();
+            } else {
+                upper_bound--;
+            }
+        }
+        std::cout << "Upper bound not found, using last element" << std::endl;
+    }
+    std::cout << "Upper bound found: index = " << (*upper_bound).first << std::endl;
+    // Plus besoin de if (upper_bound < main.begin())
+    insert_pos = binary_search(main, elem, main.begin(), upper_bound);
+    main.insert(insert_pos, elem);
 }
 
 void	PmergeMe::insert_pend(std::vector<std::pair<int, std::vector<int>>> &main,
@@ -159,8 +235,15 @@ void	PmergeMe::insert_pend(std::vector<std::pair<int, std::vector<int>>> &main,
 			pend.erase(pend.end() - 1); // Erase l'element insere
 			continue;
 		}
+		// if (jacobsthal > pend.size())
+		// 	jacobsthal = pend.size();
 		for (auto rit = pend.rend() - jacobsthal + 1; rit != pend.rend(); ++rit) // Attention ici, si jacobsthal > pend.size() on va avoir un pb
 		{
+			if ((*rit).second.empty())
+			{
+        		std::cerr << "Warning: skipping empty pend element (index = " << (*rit).first << ")" << std::endl;
+        		continue;
+    		}
 			// Prints
 			std::cout << "Inserting pend element: " << "index = " << (*rit).first << std::endl;
 			std::cout << "Elements: ";
@@ -215,10 +298,13 @@ void	PmergeMe::insert_vec(unsigned int elem_size)
 	std::vector<int>::iterator it = _vec.begin();
 	for (; safe_advance<std::vector<int>>(it, elem_size); it += elem_size)
 	{
+		std::vector<int>	group(it, it + elem_size);
+		if (group.empty())
+			continue;
 		if (!is_biggest_in_pair)
-			b_s.emplace_back(index, std::vector<int>(it, it + elem_size));
+			b_s.emplace_back(index, group);
 		else
-			a_s.emplace_back(index, std::vector<int>(it, it + elem_size));
+			a_s.emplace_back(index, group);
 		if (is_biggest_in_pair)
 			index++;
 		is_biggest_in_pair = !is_biggest_in_pair;
@@ -228,9 +314,19 @@ void	PmergeMe::insert_vec(unsigned int elem_size)
 		for (auto it_elem = it; it_elem != _vec.end(); it_elem++)
 			remains.push_back(*it_elem);
 	// Creating main and pend
-	main.insert(main.end(), b_s.begin(), b_s.begin() + 1);
-	main.insert(main.end(), a_s.begin(), a_s.end());
-	pend.insert(pend.end(), b_s.begin() + 1, b_s.end()); // Attention dans le cas ou on ne peux pas faire de pend
+	// main.insert(main.end(), b_s.begin(), b_s.begin() + 1);
+	// main.insert(main.end(), a_s.begin(), a_s.end());
+	// pend.insert(pend.end(), b_s.begin() + 1, b_s.end()); // Attention dans le cas ou on ne peux pas faire de pend
+	
+	if (!b_s.empty() && !b_s.front().second.empty())
+		main.push_back(b_s.front());
+	for (auto &pair : a_s)
+    	if (!pair.second.empty())
+      		main.push_back(pair);
+	for (auto it = b_s.begin() + 1; it != b_s.end(); ++it)
+ 		if (!it->second.empty())
+  			pend.push_back(*it);
+
 
 	std::cout << "Vectors after loading:\n";
 	// Display vectors for debug
@@ -302,7 +398,6 @@ void	PmergeMe::insert_vec(unsigned int elem_size)
 		exit(EXIT_FAILURE);
 	}
 	display_vec();
-	return ;
 }
 
 // Used by sort_vector to recursively create/sort pairs and call other functions for main pend etc
