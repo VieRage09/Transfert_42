@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:58 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/10 00:55:55 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/06/23 19:04:03 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,12 @@ int	main(int ac, char **av)
 
 	PmergeMe	obj(av);
 	obj.sort_vector();
+	std::cout << "Vector sorted in " << obj.get_nb_comps() << " comparisons / Max comparisons: " << obj.get_max_nb_comps() << std::endl;
 	obj.display_vec();	
+
+	// obj.sort_deque();
+	// std::cout << "Deque sorted in " << obj.get_nb_comps() << " comparisons / Max comparisons: " << obj.get_max_nb_comps() << std::endl;
+	// obj.display_deq();
 	
 	// Check input: positive integers only
 	// Store input in 2 containers: vector & deque ==> Idealement 2 containers avec les meme operations pour pouvoir template --> vector et deque

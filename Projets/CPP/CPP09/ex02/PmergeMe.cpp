@@ -17,10 +17,9 @@
 PmergeMe::PmergeMe(char **list)
 	: _vec(std::vector<int>()), _deq(std::deque<int>())
 {
-	int i;
+	int i = 1;
 
 	_size = 0;
-	i = 1;
 	while (list[i])
 	{
 		_vec.push_back(std::stoi(list[i]));
@@ -28,12 +27,17 @@ PmergeMe::PmergeMe(char **list)
 		_size++;
 		i++;
 	}
+	_nb_comps = 0;
+	_max_nb_comps = get_max_nb_comps(_size);
 	std::cout << "PmergeMe object instanciated\n";
 }
 
 PmergeMe::PmergeMe(const PmergeMe &copy)
 	: _vec(std::vector<int>(copy._vec)), _deq(std::deque<int>(copy._deq))
 {
+	_nb_comps = copy._nb_comps;
+	_max_nb_comps = copy._max_nb_comps;
+	_size = copy._size;
 	std::cout << "PmergeMe object copied\n";
 }
 
@@ -42,6 +46,19 @@ PmergeMe::~PmergeMe() { std::cout << "PmergeMe object destroyed\n"; }
 // ############################### METHODS #######################################################//
 
 // PRIVATE METHODS //
+
+
+// Returns the maximum number of comparisons for a given size
+// This is based on the formula derived from the Ford-Johnson algorithm
+unsigned int	PmergeMe::get_max_nb_comps(unsigned int size) const
+{
+	int sum = 0;
+    for (int k = 1; k <= size; ++k) {
+        double value = (3.0 / 4.0) * k;
+        sum += static_cast<int>(ceil(log2(value)));
+    }
+    return sum;
+}
 
 // Used to check if we can increment pos n times w/o getting past end()
 template <typename T>
@@ -61,6 +78,7 @@ void PmergeMe::sort_pairs(unsigned int pair_size)
 {
 	for (std::vector<int>::iterator it = _vec.begin(); safe_advance<std::vector<int>>(it, pair_size); it += pair_size)
 	{
+		incr_nb_comps();
 		if (pair_size == 2 && *it > *(it + 1))
 			std::iter_swap(it, it + 1);
 		else if (pair_size > 2 && *(it + (pair_size / 2) - 1) > *(it + pair_size - 1))
@@ -68,6 +86,7 @@ void PmergeMe::sort_pairs(unsigned int pair_size)
 	}
 }
 
+// Returns the nth Jacobsthal number
 unsigned int	PmergeMe::get_nth_jacobsthal(unsigned int n) const
 {
 	if (n == 0)
@@ -78,12 +97,10 @@ unsigned int	PmergeMe::get_nth_jacobsthal(unsigned int n) const
 }
 
 // Ici on peut passer direct les vecteurs intrinsèques
-std::vector<std::pair<int, std::vector<int>>>::iterator	binary_search(
-	std::vector<std::pair<int, std::vector<int>>> &main,
-	std::pair<int, std::vector<int>> &elem,
-	std::vector<std::pair<int, std::vector<int>>>::iterator lower_bound,
-	std::vector<std::pair<int, std::vector<int>>>::iterator upper_bound)
+Vec_pair::iterator	PmergeMe::binary_search(Vec_pair &main, std::pair<int, std::vector<int>> &elem,
+											Vec_pair::iterator lower_bound, Vec_pair::iterator upper_bound)
 {
+	incr_nb_comps();
 	if ((*upper_bound).second.back() <= (*lower_bound).second.back()) // Pas forcement une belle implementation
 		return (elem.second.back() > (*lower_bound).second.back()) ? lower_bound + 1 : lower_bound;
 
@@ -101,11 +118,10 @@ std::vector<std::pair<int, std::vector<int>>>::iterator	binary_search(
 	return binary_search(main, elem, lower_bound, mid - 1);
 }
 
-void	PmergeMe::binary_insert(std::pair<int, std::vector<int>> &elem,
-    std::vector<std::pair<int, std::vector<int>>> &main) const
+void	PmergeMe::binary_insert(std::pair<int, std::vector<int>> &elem, Vec_pair &main)
 {
-    std::vector<std::pair<int, std::vector<int>>>::iterator	insert_pos;
-    std::vector<std::pair<int, std::vector<int>>>::iterator	upper_bound = main.begin();
+	Vec_pair::iterator	insert_pos;
+   	Vec_pair::iterator	upper_bound = main.begin();
 
 	if (elem.second.empty())
 	{
@@ -136,10 +152,7 @@ void	PmergeMe::binary_insert(std::pair<int, std::vector<int>> &elem,
     main.insert(insert_pos, elem);
 }
 
-void PmergeMe::insert_pend(
-    std::vector<std::pair<int, std::vector<int> > > &main,
-    std::vector<std::pair<int, std::vector<int> > > &pend,
-    std::vector<std::pair<int, std::vector<int> > > &a_s) const
+void PmergeMe::insert_pend(Vec_pair &main, Vec_pair &pend, Vec_pair &a_s)
 {
     int n = 3;
     unsigned int jacobsthal = get_nth_jacobsthal(n);
@@ -153,11 +166,6 @@ void PmergeMe::insert_pend(
             count = pend.size();
         for (int i = count - 1; i >= 0; --i)
         {
-            // if (pend[i].second.empty())
-            // {
-            //     std::cerr << "Warning: skipping empty pend element (index = " << pend[i].first << ")" << std::endl;
-            //     continue;
-            // }
             std::cout << "Inserting pend element: index = " << pend[i].first << std::endl;
             std::cout << "Elements: ";
             for (std::vector<int>::iterator it = pend[i].second.begin(); it != pend[i].second.end(); ++it)
@@ -173,11 +181,11 @@ void PmergeMe::insert_pend(
 // Creates and loads 2 vectors (main & pend) then insert the pend into main and update _vec in the end
 void	PmergeMe::insert_vec(unsigned int elem_size)
 {
-	std::vector<std::pair<int, std::vector<int>>>	a_s;
-	std::vector<std::pair<int, std::vector<int>>>	b_s;
-	std::vector<std::pair<int, std::vector<int>>>	main;
-	std::vector<std::pair<int, std::vector<int>>>	pend;
-	std::vector<int>								remains;
+	Vec_pair			a_s;
+	Vec_pair			b_s;
+	Vec_pair			main;
+	Vec_pair			pend;
+	std::vector<int>	remains;
 
 	std::cout << "Inserting vector with element size: " << elem_size << std::endl;
 	bool	is_biggest_in_pair = false;
@@ -201,11 +209,8 @@ void	PmergeMe::insert_vec(unsigned int elem_size)
 	if (it != _vec.end())
 		for (auto it_elem = it; it_elem != _vec.end(); it_elem++)
 			remains.push_back(*it_elem);
-	// Creating main and pend
-	// main.insert(main.end(), b_s.begin(), b_s.begin() + 1);
-	// main.insert(main.end(), a_s.begin(), a_s.end());
-	// pend.insert(pend.end(), b_s.begin() + 1, b_s.end()); // Attention dans le cas ou on ne peux pas faire de pend
-	
+
+	// Loading main and pend vectors 
 	if (!b_s.empty() && !b_s.front().second.empty())
 		main.push_back(b_s.front());
 	for (auto &pair : a_s)
@@ -304,6 +309,8 @@ void PmergeMe::recursive_sort(unsigned int pair_size)
 
 // Public Methods //
 
+void PmergeMe::incr_nb_comps() { _nb_comps++; }
+
 // Displays the private attribute _vec
 void PmergeMe::display_vec() const
 {
@@ -342,6 +349,10 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &copy)
 	{
 		_vec = copy._vec; // Check si ca marche ca
 		_deq = copy._deq;
+		_nb_comps = copy._nb_comps;
+		_max_nb_comps = copy._max_nb_comps;
+		_size = copy._size;
+		std::cout << "PmergeMe object assigned\n";
 	}
 	return (*this);
 }
@@ -350,3 +361,5 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &copy)
 
 const std::vector<int> &PmergeMe::get_vec() const { return (_vec); }
 const std::deque<int> &PmergeMe::get_deq() const { return (_deq); }
+const unsigned int			PmergeMe::get_nb_comps() const { return (_nb_comps); }
+const unsigned int			PmergeMe::get_max_nb_comps() const { return (_max_nb_comps); }	
