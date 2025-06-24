@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:13:05 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/23 19:39:02 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/06/24 20:03:29 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ class PmergeMe
 		bool				safe_advance(typename T::iterator pos, unsigned int n) const;	
 		void				sort_pairs(unsigned int pair_size);
 		unsigned int		get_max_nb_comps(unsigned int size) const;
-		Vec_pair::iterator	binary_search(Vec_pair &main, std::pair<int, std::vector<int>> &elem,
+		Vec_pair::iterator	binary_search(Vec_pair &main, const std::pair<int, std::vector<int>> &elem,
 										Vec_pair::iterator lower_bound, Vec_pair::iterator upper_bound);
-		unsigned int		get_nth_jacobsthal(unsigned int n) const;
+		long				get_nth_jacobsthal(unsigned int n) const;
 		void				binary_insert(std::pair<int, std::vector<int>> &element, Vec_pair &main);
 		void				insert_pend(Vec_pair &main, Vec_pair &a_s, Vec_pair &pend);
 		void				recursive_sort(unsigned int pair_size); //Pour _vec uniquement ?

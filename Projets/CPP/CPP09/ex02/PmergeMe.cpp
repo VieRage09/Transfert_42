@@ -78,45 +78,50 @@ void PmergeMe::sort_pairs(unsigned int pair_size)
 {
 	for (std::vector<int>::iterator it = _vec.begin(); safe_advance<std::vector<int>>(it, pair_size); it += pair_size)
 	{
-		incr_nb_comps();
-		if (pair_size == 2 && *it > *(it + 1))
-			std::iter_swap(it, it + 1);
-		else if (pair_size > 2 && *(it + (pair_size / 2) - 1) > *(it + pair_size - 1))
-			std::swap_ranges(it, it + (pair_size / 2), it + (pair_size / 2));
+		if (pair_size == 2)
+		{
+			incr_nb_comps();
+			if (*it > *(it + 1))
+				std::iter_swap(it, it + 1);
+		}
+		else if (pair_size > 2)
+		{
+			incr_nb_comps();
+			if (*(it + (pair_size / 2) - 1) > *(it + pair_size - 1))
+				std::swap_ranges(it, it + (pair_size / 2), it + (pair_size / 2));
+		}
 	}
 }
 
 // Returns the nth Jacobsthal number
-unsigned int	PmergeMe::get_nth_jacobsthal(unsigned int n) const
+long	PmergeMe::get_nth_jacobsthal(unsigned int n) const
 {
 	if (n == 0)
 		return (0);
 	if (n == 1)
 		return (1);
-	return (static_cast<unsigned int>(round(pow(2, n) - pow(-1, n)) / 3));
+	return ((pow(2, n) - pow(-1, n)) / 3);
 }
 
-// Ici on peut passer direct les vecteurs intrinsèques
-Vec_pair::iterator	PmergeMe::binary_search(Vec_pair &main, std::pair<int, std::vector<int>> &elem,
-											Vec_pair::iterator lower_bound, Vec_pair::iterator upper_bound)
+Vec_pair::iterator PmergeMe::binary_search(Vec_pair &main, const std::pair<int, std::vector<int>> &elem,
+                                                Vec_pair::iterator lower_bound, Vec_pair::iterator upper_bound)
 {
-	incr_nb_comps();
-	if ((*upper_bound).second.back() <= (*lower_bound).second.back()) // Pas forcement une belle implementation
-		return (elem.second.back() > (*lower_bound).second.back()) ? lower_bound + 1 : lower_bound;
+    int value = elem.second.back();
+    auto first = lower_bound;
+    auto last = upper_bound;
 
-	std::vector<std::pair<int, std::vector<int>>>::iterator mid = lower_bound + std::distance(lower_bound, upper_bound) / 2;
-	
-	if (elem.second.back() == (*mid).second.back())
-		return (mid + 1);
-
-	if (elem.second.back() > (*mid).second.back())
-		return binary_search(main, elem, mid + 1, upper_bound);
-
-	if (mid == lower_bound)
-  		return lower_bound;
-	
-	return binary_search(main, elem, lower_bound, mid - 1);
+    while (first < last) {
+        auto mid = first + (last - first) / 2;
+        int mid_value = mid->second.back();
+		incr_nb_comps();
+        if (value > mid_value)
+            first = mid + 1;
+        else
+            last = mid;
+    }
+    return first;
 }
+
 
 void	PmergeMe::binary_insert(std::pair<int, std::vector<int>> &elem, Vec_pair &main)
 {
@@ -298,18 +303,21 @@ void PmergeMe::recursive_sort(unsigned int pair_size)
 {
 	std::cout << "Recursive sort called with pair size: " << pair_size << std::endl;
 	sort_pairs(pair_size);
-	// std::cout << "Displaying vector sorted with pair size = " << pair_size << std::endl;
-	// display_vec();
-	if (pair_size <= _size / 2)
-		recursive_sort(pair_size * 2);
-	std::cout << "Displaying vector after recursive sort with pair size = " << pair_size << std::endl;
+	std::cout << "Displaying vector sorted with pair size = " << pair_size << std::endl;
 	display_vec();
-	insert_vec(pair_size / 2);
+	if (pair_size <= _size / 2)
+	{
+		recursive_sort(pair_size * 2);
+		std::cout << "Displaying vector after recursive sort with pair size = " << pair_size << std::endl;
+		display_vec();
+		insert_vec(pair_size / 2);
+	}
+	std::cout << "Number of comparisons after insertion: " << _nb_comps << std::endl;
 }
 
 // Public Methods //
 
-void PmergeMe::incr_nb_comps() { _nb_comps++; }
+void PmergeMe::incr_nb_comps() { _nb_comps++; std::cout << "Incrementing number of comparisons: " << _nb_comps << std::endl; }
 
 // Displays the private attribute _vec
 void PmergeMe::display_vec() const
