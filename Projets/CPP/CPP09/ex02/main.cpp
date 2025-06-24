@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:58 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/23 19:04:03 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/06/24 21:48:33 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	main(int ac, char **av)
 	}
 
 	PmergeMe	obj(av);
-	obj.sort_vector();
+	obj.sort_vector(2);
 	std::cout << "Vector sorted in " << obj.get_nb_comps() << " comparisons / Max comparisons: " << obj.get_max_nb_comps() << std::endl;
 	obj.display_vec();	
 

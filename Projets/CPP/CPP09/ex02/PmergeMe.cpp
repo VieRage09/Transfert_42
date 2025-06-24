@@ -74,9 +74,10 @@ bool PmergeMe::safe_advance(typename T::iterator pos, unsigned int n) const
 }
 
 // Sort blocks of numbers following the first step of FJ algo
+template <typename T>
 void PmergeMe::sort_pairs(unsigned int pair_size)
 {
-	for (std::vector<int>::iterator it = _vec.begin(); safe_advance<std::vector<int>>(it, pair_size); it += pair_size)
+	for (typename T::iterator it = _vec.begin(); safe_advance<T>(it, pair_size); it += pair_size)
 	{
 		if (pair_size == 2)
 		{
@@ -103,6 +104,7 @@ long	PmergeMe::get_nth_jacobsthal(unsigned int n) const
 	return ((pow(2, n) - pow(-1, n)) / 3);
 }
 
+// Uses binary search to find the position to insert the element in the main vector
 Vec_pair::iterator PmergeMe::binary_search(Vec_pair &main, const std::pair<int, std::vector<int>> &elem,
                                                 Vec_pair::iterator lower_bound, Vec_pair::iterator upper_bound)
 {
@@ -192,7 +194,6 @@ void	PmergeMe::insert_vec(unsigned int elem_size)
 	Vec_pair			pend;
 	std::vector<int>	remains;
 
-	std::cout << "Inserting vector with element size: " << elem_size << std::endl;
 	bool	is_biggest_in_pair = false;
 	int		index = 1;
 	// Loading a_s and b_s so we can keep for later their labels
@@ -225,68 +226,19 @@ void	PmergeMe::insert_vec(unsigned int elem_size)
  		if (!it->second.empty())
   			pend.push_back(*it);
 
-
-	std::cout << "Vectors after loading:\n";
-	// Display vectors for debug
-	std::cout << "a_s vector:\n";
-	for (auto &pair : a_s)
-	{
-		std::cout << "Index: " << pair.first << " Elements: ";
-		for (auto &elem : pair.second)
-			std::cout << elem << " ";
-		std::cout << std::endl;
-	}
-	std::cout << "b_s vector:\n";
-	for (auto &pair : b_s)
-	{
-		std::cout << "Index: " << pair.first << " Elements: ";
-		for (auto &elem : pair.second)
-			std::cout << elem << " ";
-		std::cout << std::endl;
-	}
-	std::cout << "main vector:\n";
-	for (auto &pair : main)
-	{
-		std::cout << "Index: " << pair.first << " Elements: ";
-		for (auto &elem : pair.second)
-			std::cout << elem << " ";
-		std::cout << std::endl;
-	}
-	std::cout << "pend vector:\n";
-	for (auto &pair : pend)
-	{
-		std::cout << "Index: " << pair.first << " Elements: ";
-		for (auto &elem : pair.second)
-			std::cout << elem << " ";
-		std::cout << std::endl;
-	}	
-	std::cout << "remains vector:\n";
-	for (auto &elem : remains)
-	{
-		std::cout << elem << " ";
-	}
-	std::cout << std::endl;
-
-	// A partir de la, il faut inserer pend dans main
-	// Algo d'insertion binaire = '
-	// 0. Calculer le jackobstal number --> Nous dis quel element doit etre insere en premier dans main
-	// --> si jakob > au nbr d'elements dans b on insert du dernier au premier restants
-	// --> Faire en sorte de supprimer les b deja integres
-	// 1. Definir upperbound pour l'element --> Suffit de se referrer a l'index pour trouver le jumeau dans main
-	// 2. Binary insertion sort sur la plage etablie dans le main
-	// 3. Si on a insere assez d'elements, il faut recalculer le jackobstal number --> back to 0
-
-	if (!pend.empty()) // Algo d'insertion a faire
+	if (!pend.empty())
 	{
 		std::cout << "Inserting pend into main\n";
 		insert_pend(main, pend, a_s);
 	}
+
 	// Mettre a jour _vec avec main
 	_vec.clear();
 	for (auto it = main.begin(); it != main.end(); it++)
 	{
 			_vec.insert(_vec.end(), (*it).second.begin(), (*it).second.end());
 	}
+
 	// Adding the remains to _vec 
 	_vec.insert(_vec.end(), remains.begin(), remains.end());
 	std::cout << "Vector updated with main and remains\n";
@@ -295,29 +247,11 @@ void	PmergeMe::insert_vec(unsigned int elem_size)
 		std::cerr << "Error: _vec size mismatch after insertion. Expected: " << _size << ", Actual: " << _vec.size() << std::endl;
 		return ;
 	}
-	display_vec();
-}
-
-// Used by sort_vector to recursively create/sort pairs and call other functions for main pend etc
-void PmergeMe::recursive_sort(unsigned int pair_size)
-{
-	std::cout << "Recursive sort called with pair size: " << pair_size << std::endl;
-	sort_pairs(pair_size);
-	std::cout << "Displaying vector sorted with pair size = " << pair_size << std::endl;
-	display_vec();
-	if (pair_size <= _size / 2)
-	{
-		recursive_sort(pair_size * 2);
-		std::cout << "Displaying vector after recursive sort with pair size = " << pair_size << std::endl;
-		display_vec();
-		insert_vec(pair_size / 2);
-	}
-	std::cout << "Number of comparisons after insertion: " << _nb_comps << std::endl;
 }
 
 // Public Methods //
 
-void PmergeMe::incr_nb_comps() { _nb_comps++; std::cout << "Incrementing number of comparisons: " << _nb_comps << std::endl; }
+void PmergeMe::incr_nb_comps() { _nb_comps++; }
 
 // Displays the private attribute _vec
 void PmergeMe::display_vec() const
@@ -340,13 +274,25 @@ void PmergeMe::display_deq() const
 }
 
 // Sort _vec following Ford-Johnson algo
-void PmergeMe::sort_vector()
+void PmergeMe::sort_vector(unsigned int pair_size)
 {
-	recursive_sort(2);
+	sort_pairs<std::vector<int>>(pair_size);
+	if (pair_size <= _size / 2)
+	{
+		sort_vector(pair_size * 2);
+		insert_vec(pair_size / 2);
+	}
 }
 
-void PmergeMe::sort_deque()
+void PmergeMe::sort_deque(unsigned int pair_size)
 {
+	sort_pairs<std::deque<int>>(pair_size);
+	if (pair_size <= _size / 2)
+	{
+		sort_deque(pair_size * 2);
+		insert_deque(pair_size / 2);
+	}
+
 }
 
 // ############################## OPERATORS ######################################################//

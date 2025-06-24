@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:13:05 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/24 20:03:29 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/06/24 21:51:03 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <math.h>
 
 typedef std::vector<std::pair<int, std::vector<int>>> Vec_pair;
+typedef std::deque<std::pair<int, std::deque<int>>> Deq_pair;
 
 class PmergeMe
 {
@@ -41,6 +42,7 @@ class PmergeMe
 		// Private Methods
 		template <typename T>
 		bool				safe_advance(typename T::iterator pos, unsigned int n) const;	
+		template <typename T>
 		void				sort_pairs(unsigned int pair_size);
 		unsigned int		get_max_nb_comps(unsigned int size) const;
 		Vec_pair::iterator	binary_search(Vec_pair &main, const std::pair<int, std::vector<int>> &elem,
@@ -48,7 +50,6 @@ class PmergeMe
 		long				get_nth_jacobsthal(unsigned int n) const;
 		void				binary_insert(std::pair<int, std::vector<int>> &element, Vec_pair &main);
 		void				insert_pend(Vec_pair &main, Vec_pair &a_s, Vec_pair &pend);
-		void				recursive_sort(unsigned int pair_size); //Pour _vec uniquement ?
 		void				insert_vec(unsigned int elem_size);
 
 	public:
@@ -63,8 +64,8 @@ class PmergeMe
 		void	incr_nb_comps();
 		void	display_vec() const;
 		void	display_deq() const;
-		void	sort_vector();
-		void	sort_deque();
+		void	sort_vector(unsigned int pair_size);
+		void	sort_deque(unsigned int pair_size);
 
 		// Operators //
 		PmergeMe&		operator = (const PmergeMe& copy);
