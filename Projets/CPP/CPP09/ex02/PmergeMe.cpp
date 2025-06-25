@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:13:02 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/25 19:38:38 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/06/25 20:15:49 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,13 @@ void	PmergeMe::sort_pairs(T & container, unsigned int pair_size)
 	}
 }
 
-void	PmergeMe::load_utils_containers(unsigned int elem_size, Vec_pair & main, Vec_pair &pend, std::vector<int> & remains)
+// Loads the main and pend containers with pairs of index/elements from the input container
+// Also loads the remains vector with the elements that do not fit
+template <typename T, typename T_pair>
+void	PmergeMe::load_utils_containers(T & container, unsigned int elem_size, T_pair & main, T_pair & pend, T & remains)
 {
-	std::vector<int>			first_b(_vec.begin(), _vec.begin() + elem_size);
-	std::vector<int>			first_a(_vec.begin() + elem_size, _vec.begin() + 2 * elem_size);
+	T	first_b(container.begin(), container.begin() + elem_size);
+	T	first_a(container.begin() + elem_size, container.begin() + 2 * elem_size);
 
 	if (first_b.empty() || first_a.empty())
 	{
@@ -95,15 +98,15 @@ void	PmergeMe::load_utils_containers(unsigned int elem_size, Vec_pair & main, Ve
 	main.emplace_back(1, first_b);
 	main.emplace_back(1, first_a);
 
-	std::vector<int>::iterator	it = _vec.begin() + 2 * elem_size;
-	bool 						is_biggest_in_pair = false;
-	int 						index = 2;
+	typename T::iterator	it = container.begin() + 2 * elem_size;
+	bool 					is_biggest_in_pair = false;
+	int 					index = 2;
 
-	if (it == _vec.end())
+	if (it == container.end())
 		return ;
-	for (; safe_advance<std::vector<int>>(it, _vec.end(), elem_size); it += elem_size)
+	for (; safe_advance<T>(it, container.end(), elem_size); it += elem_size)
 	{
-		std::vector<int> group(it, it + elem_size);
+		T group(it, it + elem_size);
 		if (group.empty())
 			continue;
 		if (!is_biggest_in_pair)
@@ -115,16 +118,17 @@ void	PmergeMe::load_utils_containers(unsigned int elem_size, Vec_pair & main, Ve
 		is_biggest_in_pair = !is_biggest_in_pair;
 	}
 	// Keep the elements that do not participate for this round
-	if (it != _vec.end())
-		for (auto it_elem = it; it_elem != _vec.end(); it_elem++)
+	if (it != container.end())
+		for (auto it_elem = it; it_elem != container.end(); it_elem++)
 			remains.push_back(*it_elem);
 }
 
-// Uses binary search to find the position to insert the element in the main vector
-Vec_pair::iterator PmergeMe::binary_search(Vec_pair &main,
-									const std::pair<int, std::vector<int>> &elem,
-									Vec_pair::iterator lower_bound,
-									Vec_pair::iterator upper_bound)
+// Uses binary search to find the position to insert the element in the main container 
+template <typename T, typename T_pair>
+typename T_pair::iterator	PmergeMe::binary_search(T_pair &main,
+										const std::pair<int, T> &elem,
+										typename T_pair::iterator lower_bound,
+										typename T_pair::iterator upper_bound)
 {
 	int value = elem.second.back();
 	auto first = lower_bound;
@@ -143,10 +147,14 @@ Vec_pair::iterator PmergeMe::binary_search(Vec_pair &main,
 	return first;
 }
 
-void PmergeMe::binary_insert(std::pair<int, std::vector<int>> &elem, Vec_pair &main)
+// Finds the upper bound for the element to be inserted in the main container
+// If the upper bound is not found, it uses the last element as a fallback
+// Inserts the element in the main container at the correct position
+template <typename T, typename T_pair>
+void PmergeMe::binary_insert(std::pair<int, T> & elem, T_pair & main)
 {
-	Vec_pair::iterator insert_pos;
-	Vec_pair::iterator upper_bound = main.begin();
+	typename T_pair::iterator insert_pos;
+	typename T_pair::iterator upper_bound = main.begin();
 
 	if (elem.second.empty())
 	{
@@ -180,7 +188,7 @@ void PmergeMe::binary_insert(std::pair<int, std::vector<int>> &elem, Vec_pair &m
 	main.insert(insert_pos, elem);
 }
 
-void PmergeMe::insert_pend(Vec_pair &main, Vec_pair &pend)
+void PmergeMe::insert_pend_v(Vec_pair &main, Vec_pair &pend)
 {
 	int n = 3;
 	unsigned int jacobsthal = get_nth_jacobsthal(n);
@@ -199,7 +207,7 @@ void PmergeMe::insert_pend(Vec_pair &main, Vec_pair &pend)
 			for (std::vector<int>::iterator it = pend[i].second.begin(); it != pend[i].second.end(); ++it)
 				std::cout << *it << " ";
 			std::cout << std::endl;
-			binary_insert(pend[i], main);
+			binary_insert<std::vector<int>, Vec_pair>(pend[i], main);
 		}
 		pend.erase(pend.begin(), pend.begin() + count);
 		jacobsthal = get_nth_jacobsthal(++n);
@@ -213,36 +221,12 @@ void PmergeMe::insert_vec(unsigned int elem_size)
 	Vec_pair pend;
 	std::vector<int> remains;
 
-	load_utils_containers(elem_size, main, pend, remains);
-
-	// display the loaded vectors
-	std::cout << "Main vector loaded with " << main.size() << " elements:\n";
-	for (auto it = main.begin(); it != main.end(); it++)
-	{
-		std::cout << "Index: " << it->first << ", Elements: ";
-		for (const auto &elem : it->second)
-			std::cout << elem << " ";
-		std::cout << std::endl;
-	}
-	std::cout << "Pend vector loaded with " << pend.size() << " elements:\n";
-	for (auto it = pend.begin(); it != pend.end(); it++)
-	{
-		std::cout << "Index: " << it->first << ", Elements: ";
-		for (const auto &elem : it->second)
-			std::cout << elem << " ";
-		std::cout << std::endl;
-	}
-	std::cout << "Remains vector loaded with " << remains.size() << " elements:\n";
-	for (const auto &elem : remains)
-	{
-		std::cout << elem << " ";
-	}
-	std::cout << std::endl;
+	load_utils_containers<std::vector<int>>(_vec, elem_size, main, pend, remains);
 
 	if (!pend.empty())
 	{
 		std::cout << "Inserting pend into main\n";
-		insert_pend(main, pend);
+		insert_pend_v(main, pend);
 	}
 
 	// Mettre a jour _vec avec main
@@ -262,8 +246,64 @@ void PmergeMe::insert_vec(unsigned int elem_size)
 	}
 }
 
-// void	PmergeMe::insert_deque(unsigned int elem_size)
-// {}
+void PmergeMe::insert_pend_d(Deq_pair &main, Deq_pair &pend)
+{
+	int n = 3;
+	unsigned int jacobsthal = get_nth_jacobsthal(n);
+
+	while (!pend.empty())
+	{
+		unsigned int prev_jacob = get_nth_jacobsthal(n - 1);
+		unsigned int count = jacobsthal - prev_jacob;
+
+		if (count > pend.size())
+			count = pend.size();
+		for (int i = count - 1; i >= 0; --i)
+		{
+			std::cout << "Inserting pend element: index = " << pend[i].first << std::endl;
+			std::cout << "Elements: ";
+			for (std::deque<int>::iterator it = pend[i].second.begin(); it != pend[i].second.end(); ++it)
+				std::cout << *it << " ";
+			std::cout << std::endl;
+			binary_insert<std::deque<int>, Deq_pair>(pend[i], main);
+		}
+		for (unsigned int j = 0; j < count; ++j)
+			pend.pop_front();
+		jacobsthal = get_nth_jacobsthal(++n);
+	}
+}
+
+
+// Creates and loads 2 deques (main & pend) then insert the pend into main and update _deq in the end
+void	PmergeMe::insert_deque(unsigned int elem_size)
+{
+	Deq_pair main;
+	Deq_pair pend;
+	std::deque<int> remains;
+	
+	load_utils_containers<std::deque<int>>(_deq, elem_size, main, pend, remains);	
+	
+	if (!pend.empty())
+	{
+		std::cout << "Inserting pend into main\n";
+		insert_pend_d(main, pend); // A coder //
+	}
+
+	// Mettre a jour _deq avec main
+	_deq.clear();
+	for (auto it = main.begin(); it != main.end(); it++)
+	{
+		_deq.insert(_deq.end(), (*it).second.begin(), (*it).second.end());
+	}
+	// Adding the remains to _deq
+	_deq.insert(_deq.end(), remains.begin(), remains.end());
+	std::cout << "Deque updated with main and remains\n";
+	if (_deq.size() != _size)
+	{
+		std::cerr << "Error: _deq size mismatch after insertion. Expected: " << _size << ", Actual: " << _deq.size() << std::endl;
+		return;
+	}
+}
 
 #pragma endregion private_methods
 // -------------------------------------------------------------------------- //
@@ -325,7 +365,6 @@ void PmergeMe::sort_vector(unsigned int pair_size)
 {
 	sort_pairs<std::vector<int>>(_vec, pair_size);
 	std::cout << "Pairs sorted with pair size: " << pair_size << std::endl;
-	display_vec();
 	if (pair_size <= _size / 2)
 	{
 		sort_vector(pair_size * 2);
@@ -335,12 +374,12 @@ void PmergeMe::sort_vector(unsigned int pair_size)
 
 void PmergeMe::sort_deque(unsigned int pair_size)
 {
-	// sort_pairs<std::deque<int>>(pair_size);
-	// if (pair_size <= _size / 2)
-	// {
-	// 	sort_deque(pair_size * 2);
-	// 	insert_deque(pair_size / 2);
-	// }
+	sort_pairs<std::deque<int>>(_deq, pair_size);
+	if (pair_size <= _size / 2)
+	{
+		sort_deque(pair_size * 2);
+		insert_deque(pair_size / 2);
+	}
 }
 
 #pragma endregion public_methods
@@ -364,7 +403,5 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &copy)
 
 // ############################## GETTERS ########################################################//
 
-const std::vector<int> &PmergeMe::get_vec() const { return (_vec); }
-const std::deque<int> &PmergeMe::get_deq() const { return (_deq); }
 const unsigned int PmergeMe::get_nb_comps() const { return (_nb_comps); }
 const unsigned int PmergeMe::get_max_nb_comps() const { return (_max_nb_comps); }
