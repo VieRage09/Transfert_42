@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:13:05 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/25 18:20:46 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/06/25 18:55:58 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,14 @@ class PmergeMe
 		
 		// Private Methods
 		template <typename T>
-		bool				safe_advance(typename T::iterator pos, unsigned int n) const;	
+		bool				safe_advance(typename T::iterator pos, typename T::iterator end, unsigned int n) const;	
 		template <typename T>
-		void				sort_pairs(unsigned int pair_size);
+		void				sort_pairs(T & container, unsigned int pair_size);
+		void				load_utils_containers(unsigned int elem_size, Vec_pair & main, Vec_pair &pend, std::vector<int> & remains);
 		Vec_pair::iterator	binary_search(Vec_pair &main, const std::pair<int, std::vector<int>> &elem,
 										Vec_pair::iterator lower_bound, Vec_pair::iterator upper_bound);
 		void				binary_insert(std::pair<int, std::vector<int>> &element, Vec_pair &main);
-		void				insert_pend(Vec_pair &main, Vec_pair &a_s, Vec_pair &pend);
+		void				insert_pend(Vec_pair &main, Vec_pair &pend);
 		void				insert_vec(unsigned int elem_size);
 		void				insert_deque(unsigned int elem_size);
 
