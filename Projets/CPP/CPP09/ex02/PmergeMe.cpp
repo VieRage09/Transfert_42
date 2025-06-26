@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:13:02 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/25 20:15:49 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/06/26 20:08:55 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ PmergeMe::PmergeMe(char **list)
 	}
 	_nb_comps = 0;
 	_max_nb_comps = get_max_nb_comps(_size);
-	std::cout << "PmergeMe object instanciated\n";
 }
 
 PmergeMe::PmergeMe(const PmergeMe &copy)
@@ -38,10 +37,9 @@ PmergeMe::PmergeMe(const PmergeMe &copy)
 	_nb_comps = copy._nb_comps;
 	_max_nb_comps = copy._max_nb_comps;
 	_size = copy._size;
-	std::cout << "PmergeMe object copied\n";
 }
 
-PmergeMe::~PmergeMe() { std::cout << "PmergeMe object destroyed\n"; }
+PmergeMe::~PmergeMe() {}
 #pragma endregion constructors
 // ############################## METHODS ################################### //
 
@@ -181,9 +179,7 @@ void PmergeMe::binary_insert(std::pair<int, T> & elem, T_pair & main)
 			else
 				upper_bound--;
 		}
-		std::cout << "Upper bound not found, using last element" << std::endl;
 	}
-	std::cout << "Upper bound found: index = " << (*upper_bound).first << std::endl;
 	insert_pos = binary_search(main, elem, main.begin(), upper_bound);
 	main.insert(insert_pos, elem);
 }
@@ -201,14 +197,7 @@ void PmergeMe::insert_pend_v(Vec_pair &main, Vec_pair &pend)
 		if (count > pend.size())
 			count = pend.size();
 		for (int i = count - 1; i >= 0; --i)
-		{
-			std::cout << "Inserting pend element: index = " << pend[i].first << std::endl;
-			std::cout << "Elements: ";
-			for (std::vector<int>::iterator it = pend[i].second.begin(); it != pend[i].second.end(); ++it)
-				std::cout << *it << " ";
-			std::cout << std::endl;
 			binary_insert<std::vector<int>, Vec_pair>(pend[i], main);
-		}
 		pend.erase(pend.begin(), pend.begin() + count);
 		jacobsthal = get_nth_jacobsthal(++n);
 	}
@@ -224,10 +213,7 @@ void PmergeMe::insert_vec(unsigned int elem_size)
 	load_utils_containers<std::vector<int>>(_vec, elem_size, main, pend, remains);
 
 	if (!pend.empty())
-	{
-		std::cout << "Inserting pend into main\n";
 		insert_pend_v(main, pend);
-	}
 
 	// Mettre a jour _vec avec main
 	_vec.clear();
@@ -238,7 +224,6 @@ void PmergeMe::insert_vec(unsigned int elem_size)
 
 	// Adding the remains to _vec
 	_vec.insert(_vec.end(), remains.begin(), remains.end());
-	std::cout << "Vector updated with main and remains\n";
 	if (_vec.size() != _size)
 	{
 		std::cerr << "Error: _vec size mismatch after insertion. Expected: " << _size << ", Actual: " << _vec.size() << std::endl;
@@ -260,11 +245,6 @@ void PmergeMe::insert_pend_d(Deq_pair &main, Deq_pair &pend)
 			count = pend.size();
 		for (int i = count - 1; i >= 0; --i)
 		{
-			std::cout << "Inserting pend element: index = " << pend[i].first << std::endl;
-			std::cout << "Elements: ";
-			for (std::deque<int>::iterator it = pend[i].second.begin(); it != pend[i].second.end(); ++it)
-				std::cout << *it << " ";
-			std::cout << std::endl;
 			binary_insert<std::deque<int>, Deq_pair>(pend[i], main);
 		}
 		for (unsigned int j = 0; j < count; ++j)
@@ -273,9 +253,8 @@ void PmergeMe::insert_pend_d(Deq_pair &main, Deq_pair &pend)
 	}
 }
 
-
 // Creates and loads 2 deques (main & pend) then insert the pend into main and update _deq in the end
-void	PmergeMe::insert_deque(unsigned int elem_size)
+void	PmergeMe::insert_deq(unsigned int elem_size)
 {
 	Deq_pair main;
 	Deq_pair pend;
@@ -284,10 +263,7 @@ void	PmergeMe::insert_deque(unsigned int elem_size)
 	load_utils_containers<std::deque<int>>(_deq, elem_size, main, pend, remains);	
 	
 	if (!pend.empty())
-	{
-		std::cout << "Inserting pend into main\n";
-		insert_pend_d(main, pend); // A coder //
-	}
+		insert_pend_d(main, pend);
 
 	// Mettre a jour _deq avec main
 	_deq.clear();
@@ -297,7 +273,6 @@ void	PmergeMe::insert_deque(unsigned int elem_size)
 	}
 	// Adding the remains to _deq
 	_deq.insert(_deq.end(), remains.begin(), remains.end());
-	std::cout << "Deque updated with main and remains\n";
 	if (_deq.size() != _size)
 	{
 		std::cerr << "Error: _deq size mismatch after insertion. Expected: " << _size << ", Actual: " << _deq.size() << std::endl;
@@ -313,11 +288,12 @@ void	PmergeMe::insert_deque(unsigned int elem_size)
 
 // ______________________________ Utils _____________________________________ //
 #pragma region utils
-void PmergeMe::incr_nb_comps() { _nb_comps++; }
+
+void			PmergeMe::incr_nb_comps() { _nb_comps++; }
 
 // Returns the maximum number of comparisons for a given size
 // This is based on the formula derived from the Ford-Johnson algorithm
-unsigned int PmergeMe::get_max_nb_comps(unsigned int size) const
+unsigned int	PmergeMe::get_max_nb_comps(unsigned int size) const
 {
 	int sum = 0;
 	for (int k = 1; k <= size; ++k)
@@ -328,8 +304,10 @@ unsigned int PmergeMe::get_max_nb_comps(unsigned int size) const
 	return sum;
 }
 
+void			PmergeMe::reset_nb_comps() { _nb_comps = 0; }
+
 // Returns the nth Jacobsthal number
-long PmergeMe::get_nth_jacobsthal(unsigned int n) const
+long			PmergeMe::get_nth_jacobsthal(unsigned int n) const
 {
 	if (n == 0)
 		return (0);
@@ -339,9 +317,8 @@ long PmergeMe::get_nth_jacobsthal(unsigned int n) const
 }
 
 // Displays the private attribute _vec
-void PmergeMe::display_vec() const
+void			PmergeMe::display_vec() const
 {
-	std::cout << "Vector of size " << _vec.size() << ":\n";
 	for (auto it = _vec.begin(); it != _vec.end(); it++)
 	{
 		std::cout << *it << std::endl;
@@ -349,9 +326,8 @@ void PmergeMe::display_vec() const
 }
 
 // Displays the private attribute _deq
-void PmergeMe::display_deq() const
+void			PmergeMe::display_deq() const
 {
-	std::cout << "Deque:\n";
 	for (auto it = _deq.begin(); it != _deq.end(); it++)
 	{
 		std::cout << *it << std::endl;
@@ -364,7 +340,6 @@ void PmergeMe::display_deq() const
 void PmergeMe::sort_vector(unsigned int pair_size)
 {
 	sort_pairs<std::vector<int>>(_vec, pair_size);
-	std::cout << "Pairs sorted with pair size: " << pair_size << std::endl;
 	if (pair_size <= _size / 2)
 	{
 		sort_vector(pair_size * 2);
@@ -378,7 +353,7 @@ void PmergeMe::sort_deque(unsigned int pair_size)
 	if (pair_size <= _size / 2)
 	{
 		sort_deque(pair_size * 2);
-		insert_deque(pair_size / 2);
+		insert_deq(pair_size / 2);
 	}
 }
 
@@ -403,5 +378,6 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &copy)
 
 // ############################## GETTERS ########################################################//
 
-const unsigned int PmergeMe::get_nb_comps() const { return (_nb_comps); }
-const unsigned int PmergeMe::get_max_nb_comps() const { return (_max_nb_comps); }
+const unsigned int	PmergeMe::get_nb_comps() const { return (_nb_comps); }
+const unsigned int	PmergeMe::get_max_nb_comps() const { return (_max_nb_comps); }
+const size_t 		PmergeMe::get_size() const { return (_size); }

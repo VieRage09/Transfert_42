@@ -6,11 +6,12 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:58 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/25 20:06:32 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/06/26 20:10:18 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
+#include <ctime>
 
 void	check_input(int ac, char **av)
 {
@@ -47,13 +48,33 @@ int	main(int ac, char **av)
 	}
 
 	PmergeMe	obj(av);
-	obj.sort_vector(2);
-	std::cout << "Vector sorted in " << obj.get_nb_comps() << " comparisons / Max comparisons: " << obj.get_max_nb_comps() << std::endl;
-	obj.display_vec();	
 
-	obj.sort_deque(2);
-	std::cout << "Deque sorted in " << obj.get_nb_comps() << " comparisons / Max comparisons: " << obj.get_max_nb_comps() << std::endl;
-	obj.display_deq();
+	std::cout << "before sorting:" << std::endl;
+	obj.display_vec();
 	
+	clock_t v_start = clock();
+	obj.sort_vector(2);
+	clock_t v_end = clock();
+	double v_duration = static_cast<double>(v_end - v_start) / CLOCKS_PER_SEC * 1000;
+	unsigned int v_comps = obj.get_nb_comps();
+	
+	obj.reset_nb_comps();
+
+	clock_t d_start = clock();
+	obj.sort_deque(2);
+	clock_t d_end = clock();
+	double d_duration = static_cast<double>(d_end - d_start) / CLOCKS_PER_SEC * 1000;
+	unsigned int d_comps = obj.get_nb_comps();
+
+	std::cout << "after sorting:" << std::endl;
+	obj.display_vec();
+	std::cout << std::endl;
+
+	std::cout	<< "Time for " << obj.get_size() << " elements with std::vector:\t"
+				<< v_duration << " ms." << std::endl
+				<< "Comparison / Max comparison =\t\t" << v_comps << "/" << obj.get_max_nb_comps() << std::endl;
+	std::cout	<< "Time for " << obj.get_size() << " elements with std::deque:\t"
+				<< d_duration << " ms."<< std::endl
+				<< "Comparison / Max comparison =\t\t" << d_comps << "/" << obj.get_max_nb_comps() << std::endl;
 	return (0);
 }

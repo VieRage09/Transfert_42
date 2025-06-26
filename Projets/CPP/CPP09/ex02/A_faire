@@ -1,7 +1,7 @@
-Coder insert_pend pour deque en utilisant pop_front i guess
+Ajouter le decompte du temps pris pour chaque container
+reset les comp et check si deque fonctionne bien
 
 check a remplacer certains auto dans les template ou l'inverse
 
-Ajouter le decompte du temps pris pour chaque container
 
 verifier fonction de base de la classe

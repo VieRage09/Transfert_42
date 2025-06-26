@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:13:05 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/25 20:13:09 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/06/26 19:56:40 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ class PmergeMe
 		void						insert_pend_v(Vec_pair &main, Vec_pair &pend);
 		void 						insert_pend_d(Deq_pair &main, Deq_pair &pend);
 		void						insert_vec(unsigned int elem_size);
-		void						insert_deque(unsigned int elem_size);
+		void						insert_deq(unsigned int elem_size);
 
 	public:
 		// Personnalized constructor
@@ -68,6 +68,7 @@ class PmergeMe
 		// Methods //
 		void			incr_nb_comps();
 		unsigned int	get_max_nb_comps(unsigned int size) const;
+		void			reset_nb_comps();
 		long			get_nth_jacobsthal(unsigned int n) const;
 
 		void			display_vec() const;
@@ -82,6 +83,7 @@ class PmergeMe
 		// Getters //
 		const unsigned int			get_nb_comps() const;
 		const unsigned int			get_max_nb_comps() const;
+		const size_t				get_size() const;
 };
 
 #endif // PMERGEME_HPP
