@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:13:05 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/26 19:56:40 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/06/27 13:44:16 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ class PmergeMe
 		PmergeMe&		operator = (const PmergeMe& copy);
 
 		// Getters //
+		const std::vector<int>&		get_vec() const;
+		const std::deque<int>&		get_deq() const;
 		const unsigned int			get_nb_comps() const;
 		const unsigned int			get_max_nb_comps() const;
 		const size_t				get_size() const;

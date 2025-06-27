@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:58 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/26 20:10:18 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/06/27 19:32:37 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	main(int ac, char **av)
 
 	std::cout << "before sorting:" << std::endl;
 	obj.display_vec();
-	
+
 	clock_t v_start = clock();
 	obj.sort_vector(2);
 	clock_t v_end = clock();
@@ -70,11 +70,17 @@ int	main(int ac, char **av)
 	obj.display_vec();
 	std::cout << std::endl;
 
-	std::cout	<< "Time for " << obj.get_size() << " elements with std::vector:\t"
+	std::cout	<< "Time for " << obj.get_size() << " elements with std::vec:\t"
 				<< v_duration << " ms." << std::endl
 				<< "Comparison / Max comparison =\t\t" << v_comps << "/" << obj.get_max_nb_comps() << std::endl;
-	std::cout	<< "Time for " << obj.get_size() << " elements with std::deque:\t"
+	std::cout	<< "Time for " << obj.get_size() << " elements with std::deq:\t"
 				<< d_duration << " ms."<< std::endl
 				<< "Comparison / Max comparison =\t\t" << d_comps << "/" << obj.get_max_nb_comps() << std::endl;
+	std::is_sorted(obj.get_vec().begin(), obj.get_vec().end()) ?
+		std::cout << "std::vec is sorted." << std::endl :
+		std::cout << "std::vec is NOT sorted." << std::endl;	
+	std::is_sorted(obj.get_deq().begin(), obj.get_deq().end()) ?
+		std::cout << "std::deq is sorted." << std::endl :
+		std::cout << "std::deq is NOT sorted." << std::endl;
 	return (0);
 }
