@@ -1,0 +1,11 @@
+Check sujet pour nombres negatifs 
+
+Gerer les overflow de int ou mettre des long
+
+Pourquoi erreurs quand seulement 2 arguments
+
+Rendre plus beau / paufiner 
+
+Voir a mettre a jour les clocks si c'est bien cpp98 et si on veut ms ou microsecond ou jcp quoi (check si c'est pas le tps processeur)
+
+Check les commentaires de fonction et a l'interieur

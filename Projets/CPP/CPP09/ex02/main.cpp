@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:58 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/27 19:32:37 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/06/30 16:22:15 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,8 @@ void	check_input(int ac, char **av)
 {
 	std::string str;
 
-	if (ac < 2)
-		throw std::runtime_error("No argument");
-	if (ac == 2)
-	{
-		str = av[1];
-		if (str.find_first_not_of("0123456789+ \t") != std::string::npos)
-			throw std::runtime_error("No digits arguments");
-		return ;
-	}
+	if (ac < 3)
+		throw std::runtime_error("Not enough arguments");
 	int	i = 1;
 	while (av[i])
 	{
