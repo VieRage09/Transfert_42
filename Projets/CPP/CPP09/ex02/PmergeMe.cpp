@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:13:02 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/30 16:18:30 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/06/30 19:37:29 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,38 @@
 
 // ############################## CONSTRUCTORS & DESTRUCTORS ################ //
 #pragma region construtors
+
 PmergeMe::PmergeMe(char **list)
 	: _vec(std::vector<int>()), _deq(std::deque<int>())
 {
 	int i = 1;
 
 	_size = 0;
+	if (!list)
+	{
+		std::cerr << "[ERROR] list provided is NULL" << std::endl;
+		return;
+	}
 	while (list[i])
 	{
-		_vec.push_back(std::stoi(list[i]));
-		_deq.push_back(std::stoi(list[i]));
+		try
+		{
+			int	num = std::stoi(list[i]);
+			_vec.push_back(num);
+			_deq.push_back(num);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << "[ERROR] " << e.what() << " int overflow" << std::endl;
+			exit (EXIT_FAILURE);
+		}
 		_size++;
 		i++;
 	}
+	_time_vec = 0.0;
+	_time_deq = 0.0;
+	_vec_comps = 0;
+	_deq_comps = 0;
 	_nb_comps = 0;
 	_max_nb_comps = get_max_nb_comps(_size);
 }
@@ -34,17 +53,24 @@ PmergeMe::PmergeMe(char **list)
 PmergeMe::PmergeMe(const PmergeMe &copy)
 	: _vec(std::vector<int>(copy._vec)), _deq(std::deque<int>(copy._deq))
 {
+	_time_vec = copy._time_vec;
+	_time_deq = copy._time_deq;
+	_vec_comps = copy._vec_comps;
+	_deq_comps = copy._deq_comps;
 	_nb_comps = copy._nb_comps;
 	_max_nb_comps = copy._max_nb_comps;
 	_size = copy._size;
 }
 
 PmergeMe::~PmergeMe() {}
+
 #pragma endregion constructors
 // ############################## METHODS ################################### //
 
 // ------------------------------ PRIVATE METHODS --------------------------- //
 #pragma region private_methods
+
+#pragma region template_methods
 
 // Used to check if we can increment pos n times w/o getting past end()
 template <typename T>
@@ -52,14 +78,12 @@ bool	PmergeMe::safe_advance(typename T::iterator pos, typename T::iterator end, 
 {
 	int i = 0;
 	for (typename T::iterator it = pos; i < n; it++, i++)
-	{
 		if (it == end)
 			return (false);
-	}
 	return (true);
 }
 
-// Sort blocks of numbers following the first step of FJ algo
+// Sort blocks of numbers following the first step of FJ algo --> by pairs of elements
 template <typename T>
 void	PmergeMe::sort_pairs(T & container, unsigned int pair_size)
 {
@@ -100,11 +124,6 @@ void	PmergeMe::load_utils_containers(T & container, unsigned int elem_size, T_pa
 	bool 					is_biggest_in_pair = false;
 	int 					index = 2;
 
-	if (it == container.end())
-	{
-		std::cerr << "[ERROR] Not enough elements to form pairs in load_utils_containers\n";
-		return;
-	}
 	for (; safe_advance<T>(it, container.end(), elem_size); it += elem_size)
 	{
 		T group(it, it + elem_size);
@@ -118,7 +137,7 @@ void	PmergeMe::load_utils_containers(T & container, unsigned int elem_size, T_pa
 			index++;
 		is_biggest_in_pair = !is_biggest_in_pair;
 	}
-	// Keep the elements that do not participate for this round
+	// Keep the trail that do not participate for this round --> the one that cannot form an element
 	if (it != container.end())
 	{
 		for (typename T::iterator it_elem = it; it_elem != container.end(); it_elem++)
@@ -175,14 +194,15 @@ void PmergeMe::binary_insert(std::pair<int, T> & elem, T_pair & main)
 			std::cerr << "Error: main is empty in binary_insert" << std::endl;
 			return;
 		}
-		if (main.size() == 1)
-			upper_bound = main.begin();
 	}
 	insert_pos = binary_search(main, elem, main.begin(), upper_bound);
 	main.insert(insert_pos, elem);
 }
 
+#pragma endregion template_methods
 
+// Inserts the pend elements into the main container using the Jacobsthal sequence and binary_insert function
+// Vector version
 void PmergeMe::insert_pend_v(Vec_pair &main, Vec_pair &pend)
 {
 	int n = 3;
@@ -230,6 +250,17 @@ void PmergeMe::insert_vec(unsigned int elem_size)
 	}
 }
 
+// Sort _vec following Ford-Johnson algo
+void PmergeMe::sort_vector(unsigned int pair_size)
+{
+	sort_pairs<std::vector<int>>(_vec, pair_size);
+	if (pair_size <= _size / 2)
+		sort_vector(pair_size * 2);
+	insert_vec(pair_size / 2);
+}
+
+// Inserts the pend elements into the main container using the Jacobsthal sequence and binary_insert function
+// Deque version
 void PmergeMe::insert_pend_d(Deq_pair &main, Deq_pair &pend)
 {
 	int n = 3;
@@ -277,6 +308,19 @@ void	PmergeMe::insert_deq(unsigned int elem_size)
 	}
 }
 
+// Sort _deq following Ford-Johnson algo
+void PmergeMe::sort_deque(unsigned int pair_size)
+{
+	sort_pairs<std::deque<int>>(_deq, pair_size);
+	if (pair_size <= _size / 2)
+		sort_deque(pair_size * 2);
+	insert_deq(pair_size / 2);
+}
+
+// Both used to keep track of the number of comparisons made during the sorting process
+void			PmergeMe::incr_nb_comps() { _nb_comps++; }
+void			PmergeMe::reset_nb_comps() { _nb_comps = 0; }
+
 #pragma endregion private_methods
 // -------------------------------------------------------------------------- //
 
@@ -285,8 +329,6 @@ void	PmergeMe::insert_deq(unsigned int elem_size)
 
 // ______________________________ Utils _____________________________________ //
 #pragma region utils
-
-void			PmergeMe::incr_nb_comps() { _nb_comps++; }
 
 // Returns the maximum number of comparisons for a given size
 // This is based on the formula derived from the Ford-Johnson algorithm
@@ -301,9 +343,8 @@ unsigned int	PmergeMe::get_max_nb_comps(unsigned int size) const
 	return sum;
 }
 
-void			PmergeMe::reset_nb_comps() { _nb_comps = 0; }
 
-// Returns the nth Jacobsthal number
+// Returns the nth number of the Jacobsthal's sequence
 long			PmergeMe::get_nth_jacobsthal(unsigned int n) const
 {
 	if (n == 0)
@@ -317,36 +358,41 @@ long			PmergeMe::get_nth_jacobsthal(unsigned int n) const
 void			PmergeMe::display_vec() const
 {
 	for (std::vector<int>::const_iterator it = _vec.begin(); it != _vec.end(); it++)
-	{
-		std::cout << *it << std::endl;
-	}
+		std::cout << *it << " ";
+	std::cout << std::endl;
 }
 
 // Displays the private attribute _deq
 void			PmergeMe::display_deq() const
 {
 	for (std::deque<int>::const_iterator it = _deq.begin(); it != _deq.end(); it++)
-		std::cout << *it << std::endl;
+		std::cout << *it << " ";
+	std::cout << std::endl;
 }
+
 #pragma endregion utils
 // __________________________________________________________________________ //
 
-// Sort _vec following Ford-Johnson algo
-void PmergeMe::sort_vector(unsigned int pair_size)
+// Launches the sorting process for both _vec and _deq
+// if the containers are already sorted or too small, displays a message and returns
+void			PmergeMe::launch_sorts()
 {
-	sort_pairs<std::vector<int>>(_vec, pair_size);
-	if (pair_size <= _size / 2)
-		sort_vector(pair_size * 2);
-	insert_vec(pair_size / 2);
-}
+	if (std::is_sorted(_vec.begin(), _vec.end()) && std::is_sorted(_deq.begin(), _deq.end()))
+		return;
 
-// Sort _deq following Ford-Johnson algo
-void PmergeMe::sort_deque(unsigned int pair_size)
-{
-	sort_pairs<std::deque<int>>(_deq, pair_size);
-	if (pair_size <= _size / 2)
-		sort_deque(pair_size * 2);
-	insert_deq(pair_size / 2);
+	clock_t v_start = clock();
+	sort_vector(2);
+	clock_t v_end = clock();
+	_time_vec = static_cast<double>(v_end - v_start) / CLOCKS_PER_SEC * 1000;
+	_vec_comps = _nb_comps;
+
+	reset_nb_comps();
+
+	clock_t d_start = clock();
+	sort_deque(2);
+	clock_t d_end = clock();
+	_time_deq = static_cast<double>(d_end - d_start) / CLOCKS_PER_SEC * 1000;
+	_deq_comps = _nb_comps;
 }
 
 #pragma endregion public_methods
@@ -358,8 +404,12 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &copy)
 {
 	if (this != &copy)
 	{
-		_vec = copy._vec; // Check si ca marche ca
+		_vec = copy._vec;
 		_deq = copy._deq;
+		_time_vec = copy._time_vec;
+		_time_deq = copy._time_deq;
+		_vec_comps = copy._vec_comps;
+		_deq_comps = copy._deq_comps;
 		_nb_comps = copy._nb_comps;
 		_max_nb_comps = copy._max_nb_comps;
 		_size = copy._size;
@@ -370,9 +420,14 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &copy)
 
 // ############################## GETTERS ########################################################//
 #pragma region getters
+
 const std::vector<int>	&PmergeMe::get_vec() const { return (_vec); }
 const std::deque<int>	&PmergeMe::get_deq() const { return (_deq); }
-const unsigned int		PmergeMe::get_nb_comps() const { return (_nb_comps); }
+const double			PmergeMe::get_time_vec() const { return (_time_vec); }
+const double			PmergeMe::get_time_deq() const { return (_time_deq); }
+const unsigned int		PmergeMe::get_vec_comps() const { return (_vec_comps); }
+const unsigned int		PmergeMe::get_deq_comps() const { return (_deq_comps); }
 const unsigned int		PmergeMe::get_max_nb_comps() const { return (_max_nb_comps); }
 const size_t 			PmergeMe::get_size() const { return (_size); }
+
 #pragma endregion getters

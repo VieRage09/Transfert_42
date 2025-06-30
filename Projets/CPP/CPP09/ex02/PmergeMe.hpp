@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:13:05 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/30 16:05:30 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/06/30 18:49:29 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,23 @@
 #include <algorithm>
 #include <math.h>
 
-typedef std::vector<std::pair<int, std::vector<int>>> Vec_pair;
-typedef std::deque<std::pair<int, std::deque<int>>> Deq_pair;
+typedef std::vector<std::pair<int, std::vector<int>>>	Vec_pair;
+typedef std::deque<std::pair<int, std::deque<int>>>		Deq_pair;
 
 class PmergeMe
 {
 	private:
 
-		// attributes //
+		// Attributes //
 		std::vector<int>	_vec;
 		std::deque<int>		_deq;
 		size_t				_size;
 
+		double				_time_vec;
+		double				_time_deq;
+
+		unsigned int		_vec_comps;
+		unsigned int		_deq_comps;
 		unsigned int		_nb_comps;
 		unsigned int		_max_nb_comps;
 
@@ -44,20 +49,27 @@ class PmergeMe
 		template <typename T> void	sort_pairs(T & container, unsigned int pair_size);
 
 		template <typename T, typename T_pair>
-		void						load_utils_containers(T & container, unsigned int elem_size,
-															T_pair & main, T_pair & pend, T & remains);
+		void						load_utils_containers(T & container, unsigned int elem_size, T_pair & main, 
+															T_pair & pend, T & remains);
 		template <typename T, typename T_pair>
 		typename T_pair::iterator	binary_search(T_pair & main, const std::pair<int, T> & elem,
-										typename T_pair::iterator lower_bound, typename T_pair::iterator upper_bound);
+													typename T_pair::iterator lower_bound, typename T_pair::iterator upper_bound);
 		template <typename T, typename T_pair>
 		void						binary_insert(std::pair<int, T> &element, T_pair &main);
 
 		void						insert_pend_v(Vec_pair &main, Vec_pair &pend);
-		void 						insert_pend_d(Deq_pair &main, Deq_pair &pend);
 		void						insert_vec(unsigned int elem_size);
+		void						sort_vector(unsigned int pair_size);
+
+		void 						insert_pend_d(Deq_pair &main, Deq_pair &pend);
 		void						insert_deq(unsigned int elem_size);
+		void						sort_deque(unsigned int pair_size);
+
+		void						incr_nb_comps();
+		void						reset_nb_comps();
 
 	public:
+
 		// Personnalized constructor
 		PmergeMe(char **list);
 		// Copy constructor
@@ -66,24 +78,24 @@ class PmergeMe
 		~PmergeMe();
 
 		// Methods //
-		void			incr_nb_comps();
-		unsigned int	get_max_nb_comps(unsigned int size) const;
-		void			reset_nb_comps();
-		long			get_nth_jacobsthal(unsigned int n) const;
+		unsigned int				get_max_nb_comps(unsigned int size) const;
+		long						get_nth_jacobsthal(unsigned int n) const;
 
-		void			display_vec() const;
-		void			display_deq() const;
+		void						display_vec() const;
+		void						display_deq() const;
 
-		void			sort_vector(unsigned int pair_size);
-		void			sort_deque(unsigned int pair_size);
+		void						launch_sorts();
 
 		// Operators //
-		PmergeMe&		operator = (const PmergeMe& copy);
+		PmergeMe&					operator = (const PmergeMe& copy);
 
 		// Getters //
 		const std::vector<int>&		get_vec() const;
 		const std::deque<int>&		get_deq() const;
-		const unsigned int			get_nb_comps() const;
+		const double				get_time_vec() const;
+		const double				get_time_deq() const;
+		const unsigned int			get_vec_comps() const;
+		const unsigned int			get_deq_comps() const;
 		const unsigned int			get_max_nb_comps() const;
 		const size_t				get_size() const;
 };
