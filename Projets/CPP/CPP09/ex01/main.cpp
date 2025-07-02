@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:33:01 by tlebon            #+#    #+#             */
-/*   Updated: 2025/05/14 17:14:39 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/07/02 16:56:01 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	main(int ac, char **av)
 {
 	RPN	rpn_stack;
 
-	if (!rpn_stack.load_stack(av[1]))
+	if (!av[1] || !rpn_stack.load_stack(av[1]))
 		return (1);
 	try
 	{
