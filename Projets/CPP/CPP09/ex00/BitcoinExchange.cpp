@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 18:18:37 by tlebon            #+#    #+#             */
-/*   Updated: 2025/07/08 17:31:40 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/07/08 19:19:56by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,13 @@ bool	BitcoinExchange::check_format(std::string line, char delim)
 	while (date.back() == ' ')
 		date.pop_back();
 
-	if (date.size() != 10 || date[4] != '-' || date[7] != '-')
+	if (date.size() != 10 || date[4] != '-' || date[7] != '-'
+		|| date.find_first_not_of("0123456789-") != std::string::npos)
 		return (false);
+	while (line.back() == ' ' || line.back() == '\t')
+		line.pop_back();
 	if (line.substr(line.find_first_of(delim) + 1).empty()
-		|| line.substr(line.find_first_of(delim) + 1).find_first_not_of("0123456789. ") != std::string::npos)
+		|| line.substr(line.find_first_of(delim) + 2).find_first_not_of("0123456789.-") != std::string::npos)
 		return (false);
 	return (true);
 }
@@ -119,7 +122,8 @@ void	BitcoinExchange::display_closest_value(std::pair<time_t, float> pair)
 	float		value;
 	
 	std::map<time_t, float>::iterator up_bound = _db_map.lower_bound(pair.first);
-	if (up_bound == _db_map.end())
+	if (up_bound != _db_map.begin() && (up_bound == _db_map.end()
+			|| _db_map.find(pair.first) == _db_map.end()))
 		up_bound--;
 	date = gmtime(&(pair.first));
 	if (strftime(str, 11, "%Y-%m-%d", date) == 0)

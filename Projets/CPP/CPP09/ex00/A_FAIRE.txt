@@ -1,2 +1,0 @@
-Check si l'implementation de lower_bound est bonne
-Gerer le cas date | value value comme une erreur
