@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 18:18:37 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/10 00:22:53 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/07/08 17:31:40 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,9 @@ void	BitcoinExchange::display_closest_value(std::pair<time_t, float> pair)
 	char		str[11];
 	float		value;
 	
-	std::map<time_t, float>::iterator up_bound = _db_map.upper_bound(pair.first);
-	up_bound--;
+	std::map<time_t, float>::iterator up_bound = _db_map.lower_bound(pair.first);
+	if (up_bound == _db_map.end())
+		up_bound--;
 	date = gmtime(&(pair.first));
 	if (strftime(str, 11, "%Y-%m-%d", date) == 0)
 	{
