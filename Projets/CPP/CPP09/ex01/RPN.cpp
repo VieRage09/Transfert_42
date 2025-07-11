@@ -10,115 +10,87 @@ RPN::~RPN() {}
 
 // METHODS //
 
-bool RPN::valid_char(char c) const {return (isdigit(c) || is_opera(c));}
+bool	RPN::valid_char(char c) const { return (isdigit(c) || is_opera(c)); }
 
-bool RPN::is_opera(char c) const {return (c == '+' || c == '-' || c == '*' || c == '/');}
-
-int RPN::rec_calculus(char top)
+bool	RPN::is_valid_str(const std::string & str)
 {
-	int first;
-	int second;
-
-	switch (top)
+	for (int i = 0; i < str.size(); i++)
 	{
-	case '+':
-		_rpn.pop();
-		first = _rpn.top();
-		if (is_opera(first))
-		{
-			first = rec_calculus(first);
-			return (rec_calculus(_rpn.top()) + first);
-		}
-		_rpn.pop();
-		second = _rpn.top();
-		if (is_opera(second))
-			return (rec_calculus(second) + first);
-		_rpn.pop();
-		return (second + first);
-
-	case '-':
-		_rpn.pop();
-		first = _rpn.top();
-		if (is_opera(first))
-		{
-			first = rec_calculus(first);
-			return (rec_calculus(_rpn.top()) - first);
-		}
-		_rpn.pop();
-		second = _rpn.top();
-		if (is_opera(second))
-			return (rec_calculus(second) - first);
-		_rpn.pop();
-		return (second - first);
-
-	case '*':
-		_rpn.pop();
-		first = _rpn.top();
-		if (is_opera(first))
-		{
-			first = rec_calculus(first);
-			return (rec_calculus(_rpn.top()) * first);
-		}
-		_rpn.pop();
-		second = _rpn.top();
-		if (is_opera(second))
-			return (rec_calculus(second) * first);
-		_rpn.pop();
-		return (second * first);
-
-	case '/':
-		_rpn.pop();
-		first = _rpn.top();
-		if (is_opera(first))
-		{
-			first = rec_calculus(first);
-			if (first == 0)
-				return (throw std::runtime_error("Division by 0 occured"), 0);
-			return (rec_calculus(_rpn.top()) / first);
-		}
-		if (first == 0)
-			return (throw std::runtime_error("Division by 0 occured"), 0);
-		_rpn.pop();
-		second = _rpn.top();
-		if (is_opera(second))
-			return (rec_calculus(second) / first);
-		_rpn.pop();
-		return (second / first);
-
-	default:
-		throw std::runtime_error("Error in calculating\n");
-		return (0);
-	}
-	return (0);
-}
-
-int RPN::calculate_rpn(void)
-{
-	if (_rpn.empty())
-		throw std::runtime_error("empty stack\n");
-	if (_rpn.size() == 1)
-		return (_rpn.top());
-	return (rec_calculus(_rpn.top()));
-}
-
-bool RPN::load_stack(std::string s)
-{
-	if (s.empty() || std::all_of(s.begin(), s.end(), isspace))
-		return (std::cerr << "Error: empty string\n", false);
-	while (!_rpn.empty())
-		_rpn.pop();
-	for (char c : s)
-	{
-		if (isspace(c))
-			continue;
-		if (!valid_char(c))
-			return (std::cerr << "Error: invalid char\n", false);
-		if (isdigit(c))
-			_rpn.push(c - '0');
-		else
-			_rpn.push(c);
+		if (!valid_char(str[i]))
+			return (false);
 	}
 	return (true);
+}
+
+bool	RPN::is_opera(char c) const { return (c == '+' || c == '-' || c == '*' || c == '/'); }
+
+void	RPN::calculation(char ope)
+{
+	long long	rhs;
+	long long	lhs;
+	long long	res;
+
+	if (_rpn.size() < 2)
+		throw std::runtime_error("[ERROR] Invalid RPN expression: too many operators");
+	if (ope == '/' && _rpn.top() == 0)
+		throw std::runtime_error("[ERROR] Division by zero not allowed");
+	rhs = _rpn.top();
+	_rpn.pop();
+	lhs = _rpn.top();
+	_rpn.pop();
+	switch (ope)
+	{
+		case '+':
+			res = lhs + rhs;
+			break;
+		case '-':
+			res = lhs - rhs;
+			break;
+		case '*':
+			res = lhs * rhs;
+			break;
+		case '/':
+			res = lhs / rhs;
+			break;
+	}
+	if (res < INT_MIN || res > INT_MAX)
+		throw std::runtime_error("[ERROR] Int Overflow");
+	_rpn.push(static_cast<int>(res));
+}
+
+int		RPN::calculate_rpn(const std::string & s)
+{
+	std::stringstream 	ss;
+	std::string			tmp;
+	int					i;
+	char				ope;
+
+	if (s.empty() || std::all_of(s.begin(), s.end(), isspace))
+		throw std::runtime_error("[ERROR] Empty RPN expression");
+
+	ss << s;
+	while (!ss.eof())
+	{
+		ss >> tmp;
+		if (!is_valid_str(tmp))
+			throw std::runtime_error("[ERROR] Invalid char");
+		if (std::stringstream(tmp) >> i)
+		{
+			if (i < 0 || i > 9)
+				throw std::runtime_error("[ERROR] Number must be [0, 9]");
+			_rpn.push(i);
+		}
+		else if (std::stringstream(tmp) >> ope && is_opera(ope))
+		{
+			if (tmp.size() != 1)
+				throw std::runtime_error("[ERROR] Invalid RPN expression: unseparated operators");
+			calculation(ope);
+		}
+		tmp = "";
+	}
+	if (_rpn.size() != 1)
+		throw std::runtime_error("[ERROR] Invalid RPN expression: not enough operators");
+	return (_rpn.top());
 }
 
 // // OPERATORS //

@@ -5,6 +5,8 @@
 #include <stack>
 #include <iostream>
 #include <algorithm>
+#include <sstream>
+#include <climits>
 
 class RPN
 {
@@ -15,9 +17,9 @@ class RPN
 
 		// methods //
 		bool	valid_char(char c) const;
+		bool	is_valid_str(const std::string & str);
 		bool	is_opera(char c) const;
-		int		rec_calculus(char ope);
-
+		void	calculation(char c);
 	public:
 		// Default constructor
 		RPN();
@@ -27,8 +29,7 @@ class RPN
 		~RPN();
 
 		// Methods //
-		bool	load_stack(std::string s);
-		int		calculate_rpn( void ); // Throw
+		int		calculate_rpn(const std::string & s);
 
 		// Operators //
 		RPN&				operator = (const RPN& copy);
