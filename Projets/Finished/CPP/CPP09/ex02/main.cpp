@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:43:58 by tlebon            #+#    #+#             */
-/*   Updated: 2025/06/30 19:38:06 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/07/15 16:56:36 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@ void	check_input(int ac, char **av)
 	while (av[i])
 	{
 		str = av[i];
+		if (str.empty())
+			throw std::runtime_error("Empty argument(s)");
 		if (str.find_first_not_of("0123456789+") != std::string::npos)
-			throw std::runtime_error("No digits arguments");
+			throw std::runtime_error("argument must be positive integers");
 		i++;
 	}
 }
@@ -39,6 +41,7 @@ int	main(int ac, char **av)
 	}
 	catch(const std::exception& e)
 	{
+		std::cout << "Usage: " << av[0] << " [positive integers...]" << std::endl;
 		return (std::cerr << "[ERROR]: Wrong argument: " << e.what() << std::endl, 1);
 	}
 

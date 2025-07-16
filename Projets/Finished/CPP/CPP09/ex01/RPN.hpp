@@ -21,6 +21,7 @@ class RPN
 		bool	is_opera(char c) const;
 		void	calculation(char c);
 	public:
+
 		// Default constructor
 		RPN();
 		// Copy constructor
