@@ -1,0 +1,16 @@
+{
+	"nodes":[
+		{"id":"981486830b576372","type":"text","text":"Host\n\n","x":-510,"y":-140,"width":490,"height":520,"color":"1"},
+		{"id":"4231558a9a997dda","type":"text","text":"MEM","x":-380,"y":-80,"width":60,"height":420,"color":"3"},
+		{"id":"83e358b8c514a7e6","type":"text","text":"CPU","x":-460,"y":-80,"width":60,"height":420,"color":"6"},
+		{"id":"3b7f4ee4d6fc2a09","type":"text","text":"RAM","x":-300,"y":-80,"width":60,"height":420,"color":"4"},
+		{"id":"b012a7f293e90ca3","type":"text","text":"","x":-480,"y":239,"width":480,"height":60,"color":"2"},
+		{"id":"08111835fed64a36","type":"text","text":"Hypervisor","x":220,"y":-80,"width":369,"height":319},
+		{"id":"a1215e3b1804b20a","type":"text","text":"VM\n\nOS","x":349,"y":-1,"width":91,"height":201},
+		{"id":"76103028cc53e5c6","type":"text","text":"VM\n\nOS","x":249,"y":-1,"width":91,"height":201},
+		{"id":"f08dda92ef01458c","type":"text","text":"VM\n\nOS","x":449,"y":-1,"width":91,"height":201}
+	],
+	"edges":[
+		{"id":"389d8b6450ad4796","fromNode":"b012a7f293e90ca3","fromSide":"right","toNode":"08111835fed64a36","toSide":"left","color":"2"}
+	]
+}

@@ -1,0 +1,7 @@
+{
+	"nodes":[
+		{"id":"2b5b3126b3f3d8ee","type":"text","text":"Host","x":-446,"y":-153,"width":446,"height":433,"color":"1"},
+		{"id":"f5b5c3616fcab053","type":"text","text":"Processes\n\nFully contained inside an hermetic box -> a container","x":-280,"y":-80,"width":220,"height":176,"color":"5"}
+	],
+	"edges":[]
+}

@@ -1,0 +1,15 @@
+{
+	"nodes":[
+		{"id":"087307cbf022ef88","type":"text","text":"Image built from Dockerfile -> img:latest\n\n---\n","x":220,"y":-601,"width":454,"height":601,"color":"1"},
+		{"id":"5b2cc31b711e8f89","type":"text","text":"docker run","x":720,"y":-260,"width":146,"height":60,"color":"5"},
+		{"id":"a00cd165fce74969","type":"text","text":"docker build","x":0,"y":-260,"width":175,"height":60,"color":"5"},
+		{"id":"809a93d5380447ea","type":"text","text":"Container\n\n---\n\nCalls the CMD command of the dockerfile  \n-> Run Basic_script for ex","x":920,"y":-490,"width":309,"height":378,"color":"4"},
+		{"id":"2c34b3995803bf0e","type":"text","text":"Project directory -> /Project","x":-700,"y":-501,"width":657,"height":402,"color":"#0400ff"},
+		{"id":"e2795450fe059c29","type":"text","text":"Dockerfile\n\n---\n\nFROM + Name and tag -> Wich image we want to create\nRUN -> Runs following command in the image\nCMD -> Default command runned by the container","x":-680,"y":-430,"width":498,"height":200,"color":"2"},
+		{"id":"47c87721caf0fb5b","type":"text","text":"Basic_script.sh","x":-680,"y":-200,"width":182,"height":60,"color":"4"}
+	],
+	"edges":[
+		{"id":"1e950379f94df3f5","fromNode":"2c34b3995803bf0e","fromSide":"right","toNode":"087307cbf022ef88","toSide":"left"},
+		{"id":"fe2122bfdbba6f45","fromNode":"087307cbf022ef88","fromSide":"right","toNode":"809a93d5380447ea","toSide":"left"}
+	]
+}
