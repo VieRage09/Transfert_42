@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/07/23 18:54:56 by tlebon           ###   ########.fr        #
+#    Updated: 2025/07/23 19:22:12 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,13 +26,15 @@ MDB_IMG_NAME	=	deb_mdb
 #------------------------------------------------------------------------------#
 
 #--------------------------------------------------------- Wordpress ----------#
+WP_PATH			=	$(REQ_PATH)wordpress/
 
+WP_IMG_NAME		=	alpine_wp
 #------------------------------------------------------------------------------#
 
 #------------------------------------------------------------- NGinx ----------#
 NGX_PATH		=	$(REQ_PATH)nginx/
 
-NGX_IMG_NAME	=	deb_ngx
+NGX_IMG_NAME	=	alpine_ngx
 #------------------------------------------------------------------------------#
 
 #------------------------------------------------------------------- ----------#
@@ -44,20 +46,36 @@ $(NAME):
 
 #----------------------------------------------------------- MariaDB ----------#
 mdb: buildmdb runmdb
+
 runmdb:
 	cd $(MDB_PATH)
 	sudo docker run $(MDB_IMG_NAME)
 	cd -
+
 buildmdb: $(MDB_PATH)Dockerfile $(MDB_PATH)db_conf.sh
 	sudo docker build -t $(MDB_IMG_NAME) $(MDB_PATH)
 #------------------------------------------------------------------------------#
 
+#--------------------------------------------------------- Wordpress ----------#
+wp: buildwp runwp
+
+runwp:
+	cd $(WP_PATH)
+	sudo docker run $(WP_IMG_NAME)
+	cd -
+
+buildwp: $(WP_PATH)Dockerfile $(WP_PATH)wp_conf.sh
+	sudo docker build -t $(WP_IMG_NAME) $(WP_PATH)
+#------------------------------------------------------------------------------#
+
 #------------------------------------------------------------- NGinx ----------#
 ngx: buildngx runngx
+
 runngx:
 	cd $(NGX_PATH)
 	sudo docker run $(NGX_IMG_NAME)
 	cd -
+
 buildngx: $(NGX_PATH)Dockerfile 
 	sudo docker build -t $(NGX_IMG_NAME) $(NGX_PATH)
 #------------------------------------------------------------------------------#
