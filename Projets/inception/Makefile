@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/07/23 15:37:37 by tlebon           ###   ########.fr        #
+#    Updated: 2025/07/23 18:54:56 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,9 @@ MDB_IMG_NAME	=	deb_mdb
 #------------------------------------------------------------------------------#
 
 #------------------------------------------------------------- NGinx ----------#
+NGX_PATH		=	$(REQ_PATH)nginx/
+
+NGX_IMG_NAME	=	deb_ngx
 #------------------------------------------------------------------------------#
 
 #------------------------------------------------------------------- ----------#
@@ -39,23 +42,34 @@ all: $(NAME)
 $(NAME):
 	@make --silent folie
 
+#----------------------------------------------------------- MariaDB ----------#
 mdb: buildmdb runmdb
-
 runmdb:
 	cd $(MDB_PATH)
 	sudo docker run $(MDB_IMG_NAME)
 	cd -
-
 buildmdb: $(MDB_PATH)Dockerfile $(MDB_PATH)db_conf.sh
 	sudo docker build -t $(MDB_IMG_NAME) $(MDB_PATH)
+#------------------------------------------------------------------------------#
+
+#------------------------------------------------------------- NGinx ----------#
+ngx: buildngx runngx
+runngx:
+	cd $(NGX_PATH)
+	sudo docker run $(NGX_IMG_NAME)
+	cd -
+buildngx: $(NGX_PATH)Dockerfile 
+	sudo docker build -t $(NGX_IMG_NAME) $(NGX_PATH)
+#------------------------------------------------------------------------------#
 
 clean:
 	@make --silent sweep
-	sudo docker container prune --force
-	sudo docker image prune --force
+	@sudo docker container prune --force
+	@sudo docker image prune --force
 
 fclean: clean
-	sudo docker rmi $(MDB_IMG_NAME)
+	@sudo docker rmi -f $(MDB_IMG_NAME)
+	@sudo docker rmi -f $(NGX_IMG_NAME)
 
 re: fclean all
 
