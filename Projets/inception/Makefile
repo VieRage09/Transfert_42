@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/07/22 23:45:56 by tlebon           ###   ########.fr        #
+#    Updated: 2025/07/23 15:37:37 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,9 +20,9 @@ REQ_PATH	=	$(SRC_PATH)requirements/
 #------------------------------------------------------------------------------#
 
 #----------------------------------------------------------- MariaDB ----------#
-MDB_PATH	= 	$(REQ_PATH)mariaDB/
+MDB_PATH		= 	$(REQ_PATH)mariaDB/
 
-IMG_NAME	=	deb_mdb
+MDB_IMG_NAME	=	deb_mdb
 #------------------------------------------------------------------------------#
 
 #--------------------------------------------------------- Wordpress ----------#
@@ -43,16 +43,19 @@ mdb: buildmdb runmdb
 
 runmdb:
 	cd $(MDB_PATH)
-	sudo docker run $(IMG_NAME)
+	sudo docker run $(MDB_IMG_NAME)
 	cd -
 
 buildmdb: $(MDB_PATH)Dockerfile $(MDB_PATH)db_conf.sh
-	sudo docker build -t $(IMG_NAME) $(MDB_PATH)
+	sudo docker build -t $(MDB_IMG_NAME) $(MDB_PATH)
 
 clean:
 	@make --silent sweep
+	sudo docker container prune --force
+	sudo docker image prune --force
 
 fclean: clean
+	sudo docker rmi $(MDB_IMG_NAME)
 
 re: fclean all
 
@@ -79,4 +82,4 @@ sweep:
 	@printf "                                                                                   /_/       ${RESET}\n"
 #------------------------------------------------------------------------------#
 
-.PHONY: all clean fclean re folie sweep
+.PHONY: all clean fclean re folie sweep buildmdb runmdb mdb

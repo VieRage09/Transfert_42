@@ -1,9 +1,9 @@
 FROM debian:bookworm
 
-RUN apt update && apt upgrade -y &&\
-    apt install mariadb-server -y
-
 WORKDIR /app
+
+RUN apt-get update && apt-get upgrade -y &&\
+    apt-get install mariadb-server -y
 COPY db_conf.sh .
 RUN chmod +x db_conf.sh
 
