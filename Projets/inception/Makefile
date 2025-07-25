@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/07/25 17:26:37 by tlebon           ###   ########.fr        #
+#    Updated: 2025/07/25 22:03:00 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,11 +16,13 @@ NAME	=	inception
 
 SRC_PATH	=	srcs/
 REQ_PATH	=	$(SRC_PATH)requirements/
+DB_DIR		=	/home/tlebon/data/mariadb
+WP_DIR		=	/home/tlebon/data/wordpress
 
 #------------------------------------------------------------------------------#
 
 #----------------------------------------------------------- MariaDB ----------#
-MDB_PATH		= 	$(REQ_PATH)mariaDB/
+MDB_PATH		= 	$(REQ_PATH)mariadb/
 
 MDB_IMG_NAME	=	deb_mdb
 #------------------------------------------------------------------------------#
@@ -41,12 +43,14 @@ NGX_IMG_NAME	=	alpine_ngx
 #------------------------------------------------------------------------------#
 all: up
 
-up: build
+up:
 	@make --silent folie
-	docker compose up 
+	mkdir -p $(WP_DIR)
+	mkdir -p $(DB_DIR)
+	@cd srcs/
+	docker-compose up 
 
-build:
-	mkdir 
+# build:
 
 #----------------------------------------------------------- MariaDB ----------#
 mdb: buildmdb runmdb
@@ -88,6 +92,7 @@ clean:
 	@make --silent sweep
 	@sudo docker container prune --force
 	@sudo docker image prune --force
+	@sudo rm -rf $(WP_DIR) $(DB_DIR)
 
 fclean: clean
 	@sudo docker rmi -f $(MDB_IMG_NAME)

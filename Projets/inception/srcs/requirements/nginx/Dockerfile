@@ -14,4 +14,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 RUN mkdir -p /var/www/wordpress
 
+# RUN chown -R www-data:www-data /var/www/wordpress
+# A creer si important --> Alpine n'a pas ce grp la par defaut
+
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
