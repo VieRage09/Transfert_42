@@ -1,9 +1,10 @@
-RUN alpine:3.19
+FROM alpine:3.19
 
 WORKDIR /app
 
 RUN apk update && apk upgrade &&\
-    apk add curl mariadb-client 
+    apk add curl php php-phar mariadb-client 
+#php-phar might be optional
 
 COPY wp_conf.sh .
 
