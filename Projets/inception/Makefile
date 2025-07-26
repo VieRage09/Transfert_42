@@ -6,49 +6,60 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/07/25 22:03:00 by tlebon           ###   ########.fr        #
+#    Updated: 2025/07/26 19:53:00 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	=	inception
+#=========================         DEFINITIONS        =========================#
 
-#----------------------------------------------------------- SOURCES ----------#
+NAME		=	inception
+USERNAME	=	tlebon
+ALPINE_IMG	=	alpine:3.18
+DEBIAN_IMG	=	debian:12.10
+
+#------------------------------------------------------------- PATHS ----------#
 
 SRC_PATH	=	srcs/
 REQ_PATH	=	$(SRC_PATH)requirements/
-DB_DIR		=	/home/tlebon/data/mariadb
-WP_DIR		=	/home/tlebon/data/wordpress
+
+DB_DIR		=	/home/$(USERNAME)/data/mariadb
+WP_DIR		=	/home/$(USERNAME)/data/wordpress
+
+ENV			=	$(SRC_PATH).env
+DKR_CMP		=	$(SRC_PATH)docker-compose.yml
 
 #------------------------------------------------------------------------------#
 
 #----------------------------------------------------------- MariaDB ----------#
 MDB_PATH		= 	$(REQ_PATH)mariadb/
 
-MDB_IMG_NAME	=	deb_mdb
+MDB_IMG_NAME	=	mariadb
+MDB_CONT_NAME	=	"$(MDB_IMG_NAME):$(USERNAME)
 #------------------------------------------------------------------------------#
 
 #--------------------------------------------------------- Wordpress ----------#
 WP_PATH			=	$(REQ_PATH)wordpress/
 
-WP_IMG_NAME		=	alpine_wp
+WP_IMG_NAME		=	wordpress
+WP_CONT_NAME	=	"$(WP_IMG_NAME):$(USERNAME)
 #------------------------------------------------------------------------------#
 
 #------------------------------------------------------------- NGinx ----------#
 NGX_PATH		=	$(REQ_PATH)nginx/
 
-NGX_IMG_NAME	=	alpine_ngx
+NGX_IMG_NAME	=	nginx
+NGX_CONT_NAME	=	"$(NGX_IMG_NAME):$(USERNAME)
 #------------------------------------------------------------------------------#
 
-#------------------------------------------------------------------- ----------#
-#------------------------------------------------------------------------------#
+#==============================================================================#
+
 all: up
 
 up:
 	@make --silent folie
 	mkdir -p $(WP_DIR)
 	mkdir -p $(DB_DIR)
-	@cd srcs/
-	docker-compose up 
+	sudo docker-compose -f $(DKR_CMP) up 
 
 # build:
 
@@ -56,36 +67,30 @@ up:
 mdb: buildmdb runmdb
 
 runmdb:
-	cd $(MDB_PATH)
-	sudo docker run $(MDB_IMG_NAME)
-	cd -
+	sudo docker run --name=$(MDB_CONT_NAME) --env-file=$(ENV) $(MDB_IMG_NAME) 
 
 buildmdb: $(MDB_PATH)Dockerfile $(MDB_PATH)db_conf.sh
-	sudo docker build -t $(MDB_IMG_NAME) $(MDB_PATH)
+	sudo docker build -f $(MDB_PATH)/Dockerfile -t $(MDB_IMG_NAME) $(MDB_PATH)
 #------------------------------------------------------------------------------#
 
 #--------------------------------------------------------- Wordpress ----------#
 wp: buildwp runwp
 
 runwp:
-	cd $(WP_PATH)
-	sudo docker run $(WP_IMG_NAME)
-	cd -
+	sudo docker run --name=$(WP_CONT_NAME) --env-file=$(ENV) $(WP_IMG_NAME)
 
 buildwp: $(WP_PATH)Dockerfile $(WP_PATH)wp_conf.sh
-	sudo docker build -t $(WP_IMG_NAME) $(WP_PATH)
+	sudo docker build -f $(WP_PATH)/Dockerfile -t $(WP_IMG_NAME) $(WP_PATH)
 #------------------------------------------------------------------------------#
 
 #------------------------------------------------------------- NGinx ----------#
 ngx: buildngx runngx
 
 runngx:
-	cd $(NGX_PATH)
-	sudo docker run $(NGX_IMG_NAME)
-	cd -
+	sudo docker run --name=$(NGX_CONT_NAME) $(NGX_IMG_NAME)
 
-buildngx: $(NGX_PATH)Dockerfile 
-	sudo docker build -t $(NGX_IMG_NAME) $(NGX_PATH)
+buildngx: $(NGX_PATH)Dockerfile $(NGX_PATH)nginx.conf
+	sudo docker build -f (NGX_PATH)/Dockerfile -t $(NGX_IMG_NAME) $(NGX_PATH)
 #------------------------------------------------------------------------------#
 
 clean:
@@ -95,8 +100,7 @@ clean:
 	@sudo rm -rf $(WP_DIR) $(DB_DIR)
 
 fclean: clean
-	@sudo docker rmi -f $(MDB_IMG_NAME)
-	@sudo docker rmi -f $(NGX_IMG_NAME)
+	@sudo docker rmi -f $(MDB_IMG_NAME) $(WP_IMG_NAME) $(NGX_IMG_NAME) $(ALPINE_IMG) $(DEBIAN_IMG)
 
 re: fclean all
 

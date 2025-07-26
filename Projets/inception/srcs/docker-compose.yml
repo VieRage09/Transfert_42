@@ -1,4 +1,3 @@
-version: "3.8"
 #Find correct version
 
 services:
@@ -6,7 +5,7 @@ services:
   mariadb:
 
     container_name: mariadb
-    image: mariadb:user
+    image: mariadb:tlebon
     build: ./requirements/mariadb
 
     volumes:
@@ -23,7 +22,7 @@ services:
   wordpress:
 
     container_name: wordpress 
-    image: wordpress:user
+    image: wordpress:tlebon
     build: ./requirements/wordpress
 
     depends_on:
