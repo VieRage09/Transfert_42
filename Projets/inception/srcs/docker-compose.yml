@@ -1,11 +1,9 @@
-#Find correct version
-
 services:
 
   mariadb:
 
     container_name: mariadb
-    image: mariadb:tlebon
+    image: mariadb:${USERNAME}
     build: ./requirements/mariadb
 
     volumes:
@@ -22,7 +20,7 @@ services:
   wordpress:
 
     container_name: wordpress 
-    image: wordpress:tlebon
+    image: wordpress:${USERNAME}
     build: ./requirements/wordpress
 
     depends_on:
@@ -39,18 +37,18 @@ services:
     
     restart: always
 
-  # nginx:
-  #   container_name: nginx 
-  #   image: nginx:user
-  #   build: ./requirements/nginx
+  nginx:
+    container_name: nginx 
+    image: nginx:${USERNAME}
+    build: ./requirements/nginx
 
-  #   depends_on:
-  #   - wordpress
+    depends_on:
+    - wordpress
 
-  #   expose:
-  #    - "9000"
+    expose:
+     - "443"
 
-  #   restart: always
+    restart: always
 
  
 

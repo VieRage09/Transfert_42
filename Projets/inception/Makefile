@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/07/26 19:53:00 by tlebon           ###   ########.fr        #
+#    Updated: 2025/07/26 21:38:25 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,35 +33,36 @@ DKR_CMP		=	$(SRC_PATH)docker-compose.yml
 #----------------------------------------------------------- MariaDB ----------#
 MDB_PATH		= 	$(REQ_PATH)mariadb/
 
-MDB_IMG_NAME	=	mariadb
-MDB_CONT_NAME	=	"$(MDB_IMG_NAME):$(USERNAME)
+MDB_CONT_NAME	=	mariadb
+MDB_IMG_NAME	=	$(MDB_CONT_NAME):$(USERNAME)
 #------------------------------------------------------------------------------#
 
 #--------------------------------------------------------- Wordpress ----------#
 WP_PATH			=	$(REQ_PATH)wordpress/
 
-WP_IMG_NAME		=	wordpress
-WP_CONT_NAME	=	"$(WP_IMG_NAME):$(USERNAME)
+WP_CONT_NAME	=	wordpress
+WP_IMG_NAME		=	$(WP_CONT_NAME):$(USERNAME)
 #------------------------------------------------------------------------------#
 
 #------------------------------------------------------------- NGinx ----------#
 NGX_PATH		=	$(REQ_PATH)nginx/
 
-NGX_IMG_NAME	=	nginx
-NGX_CONT_NAME	=	"$(NGX_IMG_NAME):$(USERNAME)
+NGX_CONT_NAME	=	nginx
+NGX_IMG_NAME	=	$(NGX_CONT_NAME):$(USERNAME)
 #------------------------------------------------------------------------------#
 
 #==============================================================================#
 
 all: up
 
-up:
+up: build
 	@make --silent folie
 	mkdir -p $(WP_DIR)
 	mkdir -p $(DB_DIR)
 	sudo docker-compose -f $(DKR_CMP) up 
 
-# build:
+build:
+	sudo docker-compose -f $(DKR_CMP) build
 
 #----------------------------------------------------------- MariaDB ----------#
 mdb: buildmdb runmdb
@@ -100,7 +101,8 @@ clean:
 	@sudo rm -rf $(WP_DIR) $(DB_DIR)
 
 fclean: clean
-	@sudo docker rmi -f $(MDB_IMG_NAME) $(WP_IMG_NAME) $(NGX_IMG_NAME) $(ALPINE_IMG) $(DEBIAN_IMG)
+	@sudo docker rmi -f $(MDB_IMG_NAME) $(WP_IMG_NAME) $(NGX_IMG_NAME)
+# 	@sudo docker rmi -f $(ALPINE_IMG) $(DEBIAN_IMG)
 
 re: fclean all
 
