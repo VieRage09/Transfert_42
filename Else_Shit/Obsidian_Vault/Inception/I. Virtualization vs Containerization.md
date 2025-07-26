@@ -24,6 +24,16 @@ Actors:
 
 With a some existing commands, like chroot or rlimit, you can isolate a micro-environnement inside the host. Processes running inside share the same environnement as other processes but cannot access files outside this "box". The process being very tricky, it exists some programs that do it for you, like Docker.
 
-![[Shema containerization.canvas]][[II. Docker]]
+![[Shema containerization.canvas]]
+### Containers hystory
+
+In the begining : chroot -> Isolate process so they can only some files (but they can do what they want with networks, processes ...)
+Then: namespace + Cgroup :
+	- Namespace -> allow some process to have an isolated instance of a ressource (unique process tree, filesystem mount point, routing table ...)
+	- Cgroup : Control group -> gives the ability to make some groups of processes and manages their ressource usage
+==> Both together ensured that groups of process can run compartimented and in parallel 
+==> Form the core of container isolation
+
+[[II. Docker]]
 
 
