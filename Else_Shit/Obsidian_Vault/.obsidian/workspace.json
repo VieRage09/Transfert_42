@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Inception/II. Docker.md",
+                "file": "Inception/Roadmap.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "II. Docker"
+              "title": "Roadmap"
             }
           }
         ],
@@ -185,10 +185,16 @@
   },
   "active": "beed6a3db90da44a",
   "lastOpenFiles": [
-    "Inception/III. Docker Compose.md",
+    "Inception/Services/Wordpress.md",
+    "Inception/Roadmap.md",
     "Inception/Commands.md",
+    "Inception/Services/TLS Protocol.md",
+    "Inception/Services/NGINX.md",
+    "Inception/Services/MariaDB.md",
+    "Inception/Services/Daemon.md",
     "Inception/I. Virtualization vs Containerization.md",
     "Inception/II. Docker.md",
+    "Inception/III. Docker Compose.md",
     "Inception/Canvas/Shema Docker.canvas",
     "Inception/Canvas/Shema containerization.canvas",
     "Inception/Canvas/Shema virtualization.canvas",

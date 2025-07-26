@@ -1,4 +1,4 @@
-Serveur web le plus utilise au monde
+Most used web server around the world
 Open source
 
 ---
@@ -23,7 +23,7 @@ communication used to transmit data AND to synchronises operations
 ---
 # 1. Web server
 
-software and underlying hardware the accepts requests via HTTP(or HTTPS).
+software and underlying hardware that accepts requests via HTTP(or HTTPS).
 User initiates communication by making an HTTP request for a ressource (ex: web page) and the server responds with the content requested or and error message
 
 ---
