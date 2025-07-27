@@ -10,6 +10,9 @@ service mariadb start
 mariadb -e "CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`;"
 echo "Db created"
 
+mariadb -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWD}';"
+echo "Root passwd updated"
+
 mariadb -e "CREATE USER IF NOT EXISTS \`${DB_USER}\`@localhost IDENTIFIED BY '${DB_PASSWD}';"
 echo "User created"
 
@@ -20,8 +23,18 @@ mariadb -e "FLUSH PRIVILEGES;"
 echo "privileges flushed"
 
 #----------------------------------------------------------------------- Restart DB -----#
+sleep 1
 
-mysqladmin -u root -p"$DB_ROOT_PASSWD" shutdown
-echo "shutdown, launching again yeyo"
+mysqladmin --host=127.0.0.1 --user=root --password="${DB_ROOT_PASSWD}" shutdown
 
-mysqld_safe --port=3306 --bind-address=0.0.0.0 --datadir='/var/lib/mysql'
+while pgrep mysqld > /dev/null; do
+    echo "Waiting for db shutdown ..."
+    sleep 1
+done
+
+
+mkdir -p /run/mysqld
+
+chown mysql:mysql /run/mysqld
+
+mysqld_safe --user=mysql --port=3306 --bind-address=0.0.0.0 --datadir='/var/lib/mysql'

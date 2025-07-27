@@ -3,7 +3,7 @@ FROM alpine:3.18
 WORKDIR /app
 
 RUN apk update && apk upgrade &&\
-    apk add curl php82 php-phar php-curl php-fpm php81-mysqli mariadb-client 
+    apk add curl php php-phar php-curl php-fpm php81-mysqli mariadb-client 
 #php-phar might be optional
 
 # Increase base php memory for downloading wordpress cli core

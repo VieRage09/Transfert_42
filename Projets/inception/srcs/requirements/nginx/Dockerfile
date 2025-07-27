@@ -2,7 +2,7 @@ FROM alpine:3.18
 
 WORKDIR /app
 
-RUN apk update && apk upgrade &&\
+RUN apk update && apk upgrade && \
     apk add nginx openssl
 
 RUN mkdir -p /etc/nginx/ssl && openssl req -x509 -nodes \
