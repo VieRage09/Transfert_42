@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/07/26 21:38:25 by tlebon           ###   ########.fr        #
+#    Updated: 2025/07/27 17:56:19 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,7 +91,7 @@ runngx:
 	sudo docker run --name=$(NGX_CONT_NAME) $(NGX_IMG_NAME)
 
 buildngx: $(NGX_PATH)Dockerfile $(NGX_PATH)nginx.conf
-	sudo docker build -f (NGX_PATH)/Dockerfile -t $(NGX_IMG_NAME) $(NGX_PATH)
+	sudo docker build -f $(NGX_PATH)/Dockerfile -t $(NGX_IMG_NAME) $(NGX_PATH)
 #------------------------------------------------------------------------------#
 
 clean:

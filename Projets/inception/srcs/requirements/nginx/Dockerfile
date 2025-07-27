@@ -12,9 +12,8 @@ RUN mkdir -p /etc/nginx/ssl && openssl req -x509 -nodes \
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
-RUN mkdir -p /var/www/wordpress
-
-# RUN chown -R www-data:www-data /var/www/wordpress
-# A creer si important --> Alpine n'a pas ce grp la par defaut
+RUN adduser -u 82 -D -S -G www-data www-data && \
+    mkdir -p /var/www/wordpress && \
+    chown -R www-data:www-data /var/www/wordpress
 
 ENTRYPOINT ["nginx", "-g", "daemon off;"]

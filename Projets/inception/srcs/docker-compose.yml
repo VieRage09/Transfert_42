@@ -17,6 +17,12 @@ services:
 
     restart: always
 
+    healthcheck:
+      test: ["CMD", "nc", "-zv", "mariadb", "3306"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+
   wordpress:
 
     container_name: wordpress 
@@ -24,7 +30,8 @@ services:
     build: ./requirements/wordpress
 
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy 
 
     volumes:
       - wordpress:/var/www/wordpress
@@ -45,8 +52,17 @@ services:
     depends_on:
     - wordpress
 
-    expose:
-     - "443"
+    volumes:
+      - wordpress:/var/www/wordpress
+
+    ports:
+     - "443:443"
+
+    env_file:
+      - .env
+
+    networks:
+      - inception
 
     restart: always
 

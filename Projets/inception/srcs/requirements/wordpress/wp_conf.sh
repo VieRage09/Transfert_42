@@ -21,7 +21,7 @@ chown -R www-data:www-data /var/www/wordpress
 
 #------------------------------------------------------------- WP core installation -----#
 wp core download --allow-root
-wp config create --dbname="$DB_NAME" --dbuser="$DB_USER" 
+wp config create --dbname="$DB_NAME" --dbuser=root --prompt="$DB_ROOT_PASSWD" --dbhost=mariadb
 wp core config --dbhost=mariadb:3306 --dbname="$DB_NAME" \
                 --dbuser="$DB_USER" --dbpass="$DB_PASSWD" --allow-root
 wp core install --url="$DOMAIN_NAME" --title="$WP_TITLE" \
