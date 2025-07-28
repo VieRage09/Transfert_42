@@ -4,14 +4,12 @@
 #-------------------------------------------------------------------- Start MariaDB -----#
 
 service mariadb start
-
+sleep 5
 #---------------------------------------------------------------------- Creation DB -----#
 
 mariadb -e "CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`;"
 echo "Db created"
 
-mariadb -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWD}';"
-echo "Root passwd updated"
 
 mariadb -e "CREATE USER IF NOT EXISTS \`${DB_USER}\`@localhost IDENTIFIED BY '${DB_PASSWD}';"
 echo "User created"
@@ -22,6 +20,8 @@ echo "privileges granted"
 mariadb -e "FLUSH PRIVILEGES;"
 echo "privileges flushed"
 
+mariadb -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWD}';"
+echo "Root passwd updated"
 #----------------------------------------------------------------------- Restart DB -----#
 sleep 1
 
@@ -38,3 +38,6 @@ mkdir -p /run/mysqld
 chown mysql:mysql /run/mysqld
 
 mysqld_safe --user=mysql --port=3306 --bind-address=0.0.0.0 --datadir='/var/lib/mysql'
+
+ss -x | grep mysql
+ps aux | grep mysqld
