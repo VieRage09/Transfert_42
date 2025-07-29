@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -e
+#Ensure that shell exit immediately if any command fails
 #-------------------------------------------------------------------- Start MariaDB -----#
 
 service mariadb start
