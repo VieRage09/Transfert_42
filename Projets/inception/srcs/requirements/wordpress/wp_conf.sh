@@ -3,13 +3,13 @@
 set -e
 #---------------------------------------------------------------------- Download WP -----#
 
-curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+curl -SL -o https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod +x wp-cli.phar
 mv wp-cli.phar /bin/wp
 #----------------------------------------------------------------------------------------#
 
 #---------------------------------------------------------------------- ??? -----#
-mkdir -p /var/www/wordpress
+# mkdir -p /var/www/wordpress
 # Should not be here because of mounted volume (same name)
 cd /var/www/wordpress
 chmod -R 755 /var/www/wordpress
