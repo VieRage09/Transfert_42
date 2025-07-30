@@ -6,52 +6,51 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/07/28 21:20:28 by tlebon           ###   ########.fr        #
+#    Updated: 2025/07/30 17:24:32 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 #=========================         DEFINITIONS        =========================#
-
-NAME		=	inception
-USERNAME	=	tlebon
-ALPINE_IMG	=	alpine:3.18
-DEBIAN_IMG	=	debian:12.10
+	NAME		=	inception
+	USERNAME	=	tlebon
+	ALPINE_IMG	=	alpine:3.18
+	DEBIAN_IMG	=	debian:12.10
+#==============================================================================#
 
 #------------------------------------------------------------- PATHS ----------#
+	SRC_PATH	=	srcs/
+	REQ_PATH	=	$(SRC_PATH)requirements/
 
-SRC_PATH	=	srcs/
-REQ_PATH	=	$(SRC_PATH)requirements/
+	DB_DIR		=	/home/$(USERNAME)/data/mariadb
+	WP_DIR		=	/home/$(USERNAME)/data/wordpress
 
-DB_DIR		=	/home/$(USERNAME)/data/mariadb
-WP_DIR		=	/home/$(USERNAME)/data/wordpress
+	WP_V_NAME	=	wordpress
+	MDB_V_NAME	=	mariadb
 
-ENV			=	$(SRC_PATH).env
-DKR_CMP		=	$(SRC_PATH)docker-compose.yml
-
+	ENV			=	$(SRC_PATH).env
+	DKR_CMP		=	$(SRC_PATH)docker-compose.yml
 #------------------------------------------------------------------------------#
 
 #----------------------------------------------------------- MariaDB ----------#
-MDB_PATH		= 	$(REQ_PATH)mariadb/
+	MDB_PATH		= 	$(REQ_PATH)mariadb/
 
-MDB_CONT_NAME	=	mariadb
-MDB_IMG_NAME	=	$(MDB_CONT_NAME):$(USERNAME)
+	MDB_CONT_NAME	=	mariadb
+	MDB_IMG_NAME	=	$(MDB_CONT_NAME):$(USERNAME)
 #------------------------------------------------------------------------------#
 
 #--------------------------------------------------------- Wordpress ----------#
-WP_PATH			=	$(REQ_PATH)wordpress/
+	WP_PATH			=	$(REQ_PATH)wordpress/
 
-WP_CONT_NAME	=	wordpress
-WP_IMG_NAME		=	$(WP_CONT_NAME):$(USERNAME)
+	WP_CONT_NAME	=	wordpress
+	WP_IMG_NAME		=	$(WP_CONT_NAME):$(USERNAME)
 #------------------------------------------------------------------------------#
 
 #------------------------------------------------------------- NGinx ----------#
-NGX_PATH		=	$(REQ_PATH)nginx/
+	NGX_PATH		=	$(REQ_PATH)nginx/
 
-NGX_CONT_NAME	=	nginx
-NGX_IMG_NAME	=	$(NGX_CONT_NAME):$(USERNAME)
+	NGX_CONT_NAME	=	nginx
+	NGX_IMG_NAME	=	$(NGX_CONT_NAME):$(USERNAME)
 #------------------------------------------------------------------------------#
-
-#==============================================================================#
 
 all: up
 
@@ -59,10 +58,20 @@ up: build
 	@make --silent folie
 	mkdir -p $(WP_DIR)
 	mkdir -p $(DB_DIR)
-	sudo docker-compose -f $(DKR_CMP) up 
+	sudo docker-compose -f $(DKR_CMP) up -d
+
+down:
+	sudo docker-compose -f $(DKR_CMP) down
+
+start:
+	sudo docker-compose -f $(DKR_CMP) start
+
+stop:
+	sudo docker-compose -f $(DKR_CMP) stop
 
 build:
 	sudo docker-compose -f $(DKR_CMP) build
+
 
 #----------------------------------------------------------- MariaDB ----------#
 mdb: buildmdb runmdb
@@ -105,15 +114,17 @@ buildngx: $(NGX_PATH)Dockerfile $(NGX_PATH)nginx.conf
 
 clean:
 	@make --silent sweep
-	@sudo docker container prune --force
-	@sudo docker image prune --force
-	@sudo rm -rf $(WP_DIR) $(DB_DIR)
+	@sudo docker stop $$(sudo docker ps -qa) || true
+	@sudo docker rm $$(sudo docker ps -qs) || true
+	@sudo docker rmi -f $$(sudo docker images -qa) || true
+	@sudo docker network rm $$(sudo docker network ls -q) || true
+	@sudo docker rmi -f $(ALPINE_IMG) $(DEBIAN_IMG) || true
 
 fclean: clean
-	@sudo docker rmi -f $(MDB_IMG_NAME) $(WP_IMG_NAME) $(NGX_IMG_NAME)
-# 	@sudo docker rmi -f $(ALPINE_IMG) $(DEBIAN_IMG)
+	@sudo docker volume rm $$(sudo docker volume ls -q) || true
+	@sudo rm -rf $(WP_DIR) $(DB_DIR) || true
 
-re: fclean all
+re: clean up
 
 #-------------------------------------------------------JOIE EPHEMERE----------#
 
