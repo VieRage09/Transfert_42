@@ -31,8 +31,11 @@ if [ ! -f wp-config.php ]; then
                     --dbuser="${DB_USER}" --dbpass="${DB_PASSWD}" --allow-root
     echo "Installing Wordpress..."
     wp core install --url="${DOMAIN_NAME}" --title="${WP_TITLE}" \
-                    --admin_user="${WP_ADMIN_NAME}" --admin_password="${WP_ADMIN_PASSWD}" \
+                    --admin_user="${WP_ADMIN_NAME}" \
+                    --admin_password="${WP_ADMIN_PASSWD}" \
                     --admin_email="${WP_ADMIN_MAIL}" --allow-root
+    wp user create  "${WP_USER_NAME}" "${WP_USER_MAIL}" \
+                    --user_pass="${WP_USER_PASSWD}" --role="${WP_USER_ROLE}" --allow-root
     echo "Wordpress installation completed !"
 else
     echo "Wordpress already configured, skipping setup"
