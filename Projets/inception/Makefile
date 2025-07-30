@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/07/30 17:24:32 by tlebon           ###   ########.fr        #
+#    Updated: 2025/07/30 19:18:44 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,7 +72,11 @@ stop:
 build:
 	sudo docker-compose -f $(DKR_CMP) build
 
-
+info:
+	sudo docker ps -a
+	sudo docker images
+	sudo docker volume ls 
+	sudo docker network ls
 #----------------------------------------------------------- MariaDB ----------#
 mdb: buildmdb runmdb
 
@@ -121,7 +125,7 @@ clean:
 	@sudo docker rmi -f $(ALPINE_IMG) $(DEBIAN_IMG) || true
 
 fclean: clean
-	@sudo docker volume rm $$(sudo docker volume ls -q) || true
+	@sudo docker volume rm -f $$(sudo docker volume ls -q) || true
 	@sudo rm -rf $(WP_DIR) $(DB_DIR) || true
 
 re: clean up

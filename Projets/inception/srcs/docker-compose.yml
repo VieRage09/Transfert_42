@@ -44,27 +44,27 @@ services:
     
     restart: always
 
-  # nginx:
-  #   container_name: nginx 
-  #   image: nginx:${USERNAME}
-  #   build: ./requirements/nginx
+  nginx:
+    container_name: nginx 
+    image: nginx:${USERNAME}
+    build: ./requirements/nginx
 
-  #   depends_on:
-  #   - wordpress
+    depends_on:
+    - wordpress
 
-  #   volumes:
-  #     - wordpress:/var/www/wordpress
+    volumes:
+      - wordpress:/var/www/wordpress
 
-  #   ports:
-  #    - "443:443"
+    ports:
+     - "443:443"
 
-  #   env_file:
-  #     - .env
+    env_file:
+      - .env
 
-  #   networks:
-  #     - inception
+    networks:
+      - inception
 
-  #   restart: always
+    restart: always
 
  
 
