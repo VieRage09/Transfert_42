@@ -1,13 +1,15 @@
 Bien recheck les consignes sur les noms des variables env par exemple
 Bien check les commentaires + les enlever et expliquer chaque ligne
 Supprimer bash des dockefile quand tout sera pret
-Ajouter l'utilisateur dans wp
-clean up le makefile
-
+clean up le makefile --> Nottemment les fonctions lies a docker-compose (a approffondir)
+enlever netcat de mdb si mysqladmin ping fonctionne bien
 
 SUJET:
-- Check image and container name -> Image = service name -> container = whatever
 - Make each one crash to see if they restart
-- Configure domain name to point to local ip
 - Test si nginx est le seul point d'entree
 - use docker secrets for passwords
+
+
+DONE:
+- Configure domain name to point to local ip --> Modify /etc/hosts
+- Check image and container name -> Image = service name -> container = whatever

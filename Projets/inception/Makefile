@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/07/30 20:58:00 by tlebon           ###   ########.fr        #
+#    Updated: 2025/07/31 19:36:02 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,19 +58,19 @@ up: build
 	@make --silent folie
 	mkdir -p $(WP_DIR)
 	mkdir -p $(DB_DIR)
-	sudo docker-compose -f $(DKR_CMP) up -d
+	sudo docker compose -f $(DKR_CMP) up -d
 
 down:
-	sudo docker-compose -f $(DKR_CMP) down
+	sudo docker compose -f $(DKR_CMP) down
 
 start:
-	sudo docker-compose -f $(DKR_CMP) start
+	sudo docker compose -f $(DKR_CMP) start
 
 stop:
-	sudo docker-compose -f $(DKR_CMP) stop
+	sudo docker compose -f $(DKR_CMP) stop
 
 build:
-	sudo docker-compose -f $(DKR_CMP) build
+	sudo docker compose -f $(DKR_CMP) build
 
 info:
 	sudo docker ps -a

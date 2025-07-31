@@ -8,21 +8,25 @@ service mariadb start
 sleep 5
 #---------------------------------------------------------------------- Creation DB -----#
 
-mariadb -e "CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`;"
+mariadb -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWD}';"
+echo "Root passwd updated"
+
+mariadb -u root -p"${DB_ROOT_PASSWD}" -e "FLUSH PRIVILEGES;"
+echo "privileges flushed"
+
+mariadb -u root -p"${DB_ROOT_PASSWD}" -e "CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`;"
 echo "Db created"
 
 
-mariadb -e "CREATE USER IF NOT EXISTS \`${DB_USER}\`@'%' IDENTIFIED BY '${DB_PASSWD}';"
+mariadb -u root -p"${DB_ROOT_PASSWD}" -e "CREATE USER IF NOT EXISTS \`${DB_USER}\`@'%' IDENTIFIED BY '${DB_PASSWD}';"
 echo "User created"
 
-mariadb -e "GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO \`${DB_USER}\`@'%';"
+mariadb -u root -p"${DB_ROOT_PASSWD}" -e "GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO \`${DB_USER}\`@'%';"
 echo "privileges granted"
 
-mariadb -e "FLUSH PRIVILEGES;"
+mariadb -u root -p"${DB_ROOT_PASSWD}" -e "FLUSH PRIVILEGES;"
 echo "privileges flushed"
 
-mariadb -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWD}';"
-echo "Root passwd updated"
 #---------------------------------------------------------------------- Shutdown DB -----#
 sleep 1
 
@@ -38,4 +42,6 @@ done
 # chown mysql:mysql /run/mysqld
 # Seems to be optional
 
-exec mysqld_safe --user=mysql --port=3306 --bind-address=0.0.0.0 --datadir='/var/lib/mysql'
+# exec mariadb --user=mysql --port=3306 --bind-address=0.0.0.0 --datadir='/var/lib/mysql'
+exec mariadbd --user=mysql --port=3306 --datadir=/var/lib/mysql --bind-address=0.0.0.0
+

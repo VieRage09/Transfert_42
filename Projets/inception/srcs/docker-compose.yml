@@ -2,8 +2,8 @@ services:
 
   mariadb:
 
-    container_name: mariadb
-    image: mariadb:${USERNAME}
+    container_name: mariadb-${USERNAME}
+    image: mariadb
     build: ./requirements/mariadb
 
     volumes:
@@ -18,15 +18,17 @@ services:
     restart: always
 
     healthcheck:
-      test: ["CMD", "nc", "-zv", "mariadb", "3306"]
+      # test: ["CMD", "nc", "-zv", "mariadb", "3306"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$${DB_ROOT_PASSWD}"]
       interval: 1s
       timeout: 5s
-      retries: 10
+      retries: 5
+      start_period: 5s # A fchecker
 
   wordpress:
 
-    container_name: wordpress 
-    image: wordpress:${USERNAME}
+    container_name: wordpress-${USERNAME}
+    image: wordpress
     build: ./requirements/wordpress
 
     depends_on:
@@ -45,8 +47,8 @@ services:
     restart: always
 
   nginx:
-    container_name: nginx 
-    image: nginx:${USERNAME}
+    container_name: nginx-${USERNAME} 
+    image: nginx
     build: ./requirements/nginx
 
     depends_on:
