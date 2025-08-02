@@ -3,6 +3,7 @@ Bien check les commentaires + les enlever et expliquer chaque ligne
 Supprimer bash des dockefile quand tout sera pret
 clean up le makefile --> Nottemment les fonctions lies a docker-compose (a approffondir)
 enlever netcat de mdb si mysqladmin ping fonctionne bien
+Check si ca marchememe apres reboot de la vm
 
 SUJET:
 - Make each one crash to see if they restart

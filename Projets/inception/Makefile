@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/07/31 19:36:02 by tlebon           ###   ########.fr        #
+#    Updated: 2025/08/02 17:01:33 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,6 @@
 all: up
 
 up: build
-	@make --silent folie
 	mkdir -p $(WP_DIR)
 	mkdir -p $(DB_DIR)
 	sudo docker compose -f $(DKR_CMP) up -d

@@ -22,12 +22,18 @@ chmod -R 755 /var/www/wordpress
 chown -R www-data:www-data /var/www/wordpress
 #----------------------------------------------------------------------------------------#
 
+echo "Waiting for MariaDB to be ready..."
+until mysqladmin ping -h mariadb --silent; do
+    sleep 1
+done
+#euh
+
 #------------------------------------------------------------- WP core installation -----#
 if [ ! -f wp-config.php ]; then
     echo "Downloading Wordpress core..."
     wp core download --allow-root
     echo "Setting up Wordpress..."
-    wp core config  --dbhost=mariadb:3306 --dbname="${DB_NAME}" \
+    wp core config  --dbhost=mariadb --dbname="${DB_NAME}" \
                     --dbuser="${DB_USER}" --dbpass="${DB_PASSWD}" --allow-root
     echo "Installing Wordpress..."
     wp core install --url="${DOMAIN_NAME}" --title="${WP_TITLE}" \

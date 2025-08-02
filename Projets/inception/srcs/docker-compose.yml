@@ -19,11 +19,11 @@ services:
 
     healthcheck:
       # test: ["CMD", "nc", "-zv", "mariadb", "3306"]
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$${DB_ROOT_PASSWD}"]
-      interval: 1s
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWD}"]
+      interval: 5s
       timeout: 5s
-      retries: 5
-      start_period: 5s # A fchecker
+      retries: 10
+      start_period: 10s # A fchecker
 
   wordpress:
 
@@ -45,6 +45,14 @@ services:
       - inception
     
     restart: always
+    
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 9000"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
 
   nginx:
     container_name: nginx-${USERNAME} 
@@ -52,7 +60,8 @@ services:
     build: ./requirements/nginx
 
     depends_on:
-    - wordpress
+      wordpress:
+        condition: service_healthy
 
     volumes:
       - wordpress:/var/www/wordpress
@@ -67,6 +76,12 @@ services:
       - inception
 
     restart: always
+
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "https://localhost"]  # Adjust for TLS
+    #   interval: 10s
+    #   timeout: 3s
+    #   retries: 3
 
  
 
