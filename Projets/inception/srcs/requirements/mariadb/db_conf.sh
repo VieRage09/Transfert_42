@@ -6,18 +6,27 @@ set -e
 
 #---------------------------------------------------------------------- Creation DB -----#
 
-echo "Check if MariaDB is initialized..."
-echo "Files in/var/lib/mysql:"
-ls -l /var/lib/mysql || true
-if [ ! -s "/var/lib/mysql/mysql" ]; then
+echo "========== MariaDB: container started =========="
+chown -R mysql:mysql /var/lib/mysql
+mkdir -p /run/mysqld
+chown mysql:mysql /run/mysqld
 
-    echo "MariaDB not initialized, initialization..."
+if [ ! -d "/var/lib/mysql/mysql" ]; then
 
-    mysqld_safe --skip-networking &
+    echo "========== MariaDB: Initializing =========="
+
+    mysql_install_db --user=mysql --datadir=/var/lib/mysql
+
+    echo "========== MariaDB: Starting for setup =========="
+
+    mysqld_safe --user=mysql --bind-address=0.0.0.0 &
 
     until mysqladmin ping --silent; do
+        echo "Waiting for MariaDB to start..."
         sleep 1
     done
+
+    echo "========== MariaDB: Creating DB & Users =========="
 
     mariadb -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWD}';"
     echo "Root passwd updated"
@@ -40,6 +49,8 @@ if [ ! -s "/var/lib/mysql/mysql" ]; then
 #---------------------------------------------------------------------- Shutdown DB -----#
     sleep 1
 
+    echo "========== MariaDB: Restarting =========="
+
     mysqladmin --host=127.0.0.1 --user=root --password="${DB_ROOT_PASSWD}" shutdown
 
     while pgrep mysqld > /dev/null; do
@@ -47,11 +58,10 @@ if [ ! -s "/var/lib/mysql/mysql" ]; then
         sleep 1
     done
 else
-    echo "MariaDB data directory found. skipping setup."
+    echo "========== MariaDB: DB already initialized =========="
 fi
 #----------------------------------------------------------------------- Restart DB -----#
-mkdir -p /run/mysqld
-chown mysql:mysql /run/mysqld
 
+echo "========== MariaDB: Launching DB Daemon =========="
 # exec mariadb --user=mysql --port=3306 --bind-address=0.0.0.0 --datadir='/var/lib/mysql'
-exec mysqld_safe --user=mysql --port=3306 --datadir=/var/lib/mysql --bind-address=0.0.0.0
+exec mysqld --user=mysql --port=3306 --datadir=/var/lib/mysql --bind-address=0.0.0.0
