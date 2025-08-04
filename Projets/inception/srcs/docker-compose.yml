@@ -12,19 +12,23 @@ services:
     env_file:
       - .env
 
+    secrets:
+      - db_root_passwd
+      - db_passwd
+
     networks:
       - inception
 
     restart: always
 
     # healthcheck:
-    #   test: ["CMD", "nc", "-z", "localhost", "3306"]
-    #   interval: 5s
+    #   test: ["CMD-SHELL", "mysqladmin ping -u root -p$$DB_ROOT_PASSWD --silent || exit 1"]
+    #   interval: 10s
     #   timeout: 5s
-    #   retries: 15
-    #   start_period: 10s # A fchecker
+    #   retries: 10
+    #   start_period: 30s
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -u root -p$$DB_ROOT_PASSWD --silent || exit 1"]
+      test: ["CMD-SHELL", "pgrep mysqld > /dev/null || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -48,7 +52,12 @@ services:
 
     networks:
       - inception
-    
+
+    secrets:
+      - wp_admin_passwd
+      - wp_user_passwd
+      - db_passwd  
+
     restart: always
     
     healthcheck:
@@ -85,13 +94,13 @@ services:
 
 secrets:
   db_root_passwd:
-    file: ./secrets/db_root_passwd.txt
+    file: ../secrets/db_root_passwd.txt
   db_passwd:
-    file: ./secrets/db_passwd.txt
+    file: ../secrets/db_passwd.txt
   wp_admin_passwd:
-    file: ./secrets/wp_admin_passwd.txt
+    file: ../secrets/wp_admin_passwd.txt
   wp_user_passwd:
-    file: ./secrets/wp_user_passwd.txt
+    file: ../secrets/wp_user_passwd.txt
 
 volumes:
   mariadb:

@@ -3,6 +3,11 @@
 # Strict mode: exits as sound as an error occurs
 set -e
 
+# Reading environment variables from secrets
+DB_PASSWD=$(cat /run/secrets/db_passwd)
+WP_ADMIN_PASSWD=$(cat /run/secrets/wp_admin_passwd)
+WP_USER_PASSWD=$(cat /run/secrets/wp_user_passwd)
+
 #---------------------------------------------------------------------- Download WP -----#
 echo "========== Wordpress: Container started =========="
 

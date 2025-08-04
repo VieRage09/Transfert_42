@@ -7,7 +7,6 @@ check la synthax des commandes bash / sh
 
 SUJET:
 - Test si nginx est le seul point d'entree
-- use docker secrets for passwords
 
 
 DONE:
@@ -15,3 +14,4 @@ DONE:
 - Check image and container name -> Image = service name -> container = whatever
 - Make each one crash to see if they restart
 - Check si ca marchememe apres reboot de la vm
+- use docker secrets for passwords

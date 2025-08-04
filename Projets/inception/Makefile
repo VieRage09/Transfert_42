@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/08/02 17:01:33 by tlebon           ###   ########.fr        #
+#    Updated: 2025/08/04 19:23:18 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,44 +76,6 @@ info:
 	sudo docker images
 	sudo docker volume ls 
 	sudo docker network ls
-#----------------------------------------------------------- MariaDB ----------#
-mdb: buildmdb runmdb
-
-runmdb:
-	sudo docker run --env-file=$(ENV) --name $(MDB_CONT_NAME) -d $(MDB_IMG_NAME)
-
-stopmdb:
-	sudo docker stop $(MDB_CONT_NAME)
-
-buildmdb: $(MDB_PATH)Dockerfile $(MDB_PATH)db_conf.sh
-	sudo docker build -f $(MDB_PATH)/Dockerfile -t $(MDB_IMG_NAME) $(MDB_PATH)
-#------------------------------------------------------------------------------#
-
-#--------------------------------------------------------- Wordpress ----------#
-wp: buildwp runwp
-
-runwp:
-	sudo docker run --name $(WP_CONT_NAME) -d $(WP_IMG_NAME) --env-file=$(ENV) 
-
-stopwp:
-	sudo docker stop $(WP_CONT_NAME)
-
-buildwp: $(WP_PATH)Dockerfile $(WP_PATH)wp_conf.sh
-	sudo docker build -f $(WP_PATH)/Dockerfile -t $(WP_IMG_NAME) $(WP_PATH)
-#------------------------------------------------------------------------------#
-
-#------------------------------------------------------------- NGinx ----------#
-ngx: buildngx runngx
-
-runngx:
-	sudo docker run --name $(NGX_CONT_NAME) -d $(NGX_IMG_NAME) 
-
-stopngx:
-	sudo docker stop $(NGX_CONT_NAME)
-
-buildngx: $(NGX_PATH)Dockerfile $(NGX_PATH)nginx.conf
-	sudo docker build -f $(NGX_PATH)/Dockerfile -t $(NGX_IMG_NAME) $(NGX_PATH)
-#------------------------------------------------------------------------------#
 
 clean:
 	@make --silent sweep
@@ -125,6 +87,7 @@ clean:
 
 fclean: clean
 	@sudo docker volume rm -f $$(sudo docker volume ls -q) || true
+	@sudo docker secret rm $$(sudo docker secret ls -q) || true
 	@sudo rm -rf $(WP_DIR) $(DB_DIR) || true
 
 re: clean up

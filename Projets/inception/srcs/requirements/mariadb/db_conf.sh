@@ -2,9 +2,10 @@
 
 set -e
 #Ensure that shell exit immediately if any command fails
-#-------------------------------------------------------------------- Start MariaDB -----#
 
-#---------------------------------------------------------------------- Creation DB -----#
+# Reading environment variables from secrets
+DB_ROOT_PASSWD=$(cat /run/secrets/db_root_passwd)
+DB_PASSWD=$(cat /run/secrets/db_passwd)
 
 echo "========== MariaDB: container started =========="
 chown -R mysql:mysql /var/lib/mysql
