@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Strict mode: exits as sound as an error occurs
+# Strict mode: exits as soon as an error occurs
 set -e
 
 # Reading environment variables from secrets
@@ -8,22 +8,9 @@ DB_PASSWD=$(cat /run/secrets/db_passwd)
 WP_ADMIN_PASSWD=$(cat /run/secrets/wp_admin_passwd)
 WP_USER_PASSWD=$(cat /run/secrets/wp_user_passwd)
 
-#---------------------------------------------------------------------- Download WP -----#
 echo "========== Wordpress: Container started =========="
 
-if [ ! -f /bin/wp ]; then
-    echo "========== Wordpress: Downloading WP_CLI =========="
-    curl -SL -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-    chmod +x wp-cli.phar
-    mv wp-cli.phar /bin/wp
-else
-    echo "========== Wordpress: WP_CLI already there =========="
-fi
-#----------------------------------------------------------------------------------------#
-
 #------------------------------------------------- Granting permissions & ownership -----#
-mkdir -p /var/www/wordpress
-# Should not be here because of mounted volume (same name)
 echo "========== Wordpress: Setting permissions & ownership for /var/www/wordpress =========="
 cd /var/www/wordpress
 chmod -R 755 /var/www/wordpress
@@ -37,6 +24,7 @@ until mysqladmin ping -h mariadb -u "${DB_USER}" -p"${DB_PASSWD}" --silent; do
 done
 
 #------------------------------------------------------------- WP core installation -----#
+# Check is wordpress is already configured
 if [ ! -f wp-config.php ]; then
     echo "========== Wordpress: Downloading core =========="
     wp core download --allow-root

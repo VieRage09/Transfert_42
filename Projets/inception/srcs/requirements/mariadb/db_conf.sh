@@ -8,6 +8,7 @@ DB_ROOT_PASSWD=$(cat /run/secrets/db_root_passwd)
 DB_PASSWD=$(cat /run/secrets/db_passwd)
 
 echo "========== MariaDB: container started =========="
+
 chown -R mysql:mysql /var/lib/mysql
 mkdir -p /run/mysqld
 chown mysql:mysql /run/mysqld
@@ -38,6 +39,7 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
     mariadb -u root -p"${DB_ROOT_PASSWD}" -e "CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`;"
     echo "Db created"
 
+    # % means the user can connect from any host within the Docker network
     mariadb -u root -p"${DB_ROOT_PASSWD}" -e "CREATE USER IF NOT EXISTS \`${DB_USER}\`@'%' IDENTIFIED BY '${DB_PASSWD}';"
     echo "User created"
 
@@ -64,5 +66,5 @@ fi
 #----------------------------------------------------------------------- Restart DB -----#
 
 echo "========== MariaDB: Launching DB Daemon =========="
-# exec mariadb --user=mysql --port=3306 --bind-address=0.0.0.0 --datadir='/var/lib/mysql'
 exec mysqld --user=mysql --port=3306 --datadir=/var/lib/mysql --bind-address=0.0.0.0
+# exec makes mysqld pid 1 

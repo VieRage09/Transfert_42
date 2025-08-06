@@ -1,13 +1,5 @@
-Bien recheck les consignes sur les noms des variables env par exemple
-Bien check les commentaires + les enlever et expliquer chaque ligne
-Supprimer bash des dockefile quand tout sera pret
-clean up le makefile --> Nottemment les fonctions lies a docker-compose (a approffondir)
-enlever netcat de mdb si mysqladmin ping fonctionne bien
-check la synthax des commandes bash / sh
-
-SUJET:
-- Test si nginx est le seul point d'entree
-
+Bien s'assurer que les secrets et le .env ne sont pas push sur le REPO !!!
+--> Les ajouter dans le .git ignore du RENDU
 
 DONE:
 - Configure domain name to point to local ip --> Modify /etc/hosts
@@ -15,3 +7,5 @@ DONE:
 - Make each one crash to see if they restart
 - Check si ca marchememe apres reboot de la vm
 - use docker secrets for passwords
+- Test si nginx est le seul point d'entree
+- clean up le makefile --> Nottemment les fonctions lies a docker-compose (a approffondir)

@@ -6,51 +6,29 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/08/04 19:23:18 by tlebon           ###   ########.fr        #
+#    Updated: 2025/08/06 01:22:39 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 #=========================         DEFINITIONS        =========================#
+
 	NAME		=	inception
 	USERNAME	=	tlebon
-	ALPINE_IMG	=	alpine:3.18
-	DEBIAN_IMG	=	debian:12.10
 #==============================================================================#
 
 #------------------------------------------------------------- PATHS ----------#
+
 	SRC_PATH	=	srcs/
 	REQ_PATH	=	$(SRC_PATH)requirements/
 
 	DB_DIR		=	/home/$(USERNAME)/data/mariadb
 	WP_DIR		=	/home/$(USERNAME)/data/wordpress
 
-	WP_V_NAME	=	wordpress
-	MDB_V_NAME	=	mariadb
-
 	ENV			=	$(SRC_PATH).env
 	DKR_CMP		=	$(SRC_PATH)docker-compose.yml
 #------------------------------------------------------------------------------#
 
-#----------------------------------------------------------- MariaDB ----------#
-	MDB_PATH		= 	$(REQ_PATH)mariadb/
-
-	MDB_CONT_NAME	=	$(MDB_IMG_NAME):$(USERNAME)
-	MDB_IMG_NAME	=	mariadb
-#------------------------------------------------------------------------------#
-
-#--------------------------------------------------------- Wordpress ----------#
-	WP_PATH			=	$(REQ_PATH)wordpress/
-
-	WP_CONT_NAME	=	$(WP_IMG_NAME):$(USERNAME)
-	WP_IMG_NAME		=	wordpress
-#------------------------------------------------------------------------------#
-
-#------------------------------------------------------------- NGinx ----------#
-	NGX_PATH		=	$(REQ_PATH)nginx/
-
-	NGX_CONT_NAME	=	$(NGX_IMG_NAME):$(USERNAME)
-	NGX_IMG_NAME	=	nginx
-#------------------------------------------------------------------------------#
+#----------------------------------------------------------- COMMANDS----------#
 
 all: up
 
@@ -58,6 +36,9 @@ up: build
 	mkdir -p $(WP_DIR)
 	mkdir -p $(DB_DIR)
 	sudo docker compose -f $(DKR_CMP) up -d
+
+build:
+	sudo docker compose -f $(DKR_CMP) build
 
 down:
 	sudo docker compose -f $(DKR_CMP) down
@@ -68,29 +49,34 @@ start:
 stop:
 	sudo docker compose -f $(DKR_CMP) stop
 
-build:
-	sudo docker compose -f $(DKR_CMP) build
+logs:
+	sudo docker compose -f $(DKR_CMP) logs -f
 
 info:
+	@echo "========== Containers =========="
 	sudo docker ps -a
+	@echo "========== Images =========="
 	sudo docker images
-	sudo docker volume ls 
+	@echo "========== Volumes =========="
+	sudo docker volume ls
+	@echo "========== Networks =========="
 	sudo docker network ls
+
+restart: down up
+
+rebuild: fclean up
 
 clean:
 	@make --silent sweep
-	@sudo docker stop $$(sudo docker ps -qa) || true
-	@sudo docker rm $$(sudo docker ps -qs) || true
-	@sudo docker rmi -f $$(sudo docker images -qa) || true
-	@sudo docker network rm $$(sudo docker network ls -q) || true
-	@sudo docker rmi -f $(ALPINE_IMG) $(DEBIAN_IMG) || true
+	sudo docker compose -f $(DKR_CMP) down --rmi all --volumes
 
 fclean: clean
-	@sudo docker volume rm -f $$(sudo docker volume ls -q) || true
-	@sudo docker secret rm $$(sudo docker secret ls -q) || true
-	@sudo rm -rf $(WP_DIR) $(DB_DIR) || true
+	sudo rm -rf $(WP_DIR) $(DB_DIR) || true
+	sudo docker image prune -af
+	sudo docker volume prune -f
 
-re: clean up
+re: fclean up
+#------------------------------------------------------------------------------#
 
 #-------------------------------------------------------JOIE EPHEMERE----------#
 
@@ -115,4 +101,4 @@ sweep:
 	@printf "                                                                                   /_/       ${RESET}\n"
 #------------------------------------------------------------------------------#
 
-.PHONY: all clean fclean re folie sweep buildmdb runmdb mdb
+.PHONY: all up build down start stop logs info restart rebuild clean fclean re folie sweep

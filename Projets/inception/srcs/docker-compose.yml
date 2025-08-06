@@ -4,35 +4,29 @@ services:
 
     container_name: mariadb-${USERNAME}
     image: mariadb
-    build: ./requirements/mariadb
+    build: ./requirements/mariadb # Path to the Dockerfile
 
     volumes:
-      - mariadb:/var/lib/mysql
+      - mariadb:/var/lib/mysql # Which volume to use and where to mount it
 
     env_file:
       - .env
 
-    secrets:
+    secrets:                  # Secrets needed
       - db_root_passwd
       - db_passwd
 
     networks:
       - inception
 
-    restart: always
+    restart: always           # Container will restart if it fails unless stopped manually
 
-    # healthcheck:
-    #   test: ["CMD-SHELL", "mysqladmin ping -u root -p$$DB_ROOT_PASSWD --silent || exit 1"]
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 10
-    #   start_period: 30s
     healthcheck:
       test: ["CMD-SHELL", "pgrep mysqld > /dev/null || exit 1"]
+      start_period: 30s
       interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 30s
 
   wordpress:
 
@@ -40,9 +34,9 @@ services:
     image: wordpress
     build: ./requirements/wordpress
 
-    depends_on:
+    depends_on:                     
       mariadb:
-        condition: service_healthy 
+        condition: service_healthy    # Wait for mariadb to be healthy before starting
 
     volumes:
       - wordpress:/var/www/wordpress
@@ -81,7 +75,7 @@ services:
       - wordpress:/var/www/wordpress
 
     ports:
-     - "443:443"
+     - "443:443"      # Expose port 443 for HTTPS --> 443 on the host and 443 on the container
 
     env_file:
       - .env
@@ -107,8 +101,8 @@ volumes:
     name: mariadb
     driver: local
     driver_opts:
-      device: /home/tlebon/data/mariadb
-      o: bind
+      device: /home/tlebon/data/mariadb # Where to find the directory on the host
+      o: bind                           # Any changes on the host/container will impact the other
       type: none
   wordpress:
     name: wordpress
@@ -117,7 +111,6 @@ volumes:
       device: /home/tlebon/data/wordpress
       o: bind
       type: none
-# ATTENTION au point de montage check sujet
 
 networks:
   inception:
