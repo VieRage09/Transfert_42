@@ -5,6 +5,7 @@ WORKDIR /app
 RUN apk update && apk upgrade && \
     apk add nginx openssl
 
+# Generate self-signed SSL certificate
 RUN mkdir -p /etc/nginx/ssl && openssl req -x509 -nodes \
     -out /etc/nginx/ssl/inception.crt                   \
     -keyout /etc/nginx/ssl/inception.key                \
@@ -12,6 +13,7 @@ RUN mkdir -p /etc/nginx/ssl && openssl req -x509 -nodes \
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
+# Ensure nginx has the right permissions
 RUN adduser -u 82 -D -S -G www-data www-data && \
     mkdir -p /var/www/wordpress && \
     chown -R www-data:www-data /var/www/wordpress

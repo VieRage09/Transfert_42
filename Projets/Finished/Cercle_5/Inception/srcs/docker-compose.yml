@@ -1,0 +1,117 @@
+services:
+
+  mariadb:
+
+    container_name: mariadb-${USERNAME}
+    image: mariadb
+    build: ./requirements/mariadb # Path to the Dockerfile
+
+    volumes:
+      - mariadb:/var/lib/mysql # Which volume to use and where to mount it
+
+    env_file:
+      - .env
+
+    secrets:                  # Secrets needed
+      - db_root_passwd
+      - db_passwd
+
+    networks:
+      - inception
+
+    restart: always           # Container will restart if it fails unless stopped manually
+
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep mysqld > /dev/null || exit 1"]
+      start_period: 30s
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  wordpress:
+
+    container_name: wordpress-${USERNAME}
+    image: wordpress
+    build: ./requirements/wordpress
+
+    depends_on:                     
+      mariadb:
+        condition: service_healthy    # Wait for mariadb to be healthy before starting
+
+    volumes:
+      - wordpress:/var/www/wordpress
+
+    env_file:
+      - .env
+
+    networks:
+      - inception
+
+    secrets:
+      - wp_admin_passwd
+      - wp_user_passwd
+      - db_passwd  
+
+    restart: always
+    
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 9000"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+
+  nginx:
+    container_name: nginx-${USERNAME} 
+    image: nginx
+    build: ./requirements/nginx
+
+    depends_on:
+      wordpress:
+        condition: service_healthy
+
+    volumes:
+      - wordpress:/var/www/wordpress
+
+    ports:
+     - "443:443"      # Expose port 443 for HTTPS --> 443 on the host and 443 on the container
+
+    env_file:
+      - .env
+
+    networks:
+      - inception
+
+    restart: always
+
+
+secrets:
+  db_root_passwd:
+    file: ../secrets/db_root_passwd.txt
+  db_passwd:
+    file: ../secrets/db_passwd.txt
+  wp_admin_passwd:
+    file: ../secrets/wp_admin_passwd.txt
+  wp_user_passwd:
+    file: ../secrets/wp_user_passwd.txt
+
+volumes:
+  mariadb:
+    name: mariadb
+    driver: local
+    driver_opts:
+      device: /home/tlebon/data/mariadb # Where to find the directory on the host
+      o: bind                           # Any changes on the host/container will impact the other
+      type: none
+  wordpress:
+    name: wordpress
+    driver: local
+    driver_opts:
+      device: /home/tlebon/data/wordpress
+      o: bind
+      type: none
+
+networks:
+  inception:
+    name: inception
