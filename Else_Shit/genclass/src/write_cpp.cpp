@@ -13,7 +13,7 @@ static bool write_getters_and_setters(std::ofstream &file, char **tab, std::stri
 		std::cerr << "no attributes found\n";
 		return (false);
 	}
-	file << "\n// GETTERS //\n\n";
+	file << "\n//=============================================================================== GETTERS ========//\n#pragma region getters\n\n";
 	while (!attr.empty())
 	{
 		str = attr.substr(attr.find_first_not_of(' '), attr.find_first_of(','));
@@ -30,7 +30,8 @@ static bool write_getters_and_setters(std::ofstream &file, char **tab, std::stri
 		
 		file << str << "\n";
 	}
-	file << "\n// GETTERS //\n\n";
+	file << "\n#pragma endregion getters\n//================================================================================================//\n\n";
+	file << "\n//=============================================================================== SETTERS ========//\n#pragma region setters\n\n";
 	attr = get_attributes(tab);
 	while (!attr.empty())
 	{
@@ -48,6 +49,7 @@ static bool write_getters_and_setters(std::ofstream &file, char **tab, std::stri
 		
 		file << str << "\n";
 	}
+	file << "\n#pragma endregion setters\n//================================================================================================//\n\n";
 	return (true);
 }
 
@@ -55,15 +57,22 @@ bool write_cpp_file(std::ofstream &file, std::string &name, t_options opt, char 
 {
 	std::string header = name + ".hpp";
 
-	file << "#include \"" << header << "\"\n\n"
-		 << "// CONSTRUCTORS & DESTRUCTORS //\n\n"
-		 << name << "::" << name << "() {}\n\n"
-		 << name << "::" << name << "( ) {}\n\n"
-		 << name << "::" << name << "(const " << name << "& copy) {}\n\n"
-		 << name << "::~" << name << "() {}\n\n"
-		 << "// METHODS //\n\n\n// OPERATORS //\n\n"
-		 << name << "& " << name << "::operator = (const " << name << "& copy)\n{\n"
-		 << "\tif (this != &copy)\n\t{\n\n\t}\n\treturn (*this);\n}\n";
+	file	<< "#include \"" << header << "\"\n"
+			<< "\n//============================================================ CONSTRUCTORS & DESTRUCTORS ========//\n#pragma region constructors\n\n"
+			<< name << "::" << name << "() {}\n\n"
+		 	<< name << "::" << name << "( ) {}\n\n"
+		 	<< name << "::" << name << "(const " << name << "& copy) {}\n\n"
+		 	<< name << "::~" << name << "() {}\n\n"
+			<< "\n#pragma endregion constructors\n//================================================================================================//\n\n";
+
+	file	<< "\n//=============================================================================== METHODS ========//\n#pragma region methods\n\n"
+			<< "\n#pragma endregion methods\n//================================================================================================//\n\n";
+
+	file	<< "\n//============================================================================= OPERATORS ========//\n#pragma region operators\n\n"
+			<< name << "& " << name << "::operator = (const " << name << "& copy)\n{\n"
+			<< "\tif (this != &copy)\n\t{\n\n\t}\n\treturn (*this);\n}\n"
+			<< "\n#pragma endregion operators\n//================================================================================================//\n\n";
+
 	if (!write_getters_and_setters(file, tab, name))
 		return (false);
 	file.close();

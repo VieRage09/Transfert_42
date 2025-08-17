@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 16:03:45 by tlebon            #+#    #+#             */
-/*   Updated: 2025/08/16 21:18:32 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/08/17 20:44:01 tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,18 @@
 #include <sstream>
 #include <string>
 #include <algorithm>
+
 #include <sys/socket.h>
+#include <netinet/in.h>
+
+#include <unistd.h>
+#include <string.h>
+
+int		ret_error(std::string err_msg, int ret)
+{
+	std::cerr << "[ERROR] " << err_msg << std::endl;
+	return (ret);
+}
 
 bool	check_launch_input(int ac, char **av)
 {
@@ -50,27 +61,49 @@ int	main(int ac, char **av, char **env)
 	if (!check_launch_input(ac, av))
 		return (1);
 
-	int					port = std::stoi(av[1]);
+	in_port_t port = std::stoi(av[1]);
 	std::string			passwd = av[2];
 
-	std::cout << "port = " << port << std::endl
-			  << "password = " << passwd << std::endl;
+	std::cout << "Serv port = " << port << std::endl;
 	
 			  
 	// Create a socket
 
-	sockaddr	s_sock_addr;
+	// Create a struct of internet adress to bind to the port
+	sockaddr_in	addr;
+	addr.sin_family = AF_INET;
+	addr.sin_port = htons(port);
+	addr.sin_addr.s_addr = INADDR_ANY;
+	
+	int	serv_sfd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
+	if (serv_sfd < 0)
+		return (ret_error("socket call failed", 1));
+	if (bind(serv_sfd, (sockaddr *)&addr, sizeof(addr)) < 0)
+		return (ret_error("bind failed", 1));
+	if (listen(serv_sfd, SOMAXCONN) < 0)
+		return (ret_error("listen failed", 1));
 
-	s_sock_addr.sa_family = AF_INET;
-	s_sock_addr.sa_data = 
+	sockaddr_in cli_addr;
+	int			cli_sfd = 0;
+	socklen_t	len = sizeof(cli_addr);
 
-	int	sock_fd = socket(AF_INET, SOCK_STREAM || SOCK_NONBLOCK, 0);
-	if (sock_fd < 0)
+	while ((cli_sfd = accept(serv_sfd, (sockaddr *)&cli_addr, &len)) < 0)
 	{
-		std::cerr << "[ERROR] socket call failed";
-		return (2);
+		perror("accept function pending: ");
+		std::cout << "cli_sfd = " << cli_sfd << std::endl;
+		sleep(3);
 	}
-	std::cout << "Sock_fd = " << sock_fd << std::endl;
-			  
+	std::cout << "Connection established\n";
+
+	char	buffer[256];
+	memset((void *)buffer, 0, sizeof(buffer));
+	size_t	size_recv = recv(cli_sfd, buffer, 255, 0);
+	if (size_recv < 0)
+		return (ret_error("recv failed", 1));
+	std::cout << "Size received = " << size_recv << std::endl;
+	std::cout << "Message received = " << buffer << std::endl;
+
+	if (close(serv_sfd) < 0 || close(cli_sfd) < 0)
+		return (ret_error("close failed", 1));
 	return 0;
 }

@@ -15,7 +15,7 @@ static void	write_each(std::ofstream& file, std::string& attr)
 			attr = attr.substr(attr.find_first_of(',') + 1);
 		name = get_name(str);
 		type = get_type(str);
-		str = type + "\t";
+		str = type + "\t\t\t\t";
 		if (type.size() < 4)
 			str += "\t";
 		if (type.size() < 8)
@@ -25,7 +25,7 @@ static void	write_each(std::ofstream& file, std::string& attr)
 		if (type.size() < 16)
 			str += "\t";
 		str += name;
-		file << "\t\t" << str << ";\n";
+		file << "\t\t\t" << str << ";\n";
 	}
 }
 
@@ -82,7 +82,7 @@ static void	write_each_getSet(std::ofstream& file, std::string& attr, int option
 			else
 				str = "void\t\t\t\tset" + name + "(" + type + "& value)";
 		}
-		file << "\t\t" << str << ";\n";
+		file << "\t\t\t" << str << ";\n";
 	}
 }
 
@@ -98,13 +98,14 @@ static bool	write_getSet(std::ofstream& file, t_options opt, char **tab)
 			std::cerr << "no attributes found\n";
 			return (false);
 		}
-		file << "\n\t\t// Getters //\n";
+		file	<< "\t\t//========================================= GETTERS ========//\n\t\t#pragma region getters \n\n";
 		write_each_getSet(file, attr, 0);
+		file	<< "\n\t\t#pragma endregion getters\n\t\t//==========================================================//\n\n";
 		attr = get_attributes(tab);
-		file << "\n\t\t// Setters //\n";
+		file	<< "\t\t//========================================= SETTERS ========//\n\t\t#pragma region setters\n\n";
 		write_each_getSet(file, attr, 1);
+		file	<< "\n\t\t#pragma endregion setters\n\t\t//==========================================================//\n\n";
 	}
-	file << "\n";
 	return (true);
 }
 
@@ -114,31 +115,31 @@ bool	write_header_file(std::ofstream& file, std::string& name, t_options opt, ch
 	headName = capitalize(headName);
 	file 	<< "#ifndef\t" << headName << "\n#define\t" << headName << "\n\n"
 			<< "// includes //\n\n"
-			<< "class " << name << "\n{\n\tprivate:\n\n\t\t// attributes //\n";
+			<< "class " << name << "\n{\n\tprivate:\n\t"
+			<< "\t//====================================== ATTRIBUTES ========//\n\t\t#pragma region attributes \n\n";
 	if (!write_attributes(file, opt, tab))
 		return (false);
-	file	<< "public:\n\t\t" << "// Default constructor\n\t\t"
-			<< name << "();\n\t\t"
-			<< "// Personnalized constructor\n\t\t"
-			<< name << "( );\n\t\t"
-			<< "// Copy constructor\n\t\t"
-			<< name << "(const " << name << "& copy);\n\t\t"
-			<< "// Destructor\n\t\t"
-			<< "~" << name << "();\n\n\t\t"
-			<< "// Methods //\n\n\n\t\t"
-			<< "// Operators //\n\t\t"
-			<< name << "&\t";
-	if (name.size() < 4)
-		file	<< "\t";
-	if (name.size() < 8)
-		file	<< "\t";
-	if (name.size() < 12)
-		file	<< "\t";
-	// if (name.size() < 16)
-	// 	file	<< "\t";
-	file	<< "operator = (const " << name << "& copy);\n";
+	file	<< "\t#pragma endregion attributes\n\t\t//==========================================================//\n\n";
+
+	file	<< "\tpublic:\n"
+			<< "\t\t//============================= CONST & DESTRUCTORS ========//\n\t\t#pragma region constructors\n\n\t\t\t"
+			<< name << "();\n\t\t\t"
+			<< name << "( );\n\t\t\t"
+			<< name << "(const " << name << "& copy);\n\t\t\t"
+			<< "~" << name << "();\n\n"
+			<< "\t\t#pragma endregion attributes\n\t\t//==========================================================//\n\n";
+			
+	file	<< "\t\t//========================================= METHODS ========//\n\t\t#pragma region methods\n\n"
+			<< "\t\t#pragma endregion methods\n\t\t//==========================================================//\n\n";
+
+	file	<< "\t\t//======================================= OPERATORS ========//\n\t\t#pragma region methods\n\n\t\t\t"
+			<< name << "&\t"
+			<< "operator = (const " << name << "& copy);\n"
+			<< "\n\t\t#pragma endregion methods\n\t\t//==========================================================//\n\n";
+	
 	if (!write_getSet(file, opt, tab))
 		return (false);
+
 	file	<< "};\n\n#endif // " << headName << std::endl;
 			file.close();
 	return (true);

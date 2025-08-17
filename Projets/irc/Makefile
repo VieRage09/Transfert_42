@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/08/16 16:21:24 by tlebon           ###   ########.fr        #
+#    Updated: 2025/08/17 20:32:05 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,6 +47,9 @@ $(NAME): $(OBJS)
 $(OBJ_PATH)%.o: $(SRC_PATH)%.cpp $(HDR)
 	@mkdir -p $(dir $@)
 	$(CC) -c $< -o $@
+
+client: main_cli.cpp
+	c++ -Wall -Wextra -Werror $< -o client
 
 clean:
 	@make --silent sweep
