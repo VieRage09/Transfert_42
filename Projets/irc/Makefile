@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/08/17 20:32:05 by tlebon           ###   ########.fr        #
+#    Updated: 2025/08/18 19:35:31 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,12 +23,14 @@ SRC_DIR	=	src/
 
 SRC			= 									\
 				$(SRC_DIR)main.cpp				\
+				$(SRC_DIR)Server.cpp			\
 #------------------------------------------------------------------------------#
 
 #-------------------------------------------------------------HEADERS----------#
 HDR_PATH	=	include/
 
 HDR			=									\
+				$(HDR_PATH)Server.hpp			\
 #------------------------------------------------------------------------------#
 
 #--------------------------------------------------------------OBJETS----------#
@@ -46,10 +48,8 @@ $(NAME): $(OBJS)
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.cpp $(HDR)
 	@mkdir -p $(dir $@)
-	$(CC) -c $< -o $@
+	$(CC) -c $< -I $(HDR_PATH) -o $@
 
-client: main_cli.cpp
-	c++ -Wall -Wextra -Werror $< -o client
 
 clean:
 	@make --silent sweep
@@ -59,6 +59,20 @@ fclean: clean
 	@rm -rf $(NAME)
 
 re: fclean all
+
+#-------------------------------------------------------------- TEST ----------#
+# A SUPPRIMER
+SRC_TEST	= test/
+MAIN_SERV	= $(SRC_TEST)main.cpp
+MAIN_CLI	= $(SRC_TEST)main_cli.cpp
+
+test: servtest clitest
+	./serv_test 4444 passwd &
+servtest: $(MAIN_SERV)
+	c++ -Wall -Wextra -Werror $(MAIN_SERV) -o serv_test
+clitest: $(MAIN_CLI)
+	c++ -Wall -Wextra -Werror $(MAIN_CLI) -o client
+#------------------------------------------------------------------------------#
 
 #-------------------------------------------------------JOIE EPHEMERE----------#
 

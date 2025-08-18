@@ -3,9 +3,14 @@
 
 // includes //
 #include <iostream>
+#include <vector>
 
-#include <sys/socket.h>
-#include <netinet/in.h>
+#include <sys/socket.h> // for socket, bind, listen
+#include <netinet/in.h> // for sockaddr_in
+#include <unistd.h> // for close
+#include <poll.h>	// for poll duh
+
+#include <string.h> // for strerror
 
 class Server
 {
@@ -17,6 +22,7 @@ class Server
 			std::string						password;
 			sockaddr_in						s_addr;
 			int								serv_sfd;
+			std::vector<pollfd>		v_sfd;
 
 		#pragma endregion attributes
 		//==========================================================//
@@ -26,7 +32,7 @@ class Server
 		#pragma region constructors
 
 			Server();
-			Server( );
+			Server(in_port_t port, std::string password);
 			Server(const Server& copy);
 			~Server();
 
@@ -35,6 +41,11 @@ class Server
 
 		//========================================= METHODS ========//
 		#pragma region methods
+
+			void	init_serv();
+			void	loop();
+			void	accept_new_connection();
+			void	handle_client(int cli_sfd);
 
 		#pragma endregion methods
 		//==========================================================//
@@ -60,11 +71,6 @@ class Server
 
 		//========================================= SETTERS ========//
 		#pragma region setters
-
-			void				setport(in_port_t& value);
-			void				setpassword(std::string& value);
-			void				sets_addr(sockaddr_in& value);
-			void				setserv_sfd(int& value);
 
 		#pragma endregion setters
 		//==========================================================//
