@@ -52,7 +52,14 @@ void	Server::init_serv()
 		std::cerr << "[ERROR] Failed to create socket: " << strerror(errno) << std::endl;
 		return;
 	}
-	// Maybe use setsockopt
+	// Je comprends pas a quoi sert cette ligne en sah mais askip c'est important
+	// int opt = 1;
+	// if (setsockopt(serv_sfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
+	// {
+	// 	std::cerr << "[ERROR] Failed to set socket options: " << strerror(errno) << std::endl;
+	// 	close(serv_sfd);
+	// 	return;
+	// }
 	if (bind(serv_sfd, (sockaddr*)&s_addr, sizeof(s_addr)) == -1)
 	{
 		std::cerr << "[ERROR] Failed to bind socket: " << strerror(errno) << std::endl;
@@ -82,13 +89,15 @@ void	Server::loop()
 	while (true) // Ajouter de la gestion de signal 
 	{
 		// Le programme est bloque ici par poll jusqu'a ce qu'une operation soit possible 
+		// sur un des sfd de v_sfd
 		if (poll(v_sfd.data(), v_sfd.size(), -1) == -1)
 			throw std::runtime_error("poll failed");
+		std::cout << "Poll returned, checking for events...\n";
 		for (std::vector<pollfd>::iterator it = v_sfd.begin(); it != v_sfd.end(); it++)
 		{
 			if (it->revents & POLLIN) // There is data to read
 			{
-				if (it->fd == serv_sfd) // Nouveau requete de connexion d'un client
+				if (it->fd == serv_sfd) // Nouvelle requete de connexion d'un client
 					accept_new_connection();
 				else					// Un client deja co veux interagir
 					handle_client(it->fd);
@@ -104,25 +113,66 @@ void	Server::accept_new_connection()
 	socklen_t	size;
 	pollfd		newClient;
 
-	size = sizeof(cli_addr);
-	cli_sfd = accept(serv_sfd, (sockaddr *)&cli_addr, &size);
-
-	if (cli_sfd == -1)
-		throw std::runtime_error("client connexion: accept() failed");
-	std::cout << "New connection accepted\n";
-	newClient.fd = cli_sfd;
-	newClient.events = POLLIN; // POLLIN ?? ou autre ?
-	newClient.revents = 0;
-	v_sfd.push_back(newClient);
-	std::cout << "New client socket fd added to poll vector\n";
+	// Accept ALL pending connections in a loop
+	// On est sur de faire ca ? Ou on accepte juste les connexions une par une
+	while (true)
+	{
+		std::cout << "Accepting new connection...\n";
+		size = sizeof(cli_addr);
+		cli_sfd = accept(serv_sfd, (sockaddr *)&cli_addr, &size);
+		if (cli_sfd == -1)
+		{
+			if (errno == EAGAIN || errno == EWOULDBLOCK)
+			{
+				std::cout << "No more pending connections.\n";
+				break; // No more connections to accept
+			}
+			std::cerr << "[ERROR] Failed to accept new connection: " << strerror(errno) << std::endl;
+			throw std::runtime_error("client connexion: accept() failed");
+		}
+		std::cout << "New connection accepted\n";
+		newClient.fd = cli_sfd;
+		newClient.events = POLLIN;
+		newClient.revents = 0;
+		v_sfd.push_back(newClient);
+		std::cout << "New client socket fd added to poll vector\n";
+	}
 }
 
 void	Server::handle_client(int cli_sfd)
 {
+	int			size;
+	char		buffer[BUFFER_SIZE];
 
+	std::cout << "Handling client msg\n";
+	memset((void *)buffer, 0, sizeof(buffer));
+	while ((size = recv(cli_sfd, buffer, BUFFER_SIZE - 1, 0) > 0))
+	{
+		std::cout << "Size = " << size << "\nReceived = " << buffer << std::endl;
+	}
+	if (size <= 0)
+	{
+		if (size == -1)
+			std::cerr << "[ERROR] recv(failed)\n";
+		if (size == 0)
+			std::cout << "EOF reached\n";
+		remove_from_poll(cli_sfd);
+		close(cli_sfd);
+	}
 }
 
-
+void	Server::remove_from_poll(int sfd)
+{
+	for (std::vector<pollfd>::iterator it = v_sfd.begin(); it != v_sfd.end(); it++)
+	{
+		if (it->fd == sfd)
+		{
+			v_sfd.erase(it);
+			std::cout << "Client sfd removed from v_sfd\n";
+			return ;
+		}
+	}
+}
 
 
 

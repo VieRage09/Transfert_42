@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/08/18 19:35:31 by tlebon           ###   ########.fr        #
+#    Updated: 2025/08/19 15:36:04 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,16 +62,13 @@ re: fclean all
 
 #-------------------------------------------------------------- TEST ----------#
 # A SUPPRIMER
-SRC_TEST	= test/
-MAIN_SERV	= $(SRC_TEST)main.cpp
-MAIN_CLI	= $(SRC_TEST)main_cli.cpp
+SRC_CLIENT	= client/
+MAIN_CLI	= $(SRC_CLIENT)main_cli.cpp
 
-test: servtest clitest
+client: clitest
 	./serv_test 4444 passwd &
-servtest: $(MAIN_SERV)
-	c++ -Wall -Wextra -Werror $(MAIN_SERV) -o serv_test
 clitest: $(MAIN_CLI)
-	c++ -Wall -Wextra -Werror $(MAIN_CLI) -o client
+	c++ -Wall -Wextra -Werror $(MAIN_CLI) -o ircclient
 #------------------------------------------------------------------------------#
 
 #-------------------------------------------------------JOIE EPHEMERE----------#

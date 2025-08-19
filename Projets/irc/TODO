@@ -1,0 +1,8 @@
+- Regler segfault -> A cause de handle client, surement le erase qui fait foirer la boucle dans loop
+- Creer une methode create_pollfd_struct
+
+- Gerer l'arret du serv proprement via SIGNALS
+
+DANS HANDLE_CLIENT:
+
+-> Gerer lorsque le socket envoie EOF

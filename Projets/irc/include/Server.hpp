@@ -12,6 +12,8 @@
 
 #include <string.h> // for strerror
 
+#define BUFFER_SIZE 256
+
 class Server
 {
 	private:
@@ -22,7 +24,7 @@ class Server
 			std::string						password;
 			sockaddr_in						s_addr;
 			int								serv_sfd;
-			std::vector<pollfd>		v_sfd;
+			std::vector<pollfd>				v_sfd;
 
 		#pragma endregion attributes
 		//==========================================================//
@@ -46,6 +48,7 @@ class Server
 			void	loop();
 			void	accept_new_connection();
 			void	handle_client(int cli_sfd);
+			void	remove_from_poll(int sfd);
 
 		#pragma endregion methods
 		//==========================================================//
