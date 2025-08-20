@@ -53,13 +53,13 @@ void	Server::init_serv()
 		return;
 	}
 	// Je comprends pas a quoi sert cette ligne en sah mais askip c'est important
-	// int opt = 1;
-	// if (setsockopt(serv_sfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
-	// {
-	// 	std::cerr << "[ERROR] Failed to set socket options: " << strerror(errno) << std::endl;
-	// 	close(serv_sfd);
-	// 	return;
-	// }
+	int opt = 1;
+	if (setsockopt(serv_sfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
+	{
+		std::cerr << "[ERROR] Failed to set socket options: " << strerror(errno) << std::endl;
+		close(serv_sfd);
+		return;
+	}
 	if (bind(serv_sfd, (sockaddr*)&s_addr, sizeof(s_addr)) == -1)
 	{
 		std::cerr << "[ERROR] Failed to bind socket: " << strerror(errno) << std::endl;
@@ -72,7 +72,6 @@ void	Server::init_serv()
 		close(serv_sfd);
 		return;
 	}
-	std::cout << "Server socket init successfull on port " << port << std::endl;
 
 	pollfd	tmp;
 
@@ -80,7 +79,7 @@ void	Server::init_serv()
 	tmp.events = POLLIN;
 	tmp.revents = 0; 
 	v_sfd.push_back(tmp);
-	std::cout << "Server socker added to poll vector" << std::endl;
+	std::cout << "Server initialized successfully on port " << port << std::endl;
 }
 
 void	Server::loop()
@@ -93,14 +92,14 @@ void	Server::loop()
 		if (poll(v_sfd.data(), v_sfd.size(), -1) == -1)
 			throw std::runtime_error("poll failed");
 		std::cout << "Poll returned, checking for events...\n";
-		for (std::vector<pollfd>::iterator it = v_sfd.begin(); it != v_sfd.end(); it++)
+		for (int i = 0; i < v_sfd.size(); i++)
 		{
-			if (it->revents & POLLIN) // There is data to read
+			if (v_sfd[i].revents & POLLIN)		// There is data to read
 			{
-				if (it->fd == serv_sfd) // Nouvelle requete de connexion d'un client
+				if (v_sfd[i].fd == serv_sfd)	// Nouvelle requete de connexion d'un client
 					accept_new_connection();
-				else					// Un client deja co veux interagir
-					handle_client(it->fd);
+				else							// Un client deja co veux interagir
+					handle_client(v_sfd[i].fd);
 			}
 		}
 	}
@@ -113,49 +112,49 @@ void	Server::accept_new_connection()
 	socklen_t	size;
 	pollfd		newClient;
 
-	// Accept ALL pending connections in a loop
-	// On est sur de faire ca ? Ou on accepte juste les connexions une par une
-	while (true)
+	std::cout << "Accepting new connection...\n";
+	size = sizeof(cli_addr);
+	cli_sfd = accept(serv_sfd, (sockaddr *)&cli_addr, &size);
+	if (cli_sfd == -1)
 	{
-		std::cout << "Accepting new connection...\n";
-		size = sizeof(cli_addr);
-		cli_sfd = accept(serv_sfd, (sockaddr *)&cli_addr, &size);
-		if (cli_sfd == -1)
+		if (errno == EAGAIN || errno == EWOULDBLOCK)
 		{
-			if (errno == EAGAIN || errno == EWOULDBLOCK)
-			{
-				std::cout << "No more pending connections.\n";
-				break; // No more connections to accept
-			}
-			std::cerr << "[ERROR] Failed to accept new connection: " << strerror(errno) << std::endl;
-			throw std::runtime_error("client connexion: accept() failed");
+			std::cout << "No pending connection to accept\n";
+			return; // No pending connections
 		}
-		std::cout << "New connection accepted\n";
-		newClient.fd = cli_sfd;
-		newClient.events = POLLIN;
-		newClient.revents = 0;
-		v_sfd.push_back(newClient);
-		std::cout << "New client socket fd added to poll vector\n";
+		std::cerr << "[ERROR] Failed to accept new connection: " << strerror(errno) << std::endl;
+		throw std::runtime_error("client connexion: accept() failed");
 	}
+	std::cout << "New connection accepted (fd: " << cli_sfd << ")\n";
+	newClient.fd = cli_sfd;
+	newClient.events = POLLIN;
+	newClient.revents = 0;
+	v_sfd.push_back(newClient);
 }
 
 void	Server::handle_client(int cli_sfd)
 {
-	int			size;
 	char		buffer[BUFFER_SIZE];
+	int			size;
 
-	std::cout << "Handling client msg\n";
+	std::cout << "Handling client msg (fd: " << cli_sfd << ")\n";
 	memset((void *)buffer, 0, sizeof(buffer));
-	while ((size = recv(cli_sfd, buffer, BUFFER_SIZE - 1, 0) > 0))
+	
+	while ((size = recv(cli_sfd, buffer, BUFFER_SIZE - 1, 0)) > 0)
 	{
+		buffer[size] = '\0';
 		std::cout << "Size = " << size << "\nReceived = " << buffer << std::endl;
+
 	}
-	if (size <= 0)
+	if (size == 0)
 	{
-		if (size == -1)
-			std::cerr << "[ERROR] recv(failed)\n";
-		if (size == 0)
-			std::cout << "EOF reached\n";
+		std::cout << "Client disconnected (EOF)\n";
+		remove_from_poll(cli_sfd);
+		close(cli_sfd);
+	}
+	else
+	{
+		std::cout << "Client disconnected (error): " << strerror(errno) << "\n";
 		remove_from_poll(cli_sfd);
 		close(cli_sfd);
 	}
@@ -163,18 +162,17 @@ void	Server::handle_client(int cli_sfd)
 
 void	Server::remove_from_poll(int sfd)
 {
-	for (std::vector<pollfd>::iterator it = v_sfd.begin(); it != v_sfd.end(); it++)
+	// Index-based (always safe)
+	for (size_t i = 0; i < v_sfd.size(); i++)
 	{
-		if (it->fd == sfd)
-		{
-			v_sfd.erase(it);
-			std::cout << "Client sfd removed from v_sfd\n";
-			return ;
-		}
+  		if (v_sfd[i].fd == sfd)
+    	{
+        	v_sfd.erase(v_sfd.begin() + i);
+        	std::cout << "Client sfd removed from v_sfd\n";
+        	return;
+    	}
 	}
 }
-
-
 
 #pragma endregion methods
 //================================================================================================//

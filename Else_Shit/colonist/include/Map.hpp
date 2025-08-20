@@ -17,14 +17,11 @@ class Map
 			size_t				map_size;
 			std::vector<Tile>	v_map;	
 
-
 		#pragma endregion attributes
 		//==========================================================//
 
 		//========================================= METHODS ========//
 		#pragma region pmethods
-
-			int	str_to_type(std::string abrev);
 
 		#pragma endregion pmethods
 		//==========================================================//

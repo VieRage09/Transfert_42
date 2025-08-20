@@ -1,8 +1,7 @@
-- Regler segfault -> A cause de handle client, surement le erase qui fait foirer la boucle dans loop
-- Creer une methode create_pollfd_struct
 
+- Creer une methode create_pollfd_struct
 - Gerer l'arret du serv proprement via SIGNALS
 
-DANS HANDLE_CLIENT:
+- Afin d'etre sur d'etre bien co au serv, irssi attends une reponse du serveur
 
--> Gerer lorsque le socket envoie EOF
+- Faire la gestion du buffer du client et tout ca, un buffer de receive et un d'envoi pour chaque nouveau client
