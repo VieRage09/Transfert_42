@@ -3,7 +3,9 @@
 //============================================================ CONSTRUCTORS & DESTRUCTORS ========//
 #pragma region constructors
 
-Server::Server() : port(6667), password("Password1!"), serv_sfd(-1), v_sfd()
+bool Server::signal = false;
+
+Server::Server() : port(6667), password("Password1!"), serv_sfd(-1), v_sfd(), clients()
 {
 	// sfd to -1 because serv socket is not initialized yet
 	s_addr.sin_family = AF_INET;
@@ -19,7 +21,7 @@ Server::Server() : port(6667), password("Password1!"), serv_sfd(-1), v_sfd()
 // TODO: 
 // - Make sure port is valid for irc --> portno < 1000 ==> A verifier
 Server::Server(in_port_t port, std::string password) : port(port), password(password), serv_sfd(-1),
-	v_sfd()
+	v_sfd(), clients()
 {
 	s_addr.sin_family = AF_INET;
 	s_addr.sin_port = htons(port);
@@ -41,6 +43,12 @@ Server::~Server() {}
 
 //=============================================================================== METHODS ========//
 #pragma region methods
+
+void	Server::handle_signal(int sig)
+{
+	std::cout << "Signal received: " << sig << std::endl;
+	signal = true;
+}
 
 // Creates a server socket, binds it to the specified port and starts listening for incoming connections
 // Also adds it as the first sfd of v_poll_sfd
@@ -66,7 +74,7 @@ void	Server::init_serv()
 		close(serv_sfd);
 		return;
 	}
-	if (listen(serv_sfd, SOMAXCONN) == -1)
+	if (listen(serv_sfd, SOMAXCONN) == -1) //Cb de max connexions ?
 	{
 		std::cerr << "[ERROR] Failed to listen on socket: " << strerror(errno) << std::endl;
 		close(serv_sfd);
@@ -85,11 +93,11 @@ void	Server::init_serv()
 void	Server::loop()
 {
 	std::cout << "Engaging server loop ...\n";
-	while (true) // Ajouter de la gestion de signal 
+	while (Server::signal == false) // Ajouter de la gestion de signal 
 	{
 		// Le programme est bloque ici par poll jusqu'a ce qu'une operation soit possible 
 		// sur un des sfd de v_sfd
-		if (poll(v_sfd.data(), v_sfd.size(), -1) == -1)
+		if (poll(v_sfd.data(), v_sfd.size(), -1) == -1 && Server::signal == false)
 			throw std::runtime_error("poll failed");
 		std::cout << "Poll returned, checking for events...\n";
 		for (int i = 0; i < v_sfd.size(); i++)
@@ -110,7 +118,7 @@ void	Server::accept_new_connection()
 	int			cli_sfd;
 	sockaddr_in	cli_addr;
 	socklen_t	size;
-	pollfd		newClient;
+	pollfd		newPoll;
 
 	std::cout << "Accepting new connection...\n";
 	size = sizeof(cli_addr);
@@ -126,10 +134,13 @@ void	Server::accept_new_connection()
 		throw std::runtime_error("client connexion: accept() failed");
 	}
 	std::cout << "New connection accepted (fd: " << cli_sfd << ")\n";
-	newClient.fd = cli_sfd;
-	newClient.events = POLLIN;
-	newClient.revents = 0;
-	v_sfd.push_back(newClient);
+	newPoll.fd = cli_sfd;
+	newPoll.events = POLLIN;
+	newPoll.revents = 0;
+	v_sfd.push_back(newPoll);
+
+	Client		newClient(cli_sfd);
+	clients.push_back(newClient);
 }
 
 void	Server::handle_client(int cli_sfd)
@@ -140,7 +151,7 @@ void	Server::handle_client(int cli_sfd)
 	std::cout << "Handling client msg (fd: " << cli_sfd << ")\n";
 	memset((void *)buffer, 0, sizeof(buffer));
 	
-	while ((size = recv(cli_sfd, buffer, BUFFER_SIZE - 1, 0)) > 0)
+	while ((size = recv(cli_sfd, buffer, BUFFER_SIZE - 1, 0)) > 0 && Server::signal == false)
 	{
 		buffer[size] = '\0';
 		std::cout << "Size = " << size << "\nReceived = " << buffer << std::endl;

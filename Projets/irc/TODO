@@ -1,6 +1,6 @@
 
 - Creer une methode create_pollfd_struct
-- Gerer l'arret du serv proprement via SIGNALS
+- Gerer l'arret du serv proprement via SIGNALS + gerer la fermeture des sfd proprement
 
 - Afin d'etre sur d'etre bien co au serv, irssi attends une reponse du serveur
 

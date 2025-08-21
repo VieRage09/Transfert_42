@@ -1,39 +1,18 @@
-#ifndef	SERVER_HPP
-#define	SERVER_HPP
+#ifndef	CLIENT_HPP
+#define	CLIENT_HPP
 
 // includes //
 #include "ircserv.hpp"
 
-#include <iostream>
-#include <vector>
-
-#include <sys/socket.h> // for socket, bind, listen
-#include <netinet/in.h> // for sockaddr_in
-#include <unistd.h> // for close
-#include <poll.h>	// for poll duh
-
-#include <string.h> // for strerror
-#include <signal.h> // for interuption
-
-
-class Client;
-
-class Server
+class Client
 {
 	private:
 		//====================================== ATTRIBUTES ========//
 		#pragma region attributes 
 
-			static bool							signal;
-
-			in_port_t						port;
-			std::string						password;
-			sockaddr_in						s_addr;
-			int								serv_sfd;
-
-			std::vector<pollfd>				v_sfd; // Contient les sfd des client connectes ainsi que celui du serv(en premiere pos)
-			std::vector<Client>				clients;
-
+			int								sfd;
+			char							send_buff[BUFFER_SIZE];
+			char							recv_buff[BUFFER_SIZE];
 
 		#pragma endregion attributes
 		//==========================================================//
@@ -42,10 +21,9 @@ class Server
 		//============================= CONST & DESTRUCTORS ========//
 		#pragma region constructors
 
-			Server();
-			Server(in_port_t port, std::string password);
-			Server(const Server& copy);
-			~Server();
+			Client( int sfd );
+			Client(const Client& copy);
+			~Client();
 
 		#pragma endregion attributes
 		//==========================================================//
@@ -53,23 +31,13 @@ class Server
 		//========================================= METHODS ========//
 		#pragma region methods
 
-			static void	handle_signal(int sig);
-
-			void		init_serv();
-			void		loop();
-
-			void		accept_new_connection();
-			void		handle_client(int cli_sfd);
-
-			void		remove_from_poll(int sfd);
-
 		#pragma endregion methods
 		//==========================================================//
 
 		//======================================= OPERATORS ========//
 		#pragma region methods
 
-			Server&	operator = (const Server& copy);
+			Client&	operator = (const Client& copy);
 
 		#pragma endregion methods
 		//==========================================================//
@@ -77,10 +45,9 @@ class Server
 		//========================================= GETTERS ========//
 		#pragma region getters 
 
-			const in_port_t&		getport() const;
-			const std::string&		getpassword() const;
-			const sockaddr_in&		gets_addr() const;
-			const int&				getserv_sfd() const;
+			const int&			get_sfd() const;
+			const char&			get_send_buff() const;
+			const char&			get_recv_buff() const;
 
 		#pragma endregion getters
 		//==========================================================//
@@ -88,9 +55,13 @@ class Server
 		//========================================= SETTERS ========//
 		#pragma region setters
 
+			void				set_sfd(int& value);
+			void				set_send_buff(const char* value); // pas sur du type
+			void				set_recv_buff(const char* value);
+
 		#pragma endregion setters
 		//==========================================================//
 
 };
 
-#endif // SERVER_HPP
+#endif // CLIENT_HPP
