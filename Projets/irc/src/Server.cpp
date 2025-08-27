@@ -20,6 +20,7 @@ Server::Server() : port(6667), password("Password1!"), serv_sfd(-1), v_poll(), v
 
 // TODO: 
 // - Make sure port is valid for irc --> portno < 1000 ==> A verifier
+// - Politique de mdp ? en vrai balec non ?
 Server::Server(in_port_t port, std::string password) : port(port), password(password), serv_sfd(-1),
 	v_poll(), v_clients()
 {
@@ -50,6 +51,130 @@ Server::~Server() {}
 #pragma endregion constructors
 //================================================================================================//
 
+//======================================================================= PRIVATE METHODS ========//
+#pragma region pmethods
+
+void	Server::accept_client()
+{
+	int			cli_sfd;
+	sockaddr_in	cli_addr;
+	socklen_t	size;
+	pollfd		newPoll;
+
+	std::cout << "Accepting new connection...\n";
+	size = sizeof(cli_addr);
+	cli_sfd = accept(serv_sfd, (sockaddr *)&cli_addr, &size);
+	if (cli_sfd == -1)
+	{
+		if (errno == EAGAIN || errno == EWOULDBLOCK)
+		{
+			std::cout << "No pending connection to accept\n";
+			return; // No pending connections
+		}
+		std::cerr << "[ERROR] Failed to accept new connection: " << strerror(errno) << std::endl;
+		throw std::runtime_error("client connexion: accept() failed");
+	}
+	std::cout << "New connection accepted (fd: " << cli_sfd << ")\n";
+	newPoll.fd = cli_sfd;
+	newPoll.events = POLLIN;
+	newPoll.revents = 0;
+	v_poll.push_back(newPoll);
+
+	v_clients.push_back(Client(cli_sfd));
+}
+
+void	Server::parser(char *buffer, size_t size, std::string & tmp)
+{
+	std::string	line;
+
+	buffer[size] = '\0';
+	std::cout << "Size = " << size << "\nReceived = " << buffer << std::endl;
+	tmp += buffer;
+	if (tmp.find("\r\n") != std::string::npos) // \r\n present dans buff
+	{
+		while (tmp.find("\r\n") != std::string::npos)
+		{
+			if (tmp.find("\r\n") == tmp.size() - 2) // \r\n a la fin de buffer --> append a line + execution
+			{
+				line += tmp;
+				// Execution ou envoie en file d'attente
+				std::cout << "Executing: " << line << std::endl;
+				line.clear();
+				tmp.clear();
+			}
+			else
+			{
+				line += tmp.substr(0, tmp.find("\r\n"));
+				// Execution ou envoie en file d'attente
+				std::cout << "Execute: " << line << std::endl;
+				line.clear();
+				tmp = tmp.substr(tmp.find("\r\n") + 2);
+			}
+		}
+	}
+	else // pas de \r\n --> On append a line
+	{
+		line += tmp;
+		tmp.clear();
+	}
+}
+
+void	Server::handle_client(int cli_sfd)
+{
+	char		buffer[BUFFER_SIZE];
+	int			size;
+	std::string	tmp;
+
+	std::cout << "Handling client msg (fd: " << cli_sfd << ")\n";
+	memset((void *)buffer, 0, sizeof(buffer));
+	
+	while ((size = recv(cli_sfd, buffer, BUFFER_SIZE - 1, MSG_DONTWAIT)) > 0 && Server::signal == false)
+	{
+		parser(buffer, size, tmp);
+	}
+	if (size == 0)
+	{
+		std::cout << "Client disconnected (EOF)\n";
+		close(cli_sfd);
+		remove_client(cli_sfd);
+	}
+	else if (errno == EAGAIN || errno == EWOULDBLOCK)
+	{
+		std::cout << "Nothing to read anymore\n";
+		return;
+	}
+	else
+	{
+		std::cout << "Client disconnected (error): " << strerror(errno) << "\n";
+		close(cli_sfd);
+		remove_client(cli_sfd);
+	}
+}
+
+// Surement obsolete si Registery
+void	Server::remove_client(int sfd)
+{
+	for (size_t i = 0; i < v_poll.size(); i++)
+	{
+  		if (v_poll[i].fd == sfd)
+    	{
+        	v_poll.erase(v_poll.begin() + i);
+        	return;
+    	}
+	}
+	for (size_t i = 0; i < v_clients.size(); i++)
+	{
+  		if (v_clients[i].get_sfd() == sfd)
+    	{
+        	v_clients.erase(v_clients.begin() + i);
+        	return;
+    	}
+	}
+    std::cout << "Client removed\n";
+}
+
+#pragma endregion pmethods
+//================================================================================================//
 
 //=============================================================================== METHODS ========//
 #pragma region methods
@@ -124,123 +249,6 @@ void	Server::loop()
 			}
 		}
 	}
-}
-
-void	Server::accept_client()
-{
-	int			cli_sfd;
-	sockaddr_in	cli_addr;
-	socklen_t	size;
-	pollfd		newPoll;
-
-	std::cout << "Accepting new connection...\n";
-	size = sizeof(cli_addr);
-	cli_sfd = accept(serv_sfd, (sockaddr *)&cli_addr, &size);
-	if (cli_sfd == -1)
-	{
-		if (errno == EAGAIN || errno == EWOULDBLOCK)
-		{
-			std::cout << "No pending connection to accept\n";
-			return; // No pending connections
-		}
-		std::cerr << "[ERROR] Failed to accept new connection: " << strerror(errno) << std::endl;
-		throw std::runtime_error("client connexion: accept() failed");
-	}
-	std::cout << "New connection accepted (fd: " << cli_sfd << ")\n";
-	newPoll.fd = cli_sfd;
-	newPoll.events = POLLIN;
-	newPoll.revents = 0;
-	v_poll.push_back(newPoll);
-
-	v_clients.push_back(Client(cli_sfd));
-}
-
-void	Server::handle_client(int cli_sfd)
-{
-	char		buffer[BUFFER_SIZE];
-	int			size;
-	std::string	line;
-	std::string	tmp;
-
-	std::cout << "Handling client msg (fd: " << cli_sfd << ")\n";
-	memset((void *)buffer, 0, sizeof(buffer));
-	
-	while ((size = recv(cli_sfd, buffer, BUFFER_SIZE - 1, MSG_DONTWAIT)) > 0 && Server::signal == false)
-	{
-		std::cout << "========== Analysis =========\n\n\n";
-		buffer[size] = '\0';
-		std::cout << "Size = " << size << "\nReceived = " << buffer << std::endl;
-		tmp += buffer;
-		if (tmp.find("\r\n") != std::string::npos) // \r\n present dans buff
-		{
-			std::cout << "\\n found\n";
-			while (tmp.find("\r\n") != std::string::npos)
-			{
-				std::cout << "=== TMP ===\n" << tmp << std::endl;
-				if (tmp.find("\r\n") == tmp.size() - 2) // \r\n a la fin de buffer --> append a line + execution
-				{
-					line += tmp;
-					// Execution ou envoie en file d'attente
-					std::cout << "Executing: " << line << std::endl;
-					line.clear();
-					tmp.clear();
-				}
-				else
-				{
-					line += tmp.substr(0, tmp.find("\r\n"));
-					// Execution ou envoie en file d'attente
-					std::cout << "Execute: " << line << std::endl;
-					line.clear();
-					tmp = tmp.substr(tmp.find("\r\n") + 2);
-				}
-			}
-
-		}
-		else // pas de \r\n --> On append a line
-		{
-			line += tmp;
-			tmp.clear();
-		}
-	}
-	if (size == 0)
-	{
-		std::cout << "Client disconnected (EOF)\n";
-		close(cli_sfd);
-		remove_client(cli_sfd);
-	}
-	else if (errno == EAGAIN || errno == EWOULDBLOCK)
-	{
-		std::cout << "Nothing to read anymore\n";
-		return;
-	}
-	else
-	{
-		std::cout << "Client disconnected (error): " << strerror(errno) << "\n";
-		close(cli_sfd);
-		remove_client(cli_sfd);
-	}
-}
-
-// Surement obsolete si Registery
-void	Server::remove_client(int sfd)
-{
-	for (size_t i = 0; i < v_poll.size(); i++)
-	{
-  		if (v_poll[i].fd == sfd)
-    	{
-        	v_poll.erase(v_poll.begin() + i);
-        	return;
-    	}
-	}
-	for (size_t i = 0; i < v_clients.size(); i++)
-	{
-  		if (v_clients[i].get_sfd() == sfd)
-    	{
-        	v_clients.erase(v_clients.begin() + i);
-        	return;
-    	}
-	}
-    std::cout << "Client removed\n";
 }
 
 // Close all sockets present inside v_poll

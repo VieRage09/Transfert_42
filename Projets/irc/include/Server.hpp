@@ -17,6 +17,7 @@
 
 
 class Client;
+class Registry;
 
 class Server
 {
@@ -34,8 +35,19 @@ class Server
 			std::vector<pollfd>				v_poll; // Contient les sfd des client connectes ainsi que celui du serv(en premiere pos)
 			std::vector<Client>				v_clients; // A remplacer par registery
 
-
 		#pragma endregion attributes
+		//==========================================================//
+
+		//================================= PRIVATE METHODS ========//
+		#pragma region pmethods 
+			void		accept_client();
+
+			void		parser(char *buffer, size_t size, std::string & tmp);
+			void		handle_client(int cli_sfd);
+
+			void		remove_client(int sfd);
+
+		#pragma endregion pmethods 
 		//==========================================================//
 
 	public:
@@ -57,11 +69,6 @@ class Server
 
 			void		init_serv();
 			void		loop();
-
-			void		accept_client();
-			void		handle_client(int cli_sfd);
-
-			void		remove_client(int sfd);
 
 			void		close_poll_sockets();
 

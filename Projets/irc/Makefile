@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/08/27 12:37:27 by tlebon           ###   ########.fr        #
+#    Updated: 2025/08/27 18:04:28 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,9 +70,6 @@ MAIN_CLI	= $(SRC_CLIENT)main_cli.cpp
 
 clitest: $(MAIN_CLI)
 	$(CC) $(CFLAGS) $(MAIN_CLI) -o irccli 
-
-test: test/test.cpp
-	$(CC) $(CFLAGS) test/test.cpp -o testexe
 #------------------------------------------------------------------------------#
 
 #-------------------------------------------------------JOIE EPHEMERE----------#
