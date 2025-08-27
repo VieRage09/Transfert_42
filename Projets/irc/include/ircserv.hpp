@@ -8,5 +8,8 @@
 #include "Server.hpp"
 #include "Client.hpp"
 
+// A recheck
+#include <stdlib.h>
+#include <errno.h>
 
 #endif

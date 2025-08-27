@@ -6,7 +6,7 @@
 /*   By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 19:25:26 by tlebon            #+#    #+#             */
-/*   Updated: 2025/08/17 21:00:12 by tlebon           ###   ########.fr       */
+/*   Updated: 2025/08/27 14:04:58 by tlebon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <netinet/in.h>
 
 #include <unistd.h>
+#include <stdlib.h>
 
 int		ret_error(std::string err_msg, int ret)
 {
@@ -40,7 +41,7 @@ int	main(int ac, char ** av)
 		return (1);
 	}
 
-	in_port_t port = std::stoi(av[1]);
+	in_port_t port = atoi(av[1]);
 
 	std::cout << "Cli port = " << port << std::endl;
 	
@@ -56,11 +57,18 @@ int	main(int ac, char ** av)
 		return (ret_error("cli connect failed", 1));
 	std::cout << "Connection established\n";
 
-	char	*buffer = av[2];
-	size_t	size_sent = send(cli_side_sfd, buffer, strlen(buffer), 0);
-	if (size_sent < 0)
-		return (ret_error("send failed", 1));
-	std::cout << "Size sent = " << size_sent << std::endl;
+	std::string buffer;
+	// while (1)
+	// {
+		// std::cout << "Type in what you want to send: ";
+		// std::cin >> buffer;
+		buffer = "salut\nJe\nSuis\nUn\nGnome";
+		size_t	size_sent = send(cli_side_sfd, buffer.c_str(), buffer.size(), 0);
+		if (size_sent < 0)
+			return (ret_error("send failed", 1));
+		std::cout << "Size sent = " << size_sent << std::endl;
+	// }
+	
 
 	if (close(cli_side_sfd) < 0)
 		return (ret_error("close failed", 1));

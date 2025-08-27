@@ -1,7 +1,34 @@
-
-- Creer une methode create_pollfd_struct
-- Gerer l'arret du serv proprement via SIGNALS + gerer la fermeture des sfd proprement
-
 - Afin d'etre sur d'etre bien co au serv, irssi attends une reponse du serveur
-
 - Faire la gestion du buffer du client et tout ca, un buffer de receive et un d'envoi pour chaque nouveau client
+
+
+- Dans accept_client: Check si le nombre de co ne depasse pas le nombre max
+
+
+
+
+
+// PDF
+
+	- Init logger --> Est ce necessaire ? Check sujet
+	- Registery
+	- HandleReadable()
+	- HandleWritable()
+
+
+
+
+
+
+Avant de rendre:
+--> Check leaks
+--> Check librairie utiles ou non et si il existe un equivalent cpp
+
+======= Check le protocol irc (doc) =======
+ex:
+   Because of IRC's Scandinavian origin, the characters {}|^ are
+   considered to be the lower case equivalents of the characters []\~,
+   respectively. This is a critical issue when determining the
+   equivalence of two nicknames or channel names.
+
+   --> BUFFER_SIZE a check

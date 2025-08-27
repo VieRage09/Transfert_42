@@ -5,7 +5,7 @@
 
 bool Server::signal = false;
 
-Server::Server() : port(6667), password("Password1!"), serv_sfd(-1), v_sfd(), clients()
+Server::Server() : port(6667), password("Password1!"), serv_sfd(-1), v_poll(), v_clients()
 {
 	// sfd to -1 because serv socket is not initialized yet
 	s_addr.sin_family = AF_INET;
@@ -21,7 +21,7 @@ Server::Server() : port(6667), password("Password1!"), serv_sfd(-1), v_sfd(), cl
 // TODO: 
 // - Make sure port is valid for irc --> portno < 1000 ==> A verifier
 Server::Server(in_port_t port, std::string password) : port(port), password(password), serv_sfd(-1),
-	v_sfd(), clients()
+	v_poll(), v_clients()
 {
 	s_addr.sin_family = AF_INET;
 	s_addr.sin_port = htons(port);
@@ -33,7 +33,17 @@ Server::Server(in_port_t port, std::string password) : port(port), password(pass
 				<< "\n- IPv4\n";
 }
 
-Server::Server(const Server& copy) {}
+Server::Server(const Server& copy) : port(copy.port), password(copy.password), serv_sfd(copy.serv_sfd), v_poll(copy.v_poll), v_clients(copy.v_clients)
+{
+	s_addr.sin_family = copy.s_addr.sin_family;
+	s_addr.sin_port = htons(copy.s_addr.sin_port);
+	s_addr.sin_addr.s_addr = copy.s_addr.sin_addr.s_addr; // A bien check --> socket will be bound to all available
+	// network intercaces on the host => Peut etre bancal
+	std::cout	<< "Server instance copied with success:"
+				<< "\n- Port = " << this->port
+				<< "\n- Password = " << this->password
+				<< "\n- IPv4\n";
+}
 
 Server::~Server() {}
 
@@ -86,34 +96,37 @@ void	Server::init_serv()
 	tmp.fd = serv_sfd;
 	tmp.events = POLLIN;
 	tmp.revents = 0; 
-	v_sfd.push_back(tmp);
+	v_poll.push_back(tmp);
 	std::cout << "Server initialized successfully on port " << port << std::endl;
 }
 
+// Main loop of the program
+// Until SIGSTOP or SIGINT is received, uses poll to handle events of open sfd
+// or accept new connections
 void	Server::loop()
 {
 	std::cout << "Engaging server loop ...\n";
-	while (Server::signal == false) // Ajouter de la gestion de signal 
+	while (Server::signal == false)
 	{
 		// Le programme est bloque ici par poll jusqu'a ce qu'une operation soit possible 
 		// sur un des sfd de v_sfd
-		if (poll(v_sfd.data(), v_sfd.size(), -1) == -1 && Server::signal == false)
+		if (poll(v_poll.data(), v_poll.size(), -1) == -1 && Server::signal == false)
 			throw std::runtime_error("poll failed");
 		std::cout << "Poll returned, checking for events...\n";
-		for (int i = 0; i < v_sfd.size(); i++)
+		for (size_t i = 0; i < v_poll.size(); i++)
 		{
-			if (v_sfd[i].revents & POLLIN)		// There is data to read
+			if (v_poll[i].revents & POLLIN)		// There is data to read
 			{
-				if (v_sfd[i].fd == serv_sfd)	// Nouvelle requete de connexion d'un client
-					accept_new_connection();
+				if (v_poll[i].fd == serv_sfd)	// Nouvelle requete de connexion d'un client
+					accept_client();
 				else							// Un client deja co veux interagir
-					handle_client(v_sfd[i].fd);
+					handle_client(v_poll[i].fd);
 			}
 		}
 	}
 }
 
-void	Server::accept_new_connection()
+void	Server::accept_client()
 {
 	int			cli_sfd;
 	sockaddr_in	cli_addr;
@@ -137,52 +150,107 @@ void	Server::accept_new_connection()
 	newPoll.fd = cli_sfd;
 	newPoll.events = POLLIN;
 	newPoll.revents = 0;
-	v_sfd.push_back(newPoll);
+	v_poll.push_back(newPoll);
 
-	Client		newClient(cli_sfd);
-	clients.push_back(newClient);
+	v_clients.push_back(Client(cli_sfd));
 }
 
 void	Server::handle_client(int cli_sfd)
 {
 	char		buffer[BUFFER_SIZE];
 	int			size;
+	std::string	line;
+	std::string	tmp;
 
 	std::cout << "Handling client msg (fd: " << cli_sfd << ")\n";
 	memset((void *)buffer, 0, sizeof(buffer));
 	
-	while ((size = recv(cli_sfd, buffer, BUFFER_SIZE - 1, 0)) > 0 && Server::signal == false)
+	while ((size = recv(cli_sfd, buffer, BUFFER_SIZE - 1, MSG_DONTWAIT)) > 0 && Server::signal == false)
 	{
+		std::cout << "========== Analysis =========\n\n\n";
 		buffer[size] = '\0';
 		std::cout << "Size = " << size << "\nReceived = " << buffer << std::endl;
+		tmp += buffer;
+		if (tmp.find("\r\n") != std::string::npos) // \r\n present dans buff
+		{
+			std::cout << "\\n found\n";
+			while (tmp.find("\r\n") != std::string::npos)
+			{
+				std::cout << "=== TMP ===\n" << tmp << std::endl;
+				if (tmp.find("\r\n") == tmp.size() - 2) // \r\n a la fin de buffer --> append a line + execution
+				{
+					line += tmp;
+					// Execution ou envoie en file d'attente
+					std::cout << "Executing: " << line << std::endl;
+					line.clear();
+					tmp.clear();
+				}
+				else
+				{
+					line += tmp.substr(0, tmp.find("\r\n"));
+					// Execution ou envoie en file d'attente
+					std::cout << "Execute: " << line << std::endl;
+					line.clear();
+					tmp = tmp.substr(tmp.find("\r\n") + 2);
+				}
+			}
 
+		}
+		else // pas de \r\n --> On append a line
+		{
+			line += tmp;
+			tmp.clear();
+		}
 	}
 	if (size == 0)
 	{
 		std::cout << "Client disconnected (EOF)\n";
-		remove_from_poll(cli_sfd);
 		close(cli_sfd);
+		remove_client(cli_sfd);
+	}
+	else if (errno == EAGAIN || errno == EWOULDBLOCK)
+	{
+		std::cout << "Nothing to read anymore\n";
+		return;
 	}
 	else
 	{
 		std::cout << "Client disconnected (error): " << strerror(errno) << "\n";
-		remove_from_poll(cli_sfd);
 		close(cli_sfd);
+		remove_client(cli_sfd);
 	}
 }
 
-void	Server::remove_from_poll(int sfd)
+// Surement obsolete si Registery
+void	Server::remove_client(int sfd)
 {
-	// Index-based (always safe)
-	for (size_t i = 0; i < v_sfd.size(); i++)
+	for (size_t i = 0; i < v_poll.size(); i++)
 	{
-  		if (v_sfd[i].fd == sfd)
+  		if (v_poll[i].fd == sfd)
     	{
-        	v_sfd.erase(v_sfd.begin() + i);
-        	std::cout << "Client sfd removed from v_sfd\n";
+        	v_poll.erase(v_poll.begin() + i);
         	return;
     	}
 	}
+	for (size_t i = 0; i < v_clients.size(); i++)
+	{
+  		if (v_clients[i].get_sfd() == sfd)
+    	{
+        	v_clients.erase(v_clients.begin() + i);
+        	return;
+    	}
+	}
+    std::cout << "Client removed\n";
+}
+
+// Close all sockets present inside v_poll
+void	Server::close_poll_sockets()
+{
+	for (size_t i = 0; i < v_poll.size(); i++)
+	{
+		close(v_poll[i].fd);
+	}
+	std::cout << "All sockets closed\n";
 }
 
 #pragma endregion methods
@@ -208,10 +276,10 @@ Server& Server::operator = (const Server& copy)
 //=============================================================================== GETTERS ========//
 #pragma region getters
 
-const in_port_t&	Server::getport() const { return ( port );}
-const std::string&	Server::getpassword() const { return ( password );}
-const sockaddr_in&	Server::gets_addr() const { return ( s_addr );}
-const int&			Server::getserv_sfd() const { return ( serv_sfd );}
+const in_port_t&	Server::get_port() const { return ( port );}
+const std::string&	Server::get_password() const { return ( password );}
+const sockaddr_in&	Server::get_s_addr() const { return ( s_addr );}
+const int&			Server::get_serv_sfd() const { return ( serv_sfd );}
 
 #pragma endregion getters
 //================================================================================================//

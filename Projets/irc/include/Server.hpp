@@ -31,8 +31,8 @@ class Server
 			sockaddr_in						s_addr;
 			int								serv_sfd;
 
-			std::vector<pollfd>				v_sfd; // Contient les sfd des client connectes ainsi que celui du serv(en premiere pos)
-			std::vector<Client>				clients;
+			std::vector<pollfd>				v_poll; // Contient les sfd des client connectes ainsi que celui du serv(en premiere pos)
+			std::vector<Client>				v_clients; // A remplacer par registery
 
 
 		#pragma endregion attributes
@@ -58,10 +58,12 @@ class Server
 			void		init_serv();
 			void		loop();
 
-			void		accept_new_connection();
+			void		accept_client();
 			void		handle_client(int cli_sfd);
 
-			void		remove_from_poll(int sfd);
+			void		remove_client(int sfd);
+
+			void		close_poll_sockets();
 
 		#pragma endregion methods
 		//==========================================================//
@@ -77,10 +79,10 @@ class Server
 		//========================================= GETTERS ========//
 		#pragma region getters 
 
-			const in_port_t&		getport() const;
-			const std::string&		getpassword() const;
-			const sockaddr_in&		gets_addr() const;
-			const int&				getserv_sfd() const;
+			const in_port_t&		get_port() const;
+			const std::string&		get_password() const;
+			const sockaddr_in&		get_s_addr() const;
+			const int&				get_serv_sfd() const;
 
 		#pragma endregion getters
 		//==========================================================//

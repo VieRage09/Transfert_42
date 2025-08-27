@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/08/21 17:41:03 by tlebon           ###   ########.fr        #
+#    Updated: 2025/08/27 12:37:27 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,9 +49,9 @@ $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $@
 	@make --silent folie
 
-$(OBJ_PATH)%.o: $(SRC_PATH)%.cpp $(HDR)
+$(OBJ_PATH)%.o: %.cpp $(HDR)
 	@mkdir -p $(dir $@)
-	$(CC) -c $< -I $(HDR_PATH) -o $@
+	$(CC) $(CFLAGS) -c $< -I $(HDR_PATH) -o $@
 
 
 clean:
@@ -68,10 +68,11 @@ re: fclean all
 SRC_CLIENT	= client/
 MAIN_CLI	= $(SRC_CLIENT)main_cli.cpp
 
-client: clitest
-	./serv_test 4444 passwd &
 clitest: $(MAIN_CLI)
-	c++ -Wall -Wextra -Werror $(MAIN_CLI) -o ircclient
+	$(CC) $(CFLAGS) $(MAIN_CLI) -o irccli 
+
+test: test/test.cpp
+	$(CC) $(CFLAGS) test/test.cpp -o testexe
 #------------------------------------------------------------------------------#
 
 #-------------------------------------------------------JOIE EPHEMERE----------#
@@ -97,4 +98,4 @@ sweep:
 	@printf "                                                                                   /_/       ${RESET}\n"
 #------------------------------------------------------------------------------#
 
-.PHONY: all clean fclean re folie sweep
+.PHONY: all clean fclean re folie sweep test

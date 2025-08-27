@@ -2,8 +2,10 @@
 
 int	main(int ac, char **av)
 {
-	// Check inputs
-	Server serv(std::stoi(av[1]), av[2]);
+	if (ac != 3)
+		return (1);
+	// Check inputs + maybe changer atoi
+	Server serv(atoi(av[1]), av[2]);
 	
 	try
 	{
@@ -15,7 +17,10 @@ int	main(int ac, char **av)
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
+		serv.close_poll_sockets();
 		return (1);
 	}
+	serv.close_poll_sockets();
+	return (0);
 }
 	

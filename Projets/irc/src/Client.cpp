@@ -10,7 +10,13 @@ Client::Client(int sfd) : sfd(sfd)
 	std::cout << "Client instance created with sfd: " << sfd << std::endl;
 }
 
-Client::Client(const Client& copy) {}
+// A modifier --> Dans l'ideal on veut copier aussi les buffers
+Client::Client(const Client& copy) : sfd(copy.sfd)
+{
+	memset(send_buff, 0, BUFFER_SIZE);
+	memset(recv_buff, 0, BUFFER_SIZE);
+	std::cout << "Client instance copied with sfd: " << sfd << std::endl;
+}
 
 Client::~Client() {}
 
