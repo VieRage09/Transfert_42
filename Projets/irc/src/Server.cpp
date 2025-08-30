@@ -3,47 +3,43 @@
 //============================================================ CONSTRUCTORS & DESTRUCTORS ========//
 #pragma region constructors
 
-bool Server::signal = false;
+bool Server::_signal = false;
 
-Server::Server() : port(6667), password("Password1!"), serv_sfd(-1), v_poll(), v_clients()
+Server::Server() : _port(6667), _password("Password1!"), _serv_sfd(-1), _poll()
 {
 	// sfd to -1 because serv socket is not initialized yet
-	s_addr.sin_family = AF_INET;
-	s_addr.sin_port = htons(port);
-	s_addr.sin_addr.s_addr = INADDR_ANY; // A bien check --> socket will be bound to all available
+	_s_addr.sin_family = AF_INET;
+	_s_addr.sin_port = htons(_port);
+	_s_addr.sin_addr.s_addr = INADDR_ANY; // A bien check --> socket will be bound to all available
+	_s_addr.sin_addr.s_addr = INADDR_ANY; // A bien check --> socket will be bound to all available
 	// network interfaces on the host => Peut etre bancal
+	// _reg = new Registry();
 	std::cout	<< "Server instance created with success:\n"
-				<< "- Port = " << this->port
-				<< "- Password = " << this->password
+				<< "- Port = " << this->_port
+				<< "- Password = " << this->_password
 				<< "- IPv4";
 }
 
 // TODO: 
 // - Make sure port is valid for irc --> portno < 1000 ==> A verifier
 // - Politique de mdp ? en vrai balec non ?
-Server::Server(in_port_t port, std::string password) : port(port), password(password), serv_sfd(-1),
-	v_poll(), v_clients()
+Server::Server(in_port_t port, std::string password) : _port(port), _password(password), _serv_sfd(-1),
+	_poll()
 {
-	s_addr.sin_family = AF_INET;
-	s_addr.sin_port = htons(port);
-	s_addr.sin_addr.s_addr = INADDR_ANY; // A bien check --> socket will be bound to all available
+	_s_addr.sin_family = AF_INET;
+	_s_addr.sin_port = htons(_port);
+	_s_addr.sin_addr.s_addr = INADDR_ANY; // A bien check --> socket will be bound to all available
 	// network intercaces on the host => Peut etre bancal
+	// _reg = new Registry();
 	std::cout	<< "Server instance created with success:"
-				<< "\n- Port = " << this->port
-				<< "\n- Password = " << this->password
+				<< "\n- Port = " << this->_port
+				<< "\n- Password = " << this->_password
 				<< "\n- IPv4\n";
 }
 
-Server::Server(const Server& copy) : port(copy.port), password(copy.password), serv_sfd(copy.serv_sfd), v_poll(copy.v_poll), v_clients(copy.v_clients)
+Server::Server(const Server& copy)
 {
-	s_addr.sin_family = copy.s_addr.sin_family;
-	s_addr.sin_port = htons(copy.s_addr.sin_port);
-	s_addr.sin_addr.s_addr = copy.s_addr.sin_addr.s_addr; // A bien check --> socket will be bound to all available
-	// network intercaces on the host => Peut etre bancal
-	std::cout	<< "Server instance copied with success:"
-				<< "\n- Port = " << this->port
-				<< "\n- Password = " << this->password
-				<< "\n- IPv4\n";
+	_password = copy._password;
 }
 
 Server::~Server() {}
@@ -54,16 +50,56 @@ Server::~Server() {}
 //======================================================================= PRIVATE METHODS ========//
 #pragma region pmethods
 
+
+/**
+ * @brief Creates a new pollfd structure and pushes it to poll vector
+ * @param fd file descriptor associated to the socket
+ * @param events events we want to monitor
+ * @param revents returned event
+ */
+void		Server::push_new_poll(int fd, short events, short revents)
+{
+	pollfd		newPoll;
+
+	newPoll.fd = fd;
+	newPoll.events = events;
+	newPoll.revents = revents;
+	_poll.push_back(newPoll);
+}
+
+/**
+ * @brief Close the fd and delete the corresponding pollfd struct from _v_poll \
+ * @brief Prints to cerr if fd is not found
+ * @param fd the file descriptor associated to the socker of the client we want to close
+ * 
+ */
+void		Server::close_poll(int fd)
+{
+	close(fd);
+	for (std::vector<pollfd>::iterator it = _poll.begin(); it != _poll.end(); it++)
+	{
+		if (it->fd == fd)
+		{
+			_poll.erase(it);
+			return ;
+		}
+	}
+	std::cerr << "[ERROR] close_poll: fd not found" << std::endl;
+}
+
+/**
+ * @brief Accepts a new connection request and adds it to the poll vector \
+ * @brief Throw runtime_error on error 
+ */
 void	Server::accept_client()
 {
 	int			cli_sfd;
 	sockaddr_in	cli_addr;
 	socklen_t	size;
-	pollfd		newPoll;
 
-	std::cout << "Accepting new connection...\n";
+	std::cout << BLUE << "Accepting new connection..." << RESET << std::endl;
 	size = sizeof(cli_addr);
-	cli_sfd = accept(serv_sfd, (sockaddr *)&cli_addr, &size);
+	cli_sfd = accept(_serv_sfd, (sockaddr *)&cli_addr, &size);
 	if (cli_sfd == -1)
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK)
@@ -71,16 +107,10 @@ void	Server::accept_client()
 			std::cout << "No pending connection to accept\n";
 			return; // No pending connections
 		}
-		std::cerr << "[ERROR] Failed to accept new connection: " << strerror(errno) << std::endl;
-		throw std::runtime_error("client connexion: accept() failed");
+		std::cerr << "[ERROR] accept_client: Failed to accept new connection: " << strerror(errno) << std::endl;
 	}
-	std::cout << "New connection accepted (fd: " << cli_sfd << ")\n";
-	newPoll.fd = cli_sfd;
-	newPoll.events = POLLIN;
-	newPoll.revents = 0;
-	v_poll.push_back(newPoll);
-
-	v_clients.push_back(Client(cli_sfd));
+	push_new_poll(cli_sfd, POLLIN, 0);
+	// Ajouter au Registry via addClient + check mdp ?
 }
 
 void	Server::parser(char *buffer, size_t size, std::string & tmp)
@@ -119,24 +149,36 @@ void	Server::parser(char *buffer, size_t size, std::string & tmp)
 	}
 }
 
-void	Server::handle_client(int cli_sfd)
+/**
+ * @brief Uses recv to receive client msg:
+ * @brief - normal message --> Sends it to parser function
+ * @brief - EOF --> Closes server connection to that client
+ * @brief - error --> Closes server connection to that client
+ * @param fd file descriptor of the socket that received a msg (of the client)
+ */
+void	Server::handle_client(Client & cli)
 {
-	char		buffer[BUFFER_SIZE];
-	int			size;
-	std::string	tmp;
+	std::string str;
+	std::string line;
+	size_t		size;
+	char *		buff;
+	int			pos;
 
-	std::cout << "Handling client msg (fd: " << cli_sfd << ")\n";
-	memset((void *)buffer, 0, sizeof(buffer));
-	
-	while ((size = recv(cli_sfd, buffer, BUFFER_SIZE - 1, MSG_DONTWAIT)) > 0 && Server::signal == false)
+	std::cout << "Handling client msg (fd: " << cli.fd() << ")\n";
+	buff = cli.rBuff();
+	while ((size = recv(cli.fd(), buff, BUFFER_SIZE - 1, MSG_DONTWAIT)) > 0 && Server::_signal == false)
 	{
-		parser(buffer, size, tmp);
+		buff[size] = '\0';
+		str = buff;
+		while ((pos = str.find("\r\n")) != std::string::npos)
+		{
+		}
 	}
 	if (size == 0)
 	{
 		std::cout << "Client disconnected (EOF)\n";
-		close(cli_sfd);
-		remove_client(cli_sfd);
+		close_poll(cli.fd());
+		// _reg.removeClient(_reg.findClientByFd(cli_sfd));
 	}
 	else if (errno == EAGAIN || errno == EWOULDBLOCK)
 	{
@@ -146,31 +188,9 @@ void	Server::handle_client(int cli_sfd)
 	else
 	{
 		std::cout << "Client disconnected (error): " << strerror(errno) << "\n";
-		close(cli_sfd);
-		remove_client(cli_sfd);
+		close_poll(cli.fd());
+		// _reg.removeClient(_reg.findClientByFd(cli_sfd));
 	}
-}
-
-// Surement obsolete si Registery
-void	Server::remove_client(int sfd)
-{
-	for (size_t i = 0; i < v_poll.size(); i++)
-	{
-  		if (v_poll[i].fd == sfd)
-    	{
-        	v_poll.erase(v_poll.begin() + i);
-        	return;
-    	}
-	}
-	for (size_t i = 0; i < v_clients.size(); i++)
-	{
-  		if (v_clients[i].get_sfd() == sfd)
-    	{
-        	v_clients.erase(v_clients.begin() + i);
-        	return;
-    	}
-	}
-    std::cout << "Client removed\n";
 }
 
 #pragma endregion pmethods
@@ -179,86 +199,95 @@ void	Server::remove_client(int sfd)
 //=============================================================================== METHODS ========//
 #pragma region methods
 
+/**
+ * @brief Used to turn the _signal attribute of Server to true
+ * @param sig number of the received signal
+ */
 void	Server::handle_signal(int sig)
 {
 	std::cout << "Signal received: " << sig << std::endl;
-	signal = true;
+	_signal = true;
 }
 
-// Creates a server socket, binds it to the specified port and starts listening for incoming connections
-// Also adds it as the first sfd of v_poll_sfd
+/**
+ * @brief Sets up the server socket (creation, bind, listen)
+ */
 void	Server::init_serv()
 {
-	serv_sfd = socket(s_addr.sin_family, SOCK_STREAM | SOCK_NONBLOCK, 0);
-	if (serv_sfd == -1)
+	std::cout << BLUE << "Initializing Server ..." << RESET << std::endl;
+	_serv_sfd = socket(_s_addr.sin_family, SOCK_STREAM | SOCK_NONBLOCK, 0);
+	if (_serv_sfd == -1)
 	{
-		std::cerr << "[ERROR] Failed to create socket: " << strerror(errno) << std::endl;
+		std::string err = strerror(errno);
+		throw std::runtime_error("Failed to create socket: " + err);
 		return;
 	}
 	// Je comprends pas a quoi sert cette ligne en sah mais askip c'est important
 	int opt = 1;
-	if (setsockopt(serv_sfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
+	if (setsockopt(_serv_sfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
 	{
-		std::cerr << "[ERROR] Failed to set socket options: " << strerror(errno) << std::endl;
-		close(serv_sfd);
+		std::string err = strerror(errno);
+		throw std::runtime_error("Failed to set socket options: " + err);
+		close(_serv_sfd);
 		return;
 	}
-	if (bind(serv_sfd, (sockaddr*)&s_addr, sizeof(s_addr)) == -1)
+	if (bind(_serv_sfd, (sockaddr*)&_s_addr, sizeof(_s_addr)) == -1)
 	{
-		std::cerr << "[ERROR] Failed to bind socket: " << strerror(errno) << std::endl;
-		close(serv_sfd);
+		std::string err = strerror(errno);
+		throw std::runtime_error("Failed to bind socket: " + err);
+		close(_serv_sfd);
 		return;
 	}
-	if (listen(serv_sfd, SOMAXCONN) == -1) //Cb de max connexions ?
+	if (listen(_serv_sfd, SOMAXCONN) == -1) //Cb de max connexions ?
 	{
-		std::cerr << "[ERROR] Failed to listen on socket: " << strerror(errno) << std::endl;
-		close(serv_sfd);
+		std::string err = strerror(errno);
+		throw std::runtime_error("Failed to listen on socket: " + err);
+		close(_serv_sfd);
 		return;
 	}
-
-	pollfd	tmp;
-
-	tmp.fd = serv_sfd;
-	tmp.events = POLLIN;
-	tmp.revents = 0; 
-	v_poll.push_back(tmp);
-	std::cout << "Server initialized successfully on port " << port << std::endl;
+	push_new_poll(_serv_sfd, POLLIN, 0);
+	std::cout << GREEN << "Server initialized with success" << RESET << std::endl;
 }
 
-// Main loop of the program
-// Until SIGSTOP or SIGINT is received, uses poll to handle events of open sfd
-// or accept new connections
+/**
+ * @brief Main loop of the server \
+ * @brief Runs until SIGSTOP or SIGINT is received \
+ * @brief Uses poll to handle events of the sockets fd:
+ * @brief - New connection --> calls accept_client()
+ * @brief - Message from connected client --> calls handle_client()
+ */
 void	Server::loop()
 {
-	std::cout << "Engaging server loop ...\n";
-	while (Server::signal == false)
+	std::cout << BLUE << "Engaging server loop ..." << RESET << std::endl;
+	while (Server::_signal == false)
 	{
 		// Le programme est bloque ici par poll jusqu'a ce qu'une operation soit possible 
 		// sur un des sfd de v_sfd
-		if (poll(v_poll.data(), v_poll.size(), -1) == -1 && Server::signal == false)
+		if (poll(_poll.data(), _poll.size(), -1) == -1 && Server::_signal == false)
 			throw std::runtime_error("poll failed");
 		std::cout << "Poll returned, checking for events...\n";
-		for (size_t i = 0; i < v_poll.size(); i++)
+		for (size_t i = 0; i < _poll.size(); i++)
 		{
-			if (v_poll[i].revents & POLLIN)		// There is data to read
+			if (_poll[i].revents & POLLIN)		// There is data to read
 			{
-				if (v_poll[i].fd == serv_sfd)	// Nouvelle requete de connexion d'un client
+				if (_poll[i].fd == _serv_sfd)	// Nouvelle requete de connexion d'un client
 					accept_client();
 				else							// Un client deja co veux interagir
-					handle_client(v_poll[i].fd);
+					handle_client(_poll[i].fd);
 			}
 		}
 	}
 }
 
-// Close all sockets present inside v_poll
-void	Server::close_poll_sockets()
+/**
+ * @brief Closes all fd of _poll vector and clears it
+ */
+void	Server::close_all_poll()
 {
-	for (size_t i = 0; i < v_poll.size(); i++)
-	{
-		close(v_poll[i].fd);
-	}
-	std::cout << "All sockets closed\n";
+	std::cout << BLUE << "Closing all open sockets ..." << RESET << std::endl;
+	for (size_t i = 0; i < _poll.size(); i++)
+		close(_poll[i].fd);
+	_poll.clear();
 }
 
 #pragma endregion methods
@@ -284,10 +313,10 @@ Server& Server::operator = (const Server& copy)
 //=============================================================================== GETTERS ========//
 #pragma region getters
 
-const in_port_t&	Server::get_port() const { return ( port );}
-const std::string&	Server::get_password() const { return ( password );}
-const sockaddr_in&	Server::get_s_addr() const { return ( s_addr );}
-const int&			Server::get_serv_sfd() const { return ( serv_sfd );}
+const in_port_t&	Server::get_port() const { return ( _port );}
+const std::string&	Server::get_password() const { return ( _password );}
+const sockaddr_in&	Server::get_s_addr() const { return ( _s_addr );}
+const int&			Server::get_serv_sfd() const { return ( _serv_sfd );}
 
 #pragma endregion getters
 //================================================================================================//

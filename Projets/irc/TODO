@@ -1,23 +1,24 @@
 - Afin d'etre sur d'etre bien co au serv, irssi attends une reponse du serveur
 - Faire la gestion du buffer du client et tout ca, un buffer de receive et un d'envoi pour chaque nouveau client
-
-
 - Dans accept_client: Check si le nombre de co ne depasse pas le nombre max
 
 
 
+Peut etre besoin d'une struct pour stocker l'adresse du client
 
 
-// PDF
+========== PDF ==========
+      
+      Taches                                                Status
 
-	- Init logger --> Est ce necessaire ? Check sujet
-	- Registery
-	- HandleReadable()
-	- HandleWritable()
-
-
-
-
+1.    start server                                          ADONE          --> Logger pas fait + check args
+2.    Create socket bind and listen                         DONE
+3.    Enter loop                                            ADONE          --> hooks ? timeouts ?
+4.    Wait for events (poll)                                IP             --> marquage readable writable + HandleWritable pas fait
+5.    New connection (accept)                               ADONE          --> Besoin de la class Client pour servir un client minimal + gestion de la limite de client
+6.    Client message (recv)                                 IP             --> rxbuff designe quoi ? gestion des timeouts manquante
+10.   Send response back (write / send)
+11.   Loop back
 
 
 Avant de rendre:
@@ -32,3 +33,9 @@ ex:
    equivalence of two nicknames or channel names.
 
    --> BUFFER_SIZE a check
+
+CMD a rajouter:
+
+PART
+QUIT
+PONG

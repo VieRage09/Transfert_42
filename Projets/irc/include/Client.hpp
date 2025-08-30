@@ -1,67 +1,67 @@
-#ifndef	CLIENT_HPP
-#define	CLIENT_HPP
+#ifndef CLIENT_HPP
+#define CLIENT_HPP
 
-// includes //
 #include "ircserv.hpp"
 
-class Client
-{
-	private:
-		//====================================== ATTRIBUTES ========//
-		#pragma region attributes 
+#include <string>
+#include <ctime>   // time_t
 
-			int								sfd;
-			char							send_buff[BUFFER_SIZE];
-			char							recv_buff[BUFFER_SIZE];
+class Client {
+public:
 
-		#pragma endregion attributes
-		//==========================================================//
+  Client(int fd, const std::string& host);
 
-	public:
-		//============================= CONST & DESTRUCTORS ========//
-		#pragma region constructors
+  // // --- Identité réseau / IO ---
+  int                   fd() const;
+  // const std::string&    host() const;
 
-			Client( int sfd );
-			Client(const Client& copy);
-			~Client();
+  // // --- Identité IRC ---
+  // const std::string&    nick() const;
+  // void                  setNick(const std::string&);
 
-		#pragma endregion attributes
-		//==========================================================//
+  // const std::string&    user() const;
+  // void                  setUser(const std::string&);
 
-		//========================================= METHODS ========//
-		#pragma region methods
+  // const std::string&    real() const;          // alias "realname"
+  // void                  setReal(const std::string&);
 
-		#pragma endregion methods
-		//==========================================================//
+  // --- Buffers entree sortie ---
+  char *                    rBuff();
 
-		//======================================= OPERATORS ========//
-		#pragma region methods
+  // // --- Authentification PASS / état d’enregistrement ---
+  // void                  setPassOk(bool v);
+  // bool                  passOk() const;
+  // bool                  isRegistered() const;   // passOk && _nickSet && _userSet
 
-			Client&	operator = (const Client& copy);
+  // // --- Suivi d’activité / PING ---
+  // void                  touchActivity();        // met à jour _lastActivity = now
+  // void                  touchPing();            // met à jour _lastPing = now
 
-		#pragma endregion methods
-		//==========================================================//
+  // // (optionnel) exposer les timestamps si besoin de debug/timeout
+  // time_t                lastActivity() const { return _lastActivity; }
+  // time_t                lastPing() const     { return _lastPing; }
 
-		//========================================= GETTERS ========//
-		#pragma region getters 
+private:
+  // --- Données principales ---
+  int           _fd;
+  std::string   _host;
 
-			const int&			get_sfd() const;
-			const char&			get_send_buff() const;
-			const char&			get_recv_buff() const;
+  std::string   _nick;
+  std::string   _user;
+  std::string   _real;
 
-		#pragma endregion getters
-		//==========================================================//
+  bool          _passOk;     // true si PASS ok ou non requis
+  bool          _nickSet;    // true après setNick()
+  bool          _userSet;    // true après setUser()
 
-		//========================================= SETTERS ========//
-		#pragma region setters
+  char          _rBuff[BUFFER_SIZE];
+  char          _wBuff[BUFFER_SIZE];
 
-			void				set_sfd(int& value);
-			void				set_send_buff(const char* value); // pas sur du type
-			void				set_recv_buff(const char* value);
+  // --- Timestamps ---
+  time_t        _lastActivity; // maj via touchActivity()
+  time_t        _lastPing;     // maj via touchPing()
 
-		#pragma endregion setters
-		//==========================================================//
-
+  
 };
 
 #endif // CLIENT_HPP

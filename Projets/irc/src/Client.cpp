@@ -3,31 +3,26 @@
 //============================================================ CONSTRUCTORS & DESTRUCTORS ========//
 #pragma region constructors
 
-Client::Client(int sfd) : sfd(sfd)
+Client::Client(int fd, const std::string & host) : _fd(fd), _host(host), _nick(), _user(), _real(),
+	_passOk(false), _nickSet(false), _userSet(false)
 {
-	memset(send_buff, 0, BUFFER_SIZE);
-	memset(recv_buff, 0, BUFFER_SIZE);
-	std::cout << "Client instance created with sfd: " << sfd << std::endl;
+	memset(_rBuff, 0, sizeof(_rBuff));
+	memset(_wBuff, 0, sizeof(_wBuff));
+
+	// Ajouter l'init des timestamps
 }
-
-// A modifier --> Dans l'ideal on veut copier aussi les buffers
-Client::Client(const Client& copy) : sfd(copy.sfd)
-{
-	memset(send_buff, 0, BUFFER_SIZE);
-	memset(recv_buff, 0, BUFFER_SIZE);
-	std::cout << "Client instance copied with sfd: " << sfd << std::endl;
-}
-
-Client::~Client() {}
-
 
 #pragma endregion constructors
 //================================================================================================//
 
+//======================================================================= PRIVATE METHODS ========//
+#pragma region pmethods
+
+#pragma endregion pmethods
+//================================================================================================//
 
 //=============================================================================== METHODS ========//
 #pragma region methods
-
 
 #pragma endregion methods
 //================================================================================================//
@@ -36,15 +31,6 @@ Client::~Client() {}
 //============================================================================= OPERATORS ========//
 #pragma region operators
 
-Client& Client::operator = (const Client& copy)
-{
-	if (this != &copy)
-	{
-
-	}
-	return (*this);
-}
-
 #pragma endregion operators
 //================================================================================================//
 
@@ -52,20 +38,14 @@ Client& Client::operator = (const Client& copy)
 //=============================================================================== GETTERS ========//
 #pragma region getters
 
-const int&	Client::get_sfd() const { return ( sfd );}
-// const char&	Client::get_send_buff() const { return ( send_buff );}
-// const char&	Client::get_recv_buff() const { return ( recv_buff );}
-
+int                   Client::fd() const { return (_fd); }
+char  *               Client::rBuff() { return _rBuff; }
 #pragma endregion getters
 //================================================================================================//
 
 
 //=============================================================================== SETTERS ========//
 #pragma region setters
-
-void	Client::set_sfd(int& value) { this->sfd = value; }
-void	Client::set_send_buff(const char* value) { strncpy(this->send_buff, value, BUFFER_SIZE); }
-void	Client::set_recv_buff(const char* value) { strncpy(this->recv_buff, value, BUFFER_SIZE); }
 
 #pragma endregion setters
 //================================================================================================//

@@ -16,11 +16,12 @@ int	main(int ac, char **av)
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
-		serv.close_poll_sockets();
+		std::cerr << "[Exception thown]: "<< e.what() << '\n';
+		serv.close_all_poll();
 		return (1);
 	}
-	serv.close_poll_sockets();
+	serv.close_all_poll();
+	std::cout << GREEN << "Server stopped with success" << RESET << std::endl;
 	return (0);
 }
 	

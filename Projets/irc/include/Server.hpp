@@ -15,6 +15,7 @@
 #include <string.h> // for strerror
 #include <signal.h> // for interuption
 
+typedef std::vector<pollfd>		poll_vec;
 
 class Client;
 class Registry;
@@ -25,27 +26,29 @@ class Server
 		//====================================== ATTRIBUTES ========//
 		#pragma region attributes 
 
-			static bool							signal;
+			static bool						_signal;
 
-			in_port_t						port;
-			std::string						password;
-			sockaddr_in						s_addr;
-			int								serv_sfd;
+			in_port_t						_port;
+			std::string						_password;
+			sockaddr_in						_s_addr;
+			int								_serv_sfd;
 
-			std::vector<pollfd>				v_poll; // Contient les sfd des client connectes ainsi que celui du serv(en premiere pos)
-			std::vector<Client>				v_clients; // A remplacer par registery
+			poll_vec						_poll; // Contient les sfd des client connectes ainsi que celui du serv(en premiere pos)
+			// Registry *						_reg;
 
 		#pragma endregion attributes
 		//==========================================================//
 
 		//================================= PRIVATE METHODS ========//
 		#pragma region pmethods 
+
+			void		push_new_poll(int fd, short events, short revents);
+			void		close_poll(int fd);
+
 			void		accept_client();
 
 			void		parser(char *buffer, size_t size, std::string & tmp);
-			void		handle_client(int cli_sfd);
-
-			void		remove_client(int sfd);
+			void		handle_client(Client & cli);
 
 		#pragma endregion pmethods 
 		//==========================================================//
@@ -70,7 +73,7 @@ class Server
 			void		init_serv();
 			void		loop();
 
-			void		close_poll_sockets();
+			void		close_all_poll();
 
 		#pragma endregion methods
 		//==========================================================//
