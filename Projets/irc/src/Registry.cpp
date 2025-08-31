@@ -1,13 +1,12 @@
+#include "Registry.hpp"
 #include "Client.hpp"
 
 //============================================================ CONSTRUCTORS & DESTRUCTORS ========//
 #pragma region constructors
 
-Client::Client(int fd, const std::string & host) : _fd(fd), _host(host),
-_nick(), _user(), _passOk(false), _nickSet(false), _userSet(false), _rBuff()	// , _real()
-{
-	// Ajouter l'init des timestamps
-}
+Registry::Registry() : _clientsByFd() {}
+
+Registry::~Registry() {}
 
 #pragma endregion constructors
 //================================================================================================//
@@ -20,6 +19,23 @@ _nick(), _user(), _passOk(false), _nickSet(false), _userSet(false), _rBuff()	// 
 
 //=============================================================================== METHODS ========//
 #pragma region methods
+
+bool          Registry::addClient(Client* c)
+{
+	// Surement check si on PEUT l'ajouter --> Faut l'authetifier, nick unique etc
+	_clientsByFd.insert(std::pair<int, Client *>(c->fd(), c));
+	return (true); // A modif par la suite
+}
+
+void          Registry::removeClient(Client* c) { _clientsByFd.erase(c->fd()); }
+
+Client*       Registry::findClientByFd(int fd) const
+{
+	std::map<int, Client *>::const_iterator it = _clientsByFd.find(fd);
+	if (it != _clientsByFd.end())
+		return (it->second);
+	return (NULL);
+}
 
 #pragma endregion methods
 //================================================================================================//
@@ -35,23 +51,12 @@ _nick(), _user(), _passOk(false), _nickSet(false), _userSet(false), _rBuff()	// 
 //=============================================================================== GETTERS ========//
 #pragma region getters
 
-int					Client::fd() const { return (_fd); }
-const std::string&	Client::nick() const { return (_nick); }
-const std::string&	Client::user() const { return (_user); }
-bool				Client::passOk() const { return (_passOk); }
-bool				Client::isRegistered() const { return (_passOk && _nickSet && _userSet); }
-std::string &		Client::rBuff() { return _rBuff; }
-
 #pragma endregion getters
 //================================================================================================//
 
 
 //=============================================================================== SETTERS ========//
 #pragma region setters
-
-void				Client::setNick(const std::string& nick) { _nick = nick; _nickSet = true; }
-void				Client::setUser(const std::string& user) { _user = user; _userSet = true; }
-void				Client::setPassOk(bool v) { _passOk = v; }
 
 #pragma endregion setters
 //================================================================================================//

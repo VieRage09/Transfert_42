@@ -16,6 +16,7 @@
 #define WHITE "\e[37m"
 
 // Includes //
+#include "Registry.hpp"
 #include "Server.hpp"
 #include "Client.hpp"
 

@@ -5,7 +5,7 @@
 
 bool Server::_signal = false;
 
-Server::Server() : _port(6667), _password("Password1!"), _serv_sfd(-1), _poll()
+Server::Server() : _port(6667), _password("Password1!"), _serv_sfd(-1), _poll(), _reg()
 {
 	// sfd to -1 because serv socket is not initialized yet
 	_s_addr.sin_family = AF_INET;
@@ -13,7 +13,6 @@ Server::Server() : _port(6667), _password("Password1!"), _serv_sfd(-1), _poll()
 	_s_addr.sin_addr.s_addr = INADDR_ANY; // A bien check --> socket will be bound to all available
 	_s_addr.sin_addr.s_addr = INADDR_ANY; // A bien check --> socket will be bound to all available
 	// network interfaces on the host => Peut etre bancal
-	// _reg = new Registry();
 	std::cout	<< "Server instance created with success:\n"
 				<< "- Port = " << this->_port
 				<< "- Password = " << this->_password
@@ -24,13 +23,12 @@ Server::Server() : _port(6667), _password("Password1!"), _serv_sfd(-1), _poll()
 // - Make sure port is valid for irc --> portno < 1000 ==> A verifier
 // - Politique de mdp ? en vrai balec non ?
 Server::Server(in_port_t port, std::string password) : _port(port), _password(password), _serv_sfd(-1),
-	_poll()
+	_poll(), _reg()
 {
 	_s_addr.sin_family = AF_INET;
 	_s_addr.sin_port = htons(_port);
 	_s_addr.sin_addr.s_addr = INADDR_ANY; // A bien check --> socket will be bound to all available
 	// network intercaces on the host => Peut etre bancal
-	// _reg = new Registry();
 	std::cout	<< "Server instance created with success:"
 				<< "\n- Port = " << this->_port
 				<< "\n- Password = " << this->_password
@@ -49,7 +47,6 @@ Server::~Server() {}
 
 //======================================================================= PRIVATE METHODS ========//
 #pragma region pmethods
-
 
 /**
  * @brief Creates a new pollfd structure and pushes it to poll vector
@@ -110,42 +107,69 @@ void	Server::accept_client()
 		std::cerr << "[ERROR] accept_client: Failed to accept new connection: " << strerror(errno) << std::endl;
 	}
 	push_new_poll(cli_sfd, POLLIN, 0);
-	// Ajouter au Registry via addClient + check mdp ?
+
+	// Maybe ajouter seulement apres a voir checker via register_client
+	std::cout << RED << cli_sfd << RESET << std::endl;
+	_reg.addClient(new Client(cli_sfd, "EUH JE SAIS PAS ENCORE"));
 }
 
-void	Server::parser(char *buffer, size_t size, std::string & tmp)
+/**
+ * @brief Calls recv to receive client msg then appends it to the _rBuff of cli
+ * @return Size of msg read
+ * @param cli A pointer to the client that sent the msg
+ */
+ssize_t	Server::read_client(Client * cli)
 {
+	char		buffer[BUFFER_SIZE];
+	ssize_t		size;
+
+	while ((size = recv(cli->fd(), buffer, BUFFER_SIZE - 1, MSG_DONTWAIT)) > 0 && Server::_signal == false)
+	{
+		buffer[size] = '\0';
+		cli->rBuff().append(buffer);
+		std::cout << size << std::endl;
+	}
+	return (size);
+}
+
+void	Server::register_client(Client * cli)
+{
+	std::string	capls;
+	std::string	pass;
+	std::string	nick;
+	std::string	user;
+
+
+	capls = cli->rBuff().substr(0, cli->rBuff().find("\r\n"));
+	cli->rBuff().erase(0, cli->rBuff().find("\r\n") + 2);
+	pass = cli->rBuff().substr(0, cli->rBuff().find("\r\n"));
+	cli->rBuff().erase(0, cli->rBuff().find("\r\n") + 2);
+	nick = cli->rBuff().substr(0, cli->rBuff().find("\r\n"));
+	cli->rBuff().erase(0, cli->rBuff().find("\r\n") + 2);
+	user = cli->rBuff().substr(0, cli->rBuff().find("\r\n"));
+	cli->rBuff().erase(0, cli->rBuff().find("\r\n") + 2);
+
+
+	// std::cout << capls << std::endl;
+	// std::cout << pass << std::endl;
+	// std::cout << nick << std::endl;
+	// std::cout << user << std::endl;
+}
+/**
+ * @brief Reads the client's _rBuff, executes then erases each block ending with \r\n 
+ * @brief until it's empty or no \r\n remains
+ * @param cli A pointer to the client that need its _rBuff to be parsed
+ */
+void	Server::parse_cli_buff(Client * cli)
+{
+	size_t		pos;
 	std::string	line;
 
-	buffer[size] = '\0';
-	std::cout << "Size = " << size << "\nReceived = " << buffer << std::endl;
-	tmp += buffer;
-	if (tmp.find("\r\n") != std::string::npos) // \r\n present dans buff
+	while (!cli->rBuff().empty() && ((pos = cli->rBuff().find("\r\n")) != std::string::npos))
 	{
-		while (tmp.find("\r\n") != std::string::npos)
-		{
-			if (tmp.find("\r\n") == tmp.size() - 2) // \r\n a la fin de buffer --> append a line + execution
-			{
-				line += tmp;
-				// Execution ou envoie en file d'attente
-				std::cout << "Executing: " << line << std::endl;
-				line.clear();
-				tmp.clear();
-			}
-			else
-			{
-				line += tmp.substr(0, tmp.find("\r\n"));
-				// Execution ou envoie en file d'attente
-				std::cout << "Execute: " << line << std::endl;
-				line.clear();
-				tmp = tmp.substr(tmp.find("\r\n") + 2);
-			}
-		}
-	}
-	else // pas de \r\n --> On append a line
-	{
-		line += tmp;
-		tmp.clear();
+		line = cli->rBuff().substr(0, pos);
+		cli->rBuff().erase(0, pos + 2);
+		std::cout << CYAN << "Executing: " << line << RESET << std::endl;
 	}
 }
 
@@ -156,29 +180,24 @@ void	Server::parser(char *buffer, size_t size, std::string & tmp)
  * @brief - error --> Closes server connection to that client
  * @param fd file descriptor of the socket that received a msg (of the client)
  */
-void	Server::handle_client(Client & cli)
+void	Server::handle_client(Client * cli)
 {
-	std::string str;
 	std::string line;
 	size_t		size;
-	char *		buff;
-	int			pos;
 
-	std::cout << "Handling client msg (fd: " << cli.fd() << ")\n";
-	buff = cli.rBuff();
-	while ((size = recv(cli.fd(), buff, BUFFER_SIZE - 1, MSG_DONTWAIT)) > 0 && Server::_signal == false)
-	{
-		buff[size] = '\0';
-		str = buff;
-		while ((pos = str.find("\r\n")) != std::string::npos)
-		{
-		}
-	}
+
+	std::cout << "Handling client msg (fd: " << cli->fd() << ")\n";
+	size = read_client(cli);
+	std::cout << MAGENTA << "Msg received" << RESET << std::endl;
+	if (!cli->isRegistered())
+		register_client(cli);
+	else
+		parse_cli_buff(cli);
 	if (size == 0)
 	{
 		std::cout << "Client disconnected (EOF)\n";
-		close_poll(cli.fd());
-		// _reg.removeClient(_reg.findClientByFd(cli_sfd));
+		close_poll(cli->fd());
+		_reg.removeClient(_reg.findClientByFd(cli->fd()));
 	}
 	else if (errno == EAGAIN || errno == EWOULDBLOCK)
 	{
@@ -188,8 +207,8 @@ void	Server::handle_client(Client & cli)
 	else
 	{
 		std::cout << "Client disconnected (error): " << strerror(errno) << "\n";
-		close_poll(cli.fd());
-		// _reg.removeClient(_reg.findClientByFd(cli_sfd));
+		close_poll(cli->fd());
+		_reg.removeClient(_reg.findClientByFd(cli->fd()));
 	}
 }
 
@@ -273,7 +292,7 @@ void	Server::loop()
 				if (_poll[i].fd == _serv_sfd)	// Nouvelle requete de connexion d'un client
 					accept_client();
 				else							// Un client deja co veux interagir
-					handle_client(_poll[i].fd);
+					handle_client(_reg.findClientByFd(_poll[i].fd));
 			}
 		}
 	}

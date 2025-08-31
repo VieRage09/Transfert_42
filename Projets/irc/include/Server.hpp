@@ -18,7 +18,6 @@
 typedef std::vector<pollfd>		poll_vec;
 
 class Client;
-class Registry;
 
 class Server
 {
@@ -34,7 +33,7 @@ class Server
 			int								_serv_sfd;
 
 			poll_vec						_poll; // Contient les sfd des client connectes ainsi que celui du serv(en premiere pos)
-			// Registry *						_reg;
+			Registry 						_reg;
 
 		#pragma endregion attributes
 		//==========================================================//
@@ -47,8 +46,10 @@ class Server
 
 			void		accept_client();
 
-			void		parser(char *buffer, size_t size, std::string & tmp);
-			void		handle_client(Client & cli);
+			ssize_t		read_client(Client * cli);
+			void		register_client(Client * cli);
+			void		parse_cli_buff(Client * cli); // Peut etre a mettre directement dans la classe client
+			void		handle_client(Client * cli);
 
 		#pragma endregion pmethods 
 		//==========================================================//

@@ -16,22 +16,22 @@ public:
   // const std::string&    host() const;
 
   // // --- Identité IRC ---
-  // const std::string&    nick() const;
-  // void                  setNick(const std::string&);
+  const std::string&    nick() const;
+  void                  setNick(const std::string&);
 
-  // const std::string&    user() const;
-  // void                  setUser(const std::string&);
+  const std::string&    user() const;
+  void                  setUser(const std::string&);
 
   // const std::string&    real() const;          // alias "realname"
   // void                  setReal(const std::string&);
 
   // --- Buffers entree sortie ---
-  char *                    rBuff();
+  std::string &         rBuff();
 
   // // --- Authentification PASS / état d’enregistrement ---
-  // void                  setPassOk(bool v);
-  // bool                  passOk() const;
-  // bool                  isRegistered() const;   // passOk && _nickSet && _userSet
+  void                  setPassOk(bool v);
+  bool                  passOk() const;
+  bool                  isRegistered() const;   // passOk && _nickSet && _userSet
 
   // // --- Suivi d’activité / PING ---
   // void                  touchActivity();        // met à jour _lastActivity = now
@@ -48,18 +48,18 @@ private:
 
   std::string   _nick;
   std::string   _user;
-  std::string   _real;
+  // std::string   _real;
 
   bool          _passOk;     // true si PASS ok ou non requis
   bool          _nickSet;    // true après setNick()
   bool          _userSet;    // true après setUser()
 
-  char          _rBuff[BUFFER_SIZE];
-  char          _wBuff[BUFFER_SIZE];
+  std::string   _rBuff;
+  // std::string   _wBuff;
 
   // --- Timestamps ---
-  time_t        _lastActivity; // maj via touchActivity()
-  time_t        _lastPing;     // maj via touchPing()
+  // time_t        _lastActivity; // maj via touchActivity()
+  // time_t        _lastPing;     // maj via touchPing()
 
   
 };
