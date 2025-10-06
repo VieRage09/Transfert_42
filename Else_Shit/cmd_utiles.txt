@@ -6,3 +6,33 @@ nm -u check les fonctions interdites --> affiche un arbre de toutes les appellee
 
 scan -build -12 make : 
 
+
+
+
+
+
+GIT 
+
+creer une cranche: git checkout -b <nom branche>
+--> Faire les modifs
+git add .
+git commit -m "machin"
+
+pour push la branche (pas merge) : git push -u origin <nom branche>
+
+pour revenir vers le main: git switch main / git checkout main
+
+ATTENTION ATTENTION toujours git pull AVANT TOUTE CHOSE
+
+git merge <nom branche>
+
+2 solutions:
+
+1. Pas de conflits -> git push
+
+2. conflits -> Resoudre conflits pour chaque fichier PUIS
+git add commit push
+
+
+
+Si conflits pas resolvable git merge --abort
