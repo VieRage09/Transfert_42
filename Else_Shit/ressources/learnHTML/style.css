@@ -1,0 +1,47 @@
+a {
+	color:black;
+}
+
+h1{
+	font-size:xx-large;
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+	text-align: center;
+}
+
+.navBar{
+	background:linear-gradient(90deg, #2596be, #e28743);
+	border-radius: 1em;
+
+	margin: 1em 1em 1em 1em;
+	display: flex;
+	align-items: center;
+}
+
+.navLink{
+	font-size: 1.3em;
+	font-variant: small-caps;
+	text-decoration: none;
+	color: white;
+
+	margin: 1em 1em 1em 1em;
+	vertical-align: middle;
+	line-height: 1em;
+}
+
+#logo{
+	height: 50px;
+	width: 50px;
+	border-radius: 20px;
+}
+
+.accueil{
+	background-image:url('images/christoph-nolte-fA3B_MHpDJI-unsplash.jpg');
+	background-position:initial;
+	background-size: cover;
+}
+
+.pres{
+	background-image:url('images/christoph-nolte-fA3B_MHpDJI-unsplash.jpg');
+	background-position:center;
+	background-size: cover;
+}
