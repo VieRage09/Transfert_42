@@ -28,10 +28,23 @@ h1{
 	line-height: 1em;
 }
 
+.navLink:hover{
+	background: linear-gradient(90deg, pink, #e28743);
+	background-clip: text;
+	color:transparent;
+}
+
 #logo{
 	height: 50px;
 	width: 50px;
 	border-radius: 20px;
+
+	margin-left: 0.5em;
+	vertical-align: middle;
+}
+
+#logo:hover{
+	opacity: 50%;
 }
 
 .accueil{
