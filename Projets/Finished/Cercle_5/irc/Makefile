@@ -6,7 +6,7 @@
 #    By: tlebon <tlebon@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 15:17:35 by tlebon            #+#    #+#              #
-#    Updated: 2025/08/31 20:40:25 by tlebon           ###   ########.fr        #
+#    Updated: 2025/10/14 16:38:33 by tlebon           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME	=		ircserv
 #---------------------------------------------------------COMPILATION----------#
 
 CC		=	c++
-CFLAGS	=	-Wall -Werror -Wextra -std=c++98
+CFLAGS	=	-g3 -Wall -Werror -Wextra -std=c++98
 #------------------------------------------------------------------------------#
 
 #-------------------------------------------------------------SOURCES----------#
@@ -23,9 +23,14 @@ SRC_DIR	=	src/
 
 SRC			= 									\
 				$(SRC_DIR)main.cpp				\
-				$(SRC_DIR)Server.cpp			\
+				$(SRC_DIR)Bot.cpp				\
+				$(SRC_DIR)Channel.cpp			\
 				$(SRC_DIR)Client.cpp			\
+				$(SRC_DIR)CommandHandler.cpp	\
+				$(SRC_DIR)NumericReplies.cpp	\
 				$(SRC_DIR)Registry.cpp			\
+				$(SRC_DIR)Server.cpp			\
+				$(SRC_DIR)utils.cpp				\
 #------------------------------------------------------------------------------#
 
 #-------------------------------------------------------------HEADERS----------#
@@ -33,15 +38,20 @@ HDR_PATH	=	include/
 
 HDR			=									\
 				$(HDR_PATH)ircserv.hpp			\
-				$(HDR_PATH)Server.hpp			\
+				$(HDR_PATH)Bot.hpp				\
+				$(HDR_PATH)Channel.hpp			\
 				$(HDR_PATH)Client.hpp			\
+				$(HDR_PATH)CommandHandler.hpp	\
+				$(HDR_PATH)NumericReplies.hpp	\
 				$(HDR_PATH)Registry.hpp			\
+				$(HDR_PATH)Server.hpp			\
+				$(HDR_PATH)utils.hpp			\
 #------------------------------------------------------------------------------#
 
 #--------------------------------------------------------------OBJETS----------#
 
 OBJ_PATH	=	obj/
-OBJ			=	$(SRC:.cpp=.o)
+OBJ			=	$(notdir $(SRC:.cpp=.o))
 OBJS		=	$(addprefix $(OBJ_PATH), $(OBJ))
 #------------------------------------------------------------------------------#
 
@@ -51,7 +61,7 @@ $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $@
 	@make --silent folie
 
-$(OBJ_PATH)%.o: %.cpp $(HDR)
+$(OBJ_PATH)%.o: $(SRC_DIR)%.cpp $(HDR)
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -I $(HDR_PATH) -o $@
 

@@ -1,3 +1,12 @@
+:root{
+	--color-prim: #3D9AE1;
+	--color-sec: #EB4B98;
+	--color-accent: #BCF4F5;
+	--color-dark: #545454;
+	--color-light: #F3C98B;
+}
+
+
 * {
 	margin: 0;
 }
@@ -12,12 +21,12 @@ header{
 
 	height: 8rem;
 
-	background: radial-gradient(circle, #BCF4F5 0%, #EB4B98 50%,  #3D9AE1 100%);
+	background: radial-gradient(circle, var(--color-sec) 0%, var(--color-light) 50%, var(--color-prim) 100%);
 	font-size: 2em;
 	font-family: "Geo";
 	font-weight: 600;
 	font-style: italic;
-	color: #545454;
+	color: var(--color-dark);
 }
 /* #endregion */
 
@@ -29,14 +38,14 @@ nav{
 	justify-content: space-around;
 
 	padding: 1rem;
-	background: linear-gradient(90deg, #EB4B98 0%, #3D9AE1 100%);
+	background: linear-gradient(90deg, var(--color-prim) 0%, var(--color-sec) 50%, var(--color-prim) 100%);
 }
 nav a{
 	font-family: "Geo";
 	font-weight: 600;
 	font-style: normal;
 	font-size: 1.5rem;
-	color: #BCF4F5;
+	color: var(--color-accent);
 	text-decoration: none;
 }
 
@@ -50,6 +59,17 @@ nav a:hover{
 
 
 
+
+/* #region connexion */
+#connexion form{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	
+	gap: 1rem;
+	margin: 1rem;
+}
+/* #endregion */
 
 
 .page{
@@ -68,11 +88,11 @@ footer{
 	align-items: center;
 	justify-content: center;
 	
-	background: #545454;
+	background: var(--color-dark);
 
-	padding: 1rem;
+	padding: 1.5rem;
 
-	color:white;
+	color: var(--color-light);
 
 }
 

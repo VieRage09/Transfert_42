@@ -3,21 +3,19 @@
 
 // includes //
 #include "ircserv.hpp"
+#include "Registry.hpp"
+#include "Channel.hpp"
 
-#include <iostream>
 #include <vector>
-
-#include <sys/socket.h> // for socket, bind, listen
 #include <netinet/in.h> // for sockaddr_in
-#include <unistd.h> // for close
-#include <poll.h>	// for poll duh
+#include <poll.h>		// for poll duh
+#include <ctime>		// for time_t
 
-#include <string.h> // for strerror
-#include <signal.h> // for interuption
+class Client;
+class Bot;
 
 typedef std::vector<pollfd>		poll_vec;
 
-class Client;
 
 class Server
 {
@@ -27,6 +25,11 @@ class Server
 
 			static bool						_signal;
 
+			static std::string				_server_name;
+			static std::string				_version;
+
+			time_t							_launch_time;
+
 			in_port_t						_port;
 			std::string						_password;
 			sockaddr_in						_s_addr;
@@ -35,6 +38,8 @@ class Server
 			poll_vec						_poll; // Contient les sfd des client connectes ainsi que celui du serv(en premiere pos)
 			Registry 						_reg;
 
+			Bot *							_bot;
+
 		#pragma endregion attributes
 		//==========================================================//
 
@@ -42,14 +47,18 @@ class Server
 		#pragma region pmethods 
 
 			void		push_new_poll(int fd, short events, short revents);
-			void		close_poll(int fd);
+			size_t		count_clients();
+			void		monitor_pollout(int fd, bool enable);
 
 			void		accept_client();
 
-			ssize_t		read_client(Client * cli);
-			void		register_client(Client * cli);
-			void		parse_cli_buff(Client * cli); // Peut etre a mettre directement dans la classe client
-			void		handle_client(Client * cli);
+			void		handle_readable(Client * cli);
+			void		parse_cli_buff(Client * cli);
+
+			void		handle_writable(Client * cli);
+			
+			void		ping_client(Client *cli);
+			void		check_timeout();
 
 		#pragma endregion pmethods 
 		//==========================================================//
@@ -60,7 +69,6 @@ class Server
 
 			Server();
 			Server(in_port_t port, std::string password);
-			Server(const Server& copy);
 			~Server();
 
 		#pragma endregion attributes
@@ -69,20 +77,19 @@ class Server
 		//========================================= METHODS ========//
 		#pragma region methods
 
-			static void	handle_signal(int sig);
+			static void			handle_signal(int sig);
+
+			const std::string	get_str_lTime() const;
 
 			void		init_serv();
 			void		loop();
 
-			void		close_all_poll();
+			void		append_client_sBuff(Client * cli, std::string str);
+			void		send_to_channel(Channel * chan, Client * cli, std::string str);
+			void		send_to_targetSet(TargetSet & trgSet, std::string str);
 
-		#pragma endregion methods
-		//==========================================================//
-
-		//======================================= OPERATORS ========//
-		#pragma region methods
-
-			Server&	operator = (const Server& copy);
+			void		close_poll(int fd);
+			void		shutdown();
 
 		#pragma endregion methods
 		//==========================================================//
@@ -90,20 +97,19 @@ class Server
 		//========================================= GETTERS ========//
 		#pragma region getters 
 
-			const in_port_t&		get_port() const;
-			const std::string&		get_password() const;
-			const sockaddr_in&		get_s_addr() const;
-			const int&				get_serv_sfd() const;
+			static const std::string &	get_server_name();
+			static const std::string &	get_version();
+
+			const in_port_t &			get_port() const;
+			const std::string &			get_password() const;
+			const sockaddr_in &			get_s_addr() const;
+			const int &					get_serv_sfd() const;
+
+			const Registry &			get_reg() const;
+			Registry &					get_reg_ref();
 
 		#pragma endregion getters
 		//==========================================================//
-
-		//========================================= SETTERS ========//
-		#pragma region setters
-
-		#pragma endregion setters
-		//==========================================================//
-
-};
+	};
 
 #endif // SERVER_HPP
